@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация | Kultura_Treyding </title>
+    <title>Kultura_Treyding</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -15,89 +15,79 @@
 
         body, html {
             width: 100%;
-            min-height: 100vh;
+            height: 100vh;
             background-color: #070707;
             color: #ffffff;
-            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .po-pages {
-            position: relative;
             display: flex;
-            min-height: 100vh;
             flex-direction: column;
+            min-height: 100vh;
             background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), linear-gradient(0deg, rgb(9, 16, 29) 0%, rgb(7, 9, 15) 24%, rgb(7, 7, 7) 60%, rgb(7, 7, 7) 100%);
-            overflow: hidden;
         }
 
         /* Шапка */
         header {
-            position: relative;
-            z-index: 10;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 24rem 32rem;
-            max-width: 1200rem;
+            padding: 16px 20px;
             width: 100%;
-            margin: 0 auto;
         }
 
         .logo {
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
             letter-spacing: 0.5px;
         }
 
         .lang-switcher {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 12px;
             cursor: pointer;
         }
 
-        /* Основной контент */
+        /* Основной контент (строго по центру) */
         main {
             flex: 1;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            z-index: 10;
         }
 
         .register-container {
             width: 100%;
-            max-width: 440px;
-            background: rgba(15, 18, 25, 0.7);
+            max-width: 400px;
+            background: rgba(15, 18, 25, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 32px;
+            padding: 24px;
             backdrop-filter: blur(12px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
         .title-block {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .title-block h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
 
         .title-block p {
-            font-size: 13px;
+            font-size: 12px;
             color: #94a3b8;
+            line-height: 1.4;
         }
 
         /* Кнопка Google */
@@ -109,13 +99,13 @@
             border-radius: 12px;
             padding: 12px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             transition: background 0.2s;
         }
 
@@ -125,23 +115,22 @@
 
         /* Форма */
         .form-group {
-            margin-bottom: 16px;
-            position: relative;
+            margin-bottom: 14px;
         }
 
         .form-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             color: #94a3b8;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .form-control {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 12px 14px;
             color: #ffffff;
             font-size: 14px;
             outline: none;
@@ -149,7 +138,8 @@
         }
 
         .form-control:focus {
-            border-color: #3b82f6;
+            border-color: #60a5fa;
+            background: rgba(0, 0, 0, 0.6);
         }
 
         .submit-btn {
@@ -158,11 +148,11 @@
             color: #0f172a;
             border: none;
             border-radius: 12px;
-            padding: 14px;
+            padding: 13px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 4px;
             transition: background 0.2s;
         }
 
@@ -172,8 +162,8 @@
 
         .footer-link {
             text-align: center;
-            margin-top: 16px;
-            font-size: 13px;
+            margin-top: 14px;
+            font-size: 12px;
             color: #94a3b8;
         }
 
@@ -182,8 +172,11 @@
             text-decoration: none;
         }
 
-        .footer-link a:hover {
-            text-decoration: underline;
+        .bot-footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+            color: #64748b;
         }
     </style>
 </head>
@@ -192,9 +185,7 @@
     <div class="po-pages">
         <header>
             <div class="logo">Kultura_Treyding</div>
-            <div class="lang-switcher">
-                🇷🇺 RU ▾
-            </div>
+            <div class="lang-switcher">🇷🇺 RU ▾</div>
         </header>
 
         <main>
@@ -204,25 +195,25 @@
                     <p>Для полного доступа создадим аккаунт у брокера PocketOption</p>
                 </div>
 
-                <button class="google-btn">
-                    <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.19-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.79 2.71v2.25h2.9c1.7-1.57 2.69-3.88 2.69-6.6z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.25c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.73H.95v2.33C2.42 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.95C.35 6.17 0 7.54 0 9s.35 2.83.95 4.03l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.47.89 11.43 0 9 0 5.48 0 2.42 2.02.95 4.97l3 2.33c.71-2.14 2.7-3.72 5.05-3.72z"/></svg>
+                <button class="google-btn" type="button">
+                    <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.19-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.79 2.71v2.25h2.9c1.7-1.57 2.69-3.88 2.69-6.6z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.25c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.73H.95v2.33C2.42 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.95C.35 6.17 0 7.54 0 9s.35 2.83.95 4.03l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.47.89 11.43 0 9 0 5.48 0 2.42 2.02.95 4.97l3 2.33c.71-2.14 2.7-3.72 5.05-3.72z"/></svg>
                     Регистрация через Google
                 </button>
 
                 <form>
                     <div class="form-group">
                         <label>Электронная почта *</label>
-                        <input type="email" class="form-control" placeholder="Электронная почта">
+                        <input type="email" class="form-control" placeholder="Электронная почта" id="email-input">
                     </div>
 
                     <div class="form-group">
                         <label>Пароль *</label>
-                        <input type="password" class="form-control" placeholder="Пароль">
+                        <input type="password" class="form-control" placeholder="Пароль" id="pass-input">
                     </div>
 
                     <div class="form-group">
                         <label>Повтор пароля *</label>
-                        <input type="password" class="form-control" placeholder="Повтор пароля">
+                        <input type="password" class="form-control" placeholder="Повтор пароля" id="repass-input">
                     </div>
 
                     <button type="submit" class="submit-btn">Регистрация</button>
@@ -233,6 +224,8 @@
                 </div>
             </div>
         </main>
+
+        <div class="bot-footer">@Kultura_Treyding_bot</div>
     </div>
 
 </body>
