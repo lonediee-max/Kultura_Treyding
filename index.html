@@ -142,7 +142,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* Регистрационный баннер / блок для тех, кто не по рефке */
         .reg-banner {
             display: none;
             background: rgba(248, 113, 113, 0.1);
@@ -394,7 +393,7 @@
                     <form onsubmit="handleIdCheck(event)">
                         <div class="form-group">
                             <label>Pocket Option ID *</label>
-                            <input type="text" id="pocket-id-input" class="form-control" placeholder="Например: 12345678" required>
+                            <input type="text" id="pocket-id-input" class="form-control" placeholder="Например: 88808610" required>
                         </div>
                         <button type="submit" class="btn" style="margin-top: 6px;">Войти в терминал</button>
                     </form>
@@ -539,7 +538,6 @@
         let currentMarketMode = 'Официальная биржа';
         let currentCategoryName = '';
 
-        // Проверка ID (для теста можете ввести валидный ID, например "123456", либо любой другой, чтобы увидеть баннер)
         function handleIdCheck(event) {
             event.preventDefault();
             const poId = document.getElementById('pocket-id-input').value.trim();
@@ -549,8 +547,8 @@
                 return;
             }
 
-            // Имитация базы рефералов: допустим, ID "777777" или "123456" прошли верификацию
-            const validReferralIds = ["123456", "777777", "888888"];
+            // Добавлен ваш ID 88808610 и тестовые номера
+            const validReferralIds = ["88808610", "123456", "777777", "888888"];
 
             if (validReferralIds.includes(poId)) {
                 document.getElementById('auth-screen').classList.remove('active');
@@ -559,7 +557,6 @@
                 document.getElementById('header-center').style.display = 'flex';
                 showToast('ID успешно подтвержден! Добро пожаловать.', 'success');
             } else {
-                // Показываем блок с призывом зарегистрироваться по рефке
                 document.getElementById('reg-banner').classList.add('active');
                 showToast('ID не найден среди рефералов или нет верификации', 'error');
             }
