@@ -76,7 +76,47 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
+        }
+
+        /* Плеер в шапке */
+        .music-player {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .music-player select {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 11px;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            max-width: 160px;
+            text-overflow: ellipsis;
+        }
+        .music-player select option {
+            background: #0b0f19;
+            color: #fff;
+        }
+
+        .music-btn {
+            background: none;
+            border: none;
+            color: #60a5fa;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
         }
 
         .nav-menu {
@@ -360,6 +400,9 @@
 </head>
 <body>
 
+    <!-- Аудио элемент (скрытый) -->
+    <audio id="bg-audio" loop></audio>
+
     <div class="po-pages">
         <header>
             <div class="logo">Kultura_Treyding <span>PRO</span></div>
@@ -372,6 +415,17 @@
             </div>
 
             <div class="header-right">
+                <!-- Плеер фона -->
+                <div class="music-player">
+                    <button class="music-btn" id="play-pause-btn" onclick="toggleMusic()" title="Включить/Выключить музыку">▶</button>
+                    <select id="track-select" onchange="changeTrack()">
+                        <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=skai-isyourgod-bak-fong-loai.mp3" selected>🧧 攬佬SKAI ISYOURGOD – 八方來財</option>
+                        <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3">🎵 Lo-Fi Chill</option>
+                        <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=chill-out-space-10787.mp3">🌌 Ambient Space</option>
+                        <option value="https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792cb.mp3?filename=cyberpunk-2099-10701.mp3">⚡ Cyberpunk Beat</option>
+                    </select>
+                </div>
+
                 <nav class="nav-menu" id="nav-menu">
                     <a onclick="switchTab('terminal')" class="active" id="t-btn">Терминал</a>
                     <a onclick="switchTab('stats')" id="s-btn">Статистика</a>
@@ -393,7 +447,7 @@
                     <form onsubmit="handleIdCheck(event)">
                         <div class="form-group">
                             <label>Pocket Option ID *</label>
-                            <input type="text" id="pocket-id-input" class="form-control" placeholder="Например: 88808610" required>
+                            <input type="text" id="pocket-id-input" class="form-control" placeholder="Введите ваш ID" required>
                         </div>
                         <button type="submit" class="btn" style="margin-top: 6px;">Войти в терминал</button>
                     </form>
@@ -505,6 +559,40 @@
     <div id="toast-box"></div>
 
     <script>
+        // Логика аудиоплеера
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-pause-btn');
+        const trackSelect = document.getElementById('track-select');
+        let isPlaying = false;
+
+        audio.volume = 0.3; // Установим комфортную фоновую громкость (30%)
+        audio.src = trackSelect.value;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = "▶";
+                isPlaying = false;
+                showToast('Музыка поставлена на паузу', 'success');
+            } else {
+                audio.play().then(() => {
+                    playBtn.innerText = "⏸";
+                    isPlaying = true;
+                    showToast('Музыка включена 🎧', 'success');
+                }).catch(e => {
+                    showToast('Не удалось запустить аудио', 'error');
+                });
+            }
+        }
+
+        function changeTrack() {
+            audio.src = trackSelect.value;
+            if (isPlaying) {
+                audio.play();
+            }
+            showToast('Трек изменен', 'success');
+        }
+
         const allPairsDB = {
             "Валютные пары": [
                 { name: "EUR/USD", status: "active", tv: "FX:EURUSD" },
@@ -547,7 +635,6 @@
                 return;
             }
 
-            // Добавлен ваш ID 88808610 и тестовые номера
             const validReferralIds = ["88808610", "123456", "777777", "888888"];
 
             if (validReferralIds.includes(poId)) {
