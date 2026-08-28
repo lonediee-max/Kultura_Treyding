@@ -174,7 +174,7 @@
             .control-pane { flex: 0 0 50%; width: 100%; }
         }
 
-        /* Стили подменю как в Telegram-боте со скриншотов */
+        /* Стили подменю бота */
         .bot-panel-box {
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -239,7 +239,7 @@
         }
         .back-btn:hover { background: rgba(255, 255, 255, 0.08); }
 
-        /* Список пар (абсолютно все пары с активным/неактивным статусом) */
+        /* Список пар */
         .pairs-container {
             display: flex;
             flex-direction: column;
@@ -276,9 +276,16 @@
         .pair-row.active-pair .pair-status { background: rgba(52, 211, 153, 0.15); color: #34d399; }
         .pair-row.inactive-pair .pair-status { background: rgba(248, 113, 113, 0.15); color: #f87171; }
 
-        /* Общие элементы */
+        /* Формы и Поля ввода */
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+        
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
         .form-control {
             width: 100%;
             background: rgba(0, 0, 0, 0.5);
@@ -290,6 +297,20 @@
             outline: none;
         }
         .form-control:focus { border-color: #60a5fa; }
+
+        /* Кнопка с глазиком */
+        .eye-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .eye-btn:hover { color: #ffffff; }
 
         .btn {
             width: 100%;
@@ -305,23 +326,6 @@
         }
         .btn:hover { background: #93c5fd; }
 
-        .google-btn {
-            width: 100%;
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 8px;
-            padding: 10px;
-            font-weight: 600;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            margin-bottom: 14px;
-        }
-
         #toast-box {
             position: fixed;
             bottom: 16px;
@@ -334,11 +338,17 @@
         .toast {
             background: #1e293b;
             color: #fff;
-            padding: 8px 14px;
+            padding: 10px 16px;
             border-radius: 8px;
-            font-size: 11px;
+            font-size: 12px;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .toast.error {
+            border-left: 4px solid #f87171;
+        }
+        .toast.success {
+            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -348,7 +358,6 @@
         <header>
             <div class="logo">Kultura_Treyding <span>PRO</span></div>
             
-            <!-- Статус и Статистика в шапке рядом с названием -->
             <div class="header-center" id="header-center">
                 <div class="bot-status-badge">
                     <span>🤖 Бот: <b style="color: #34d399;">АКТИВЕН</b></span>
@@ -371,33 +380,33 @@
             <section id="auth-screen" class="screen active">
                 <div class="card-auth">
                     <div style="text-align: center; margin-bottom: 16px;">
-                        <h1 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;" id="txt-title">РЕГИСТРАЦИЯ</h1>
-                        <p style="font-size: 11px; color: #94a3b8;" id="txt-subtitle">Создадим аккаунт для доступа к терминалу</p>
+                        <h1 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;" id="txt-title">ВХОД В СИСТЕМУ</h1>
+                        <p style="font-size: 11px; color: #94a3b8;" id="txt-subtitle">Введите данные для доступа к терминалу</p>
                     </div>
 
-                    <button class="google-btn" type="button" onclick="loginSuccess()">
-                        <svg width="14" height="14" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.19-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.79 2.71v2.25h2.9c1.7-1.57 2.69-3.88 2.69-6.6z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.25c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.73H.95v2.33C2.42 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.95C.35 6.17 0 7.54 0 9s.35 2.83.95 4.03l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.47.89 11.43 0 9 0 5.48 0 2.42 2.02.95 4.97l3 2.33c.71-2.14 2.7-3.72 5.05-3.72z"/></svg>
-                        Регистрация через Google
-                    </button>
-
-                    <form onsubmit="event.preventDefault(); loginSuccess();">
+                    <form onsubmit="handleLogin(event)">
                         <div class="form-group">
                             <label>Email *</label>
-                            <input type="email" class="form-control" placeholder="name@gmail.com" required>
+                            <input type="email" id="login-email" class="form-control" placeholder="name@gmail.com" value="Lonediee@gmail.com" required>
                         </div>
                         <div class="form-group">
                             <label>Пароль *</label>
-                            <input type="password" class="form-control" placeholder="••••••••" required>
+                            <div class="input-wrapper">
+                                <input type="password" id="login-pass" class="form-control" placeholder="••••••••" required>
+                                <!-- Кнопка глазика -->
+                                <button type="button" class="eye-btn" onclick="togglePassword()">
+                                    <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn" style="margin-top: 6px;">Войти в терминал</button>
                     </form>
                 </div>
             </section>
 
-            <!-- ЭКРАН 2: ТЕРМИНАЛ (График 70% + Интерактивное меню выбора всех пар 30%) -->
+            <!-- ЭКРАН 2: ТЕРМИНАЛ -->
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
-                    <!-- ЛЕВАЯ ЧАСТЬ: График TradingView (70%) -->
                     <div class="chart-pane">
                         <div class="tradingview-widget-container" style="height:100%;width:100%;">
                             <div id="tradingview_widget" style="height:100%;width:100%;"></div>
@@ -425,10 +434,7 @@
                         </div>
                     </div>
 
-                    <!-- ПРАВАЯ ЧАСТЬ: Меню выбора рынка, категорий и абсолютного списка пар (30%) -->
                     <div class="control-pane">
-                        
-                        <!-- УРОВЕНЬ 1: Выбор режима торговли -->
                         <div id="menu-market" class="bot-panel-box">
                             <div class="bot-panel-title">🌐 Выберите режим торговли:</div>
                             <div class="menu-grid-2">
@@ -437,7 +443,6 @@
                             </div>
                         </div>
 
-                        <!-- УРОВЕНЬ 2: Выбор категории -->
                         <div id="menu-category" class="bot-panel-box" style="display: none;">
                             <div class="bot-panel-title"><span id="lbl-market-mode">Режим: Биржа</span></div>
                             <div class="menu-grid-2">
@@ -449,24 +454,19 @@
                             <button class="back-btn" onclick="goBackToMarket()">◀ Назад к выбору рынка</button>
                         </div>
 
-                        <!-- УРОВЕНЬ 3: Абсолютный список абсолютно всех пар с активным/неактивным статусом -->
-                        <div id="menu-pairs" class="bot-panel-box" style="display: none; flex: 1; display: none; flex-direction: column;">
+                        <div id="menu-pairs" class="bot-panel-box" style="display: none; flex: 1; flex-direction: column;">
                             <div class="bot-panel-title"><span id="lbl-cat-title">Активные и неактивные пары</span></div>
-                            <div class="pairs-container" id="pairs-list-container">
-                                <!-- Список рендерится динамически скриптом -->
-                            </div>
+                            <div class="pairs-container" id="pairs-list-container"></div>
                             <button class="back-btn" onclick="goBackToCategory()">◀ Назад к категориям</button>
                         </div>
 
-                        <!-- Интерактивная лента последних сигналов для удобства -->
                         <div class="bot-panel-box" style="margin-top: auto;">
                             <div class="bot-panel-title">⚡ Последний сигнал бота</div>
                             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
-                                <span id="current-active-signal">EUR/USD (M5): <b>CALL</b></span>
-                                <button class="bot-btn" style="padding: 4px 8px;" onclick="showToast('Сигнал отправлен в Telegram!')">Тест</button>
+                                <span>EUR/USD (M5): <b>CALL</b></span>
+                                <button class="bot-btn" style="padding: 4px 8px;" onclick="showToast('Тестовый сигнал отправлен!', 'success')">Тест</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -500,7 +500,6 @@
     <div id="toast-box"></div>
 
     <script>
-        // База абсолютно всех пар с их статусами (активен / неактивен)
         const allPairsDB = {
             "Валютные пары": [
                 { name: "EUR/USD", status: "active", tv: "FX:EURUSD" },
@@ -534,6 +533,44 @@
         let currentMarketMode = 'Официальная биржа';
         let currentCategoryName = '';
 
+        // Переключение видимости пароля (глазик)
+        function togglePassword() {
+            const passInput = document.getElementById('login-pass');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                passInput.type = 'password';
+                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        }
+
+        // Проверка при входе
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+
+            if (!email || !pass) {
+                showToast('Заполните все поля!', 'error');
+                return;
+            }
+
+            // Условие для примера неверного пароля (если меньше 6 символов)
+            if (pass.length < 6) {
+                showToast('Ошибка: Неверный пароль! Пароль должен содержать минимум 6 символов.', 'error');
+                return;
+            }
+
+            // Успешный вход
+            document.getElementById('auth-screen').classList.remove('active');
+            document.getElementById('terminal-screen').classList.add('active');
+            document.getElementById('nav-menu').style.display = 'flex';
+            document.getElementById('header-center').style.display = 'flex';
+            showToast('Успешный вход в терминал!', 'success');
+        }
+
         function selectMarket(market) {
             currentMarketMode = market;
             document.getElementById('lbl-market-mode').innerText = "Режим: " + market;
@@ -557,7 +594,6 @@
             const container = document.getElementById('pairs-list-container');
             container.innerHTML = '';
 
-            // Загружаем абсолютно все пары выбранной категории из базы
             const pairs = allPairsDB[category] || [];
             pairs.forEach(p => {
                 const row = document.createElement('div');
@@ -565,11 +601,11 @@
                 row.className = `pair-row ${isActive ? 'active-pair' : 'inactive-pair'}`;
                 row.innerHTML = `
                     <span><b>${p.name}</b> <small style="color:#94a3b8">${currentMarketMode}</small></span>
-                    <span class="pair-status">${isActive ? 'Активна' Неактивна'}</span>
+                    <span class="pair-status">${isActive ? 'Активна' : 'Неактивна'}</span>
                 `;
                 row.onclick = () => {
                     loadTV(p.tv);
-                    showToast('График переключен на: ' + p.name);
+                    showToast('График переключен на: ' + p.name, 'success');
                 };
                 container.appendChild(row);
             });
@@ -584,15 +620,7 @@
         function toggleLang() {
             currentLang = currentLang === 'RU' ? 'EN' : 'RU';
             document.getElementById('lang-lbl').innerText = currentLang === 'RU' ? '🇷🇺 RU' : '🇬🇧 EN';
-            showToast('Язык изменен: ' + currentLang);
-        }
-
-        function loginSuccess() {
-            document.getElementById('auth-screen').classList.remove('active');
-            document.getElementById('terminal-screen').classList.add('active');
-            document.getElementById('nav-menu').style.display = 'flex';
-            document.getElementById('header-center').style.display = 'flex';
-            showToast('Успешный вход в терминал!');
+            showToast('Язык изменен: ' + currentLang, 'success');
         }
 
         function logout() {
@@ -600,7 +628,8 @@
             document.getElementById('auth-screen').classList.add('active');
             document.getElementById('nav-menu').style.display = 'none';
             document.getElementById('header-center').style.display = 'none';
-            showToast('Вы вышли из системы');
+            document.getElementById('login-pass').value = '';
+            showToast('Вы вышли из системы', 'success');
         }
 
         function switchTab(tab) {
@@ -617,13 +646,13 @@
             }
         }
 
-        function showToast(text) {
+        function showToast(text, type = 'success') {
             const box = document.getElementById('toast-box');
             const t = document.createElement('div');
-            t.className = 'toast';
+            t.className = `toast ${type}`;
             t.innerText = text;
             box.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
+            setTimeout(() => t.remove(), 3500);
         }
     </script>
 </body>
