@@ -2,62 +2,219 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Mini App</title>
-    <!-- Подключаем официальный скрипт Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kultura_Treyding Terminal</title>
+    <!-- Подключаем библиотеку для графиков (например, Lightweight Charts от TradingView) -->
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #121212);
-            color: var(--tg-theme-text-color, #ffffff);
+        /* CSS Стили для темного интерфейса терминала */
+        body, html {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #131722; /* Темный фон всего приложения */
+            color: #d1d4dc;
+            overflow: hidden; /* Чтобы контент не выходил за границы экрана */
+        }
+
+        #app-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            height: 100%;
         }
-        .card {
-            background-color: var(--tg-theme-secondary-bg-color, #1e1e1e);
+
+        /* Блок СИГНАЛА (как на image_11.png) */
+        #signal-block {
+            background-color: #1e222d;
             border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
-        h2 { margin-top: 0; font-size: 1.2rem; }
-        button {
-            background-color: var(--tg-theme-button-color, #2ecc71);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            width: 100%;
-            font-size: 1rem;
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            color: #787b86;
+            margin-bottom: 10px;
+        }
+
+        .signal-status {
+            font-size: 32px;
             font-weight: bold;
-            cursor: pointer;
+            color: #089981; /* Зеленый цвет для ВВЕРХ */
+            margin: 10px 0;
+        }
+
+        .signal-strength {
+            font-size: 24px;
+            font-weight: bold;
             margin-top: 10px;
         }
+
+        .signal-strength-label {
+            font-size: 14px;
+            color: #787b86;
+        }
+
+        /* Блок ГРАФИКА (как на image_12.png) */
+        #chart-container {
+            flex-grow: 1; /* График занимает всё оставшееся место */
+            position: relative;
+            margin: 10px;
+            background-color: #1e222d;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 16px;
+            color: #d1d4dc;
+            z-index: 10;
+        }
+
+        /* Блок ЦЕНЫ ВХОДА */
+        #entry-price {
+            background-color: #1e222d;
+            border-radius: 12px;
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            color: #787b86;
+            display: flex;
+            justify-content: space-between;
+        }
+        .price-value {
+            color: #d1d4dc;
+            font-weight: bold;
+        }
+
+        /* Панель навигации (как внизу на image_11.png) */
+        #bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #131722;
+            padding: 15px 0;
+            border-top: 1px solid #2a2e39;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 12px;
+            color: #787b86;
+        }
+        .nav-item.active {
+            color: #2962ff; /* Синий цвет для активной вкладки */
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>🚀 Terminal Web App</h2>
-        <p>Добро пожаловать в торговый терминал! Здесь можно управлять рисками и следить за аналитикой.</p>
-        <button id="mainBtn">Нажми меня</button>
+<div id="app-container">
+    <!-- 1. Блок Сигнала (копия из image_11.png) -->
+    <div id="signal-block">
+        <div class="signal-header">
+            <span>AL CA</span>
+            <span>AUD/CAD OTC</span>
+            <span>M1 • LIVE</span>
+        </div>
+        <div style="font-size: 12px; color: #787b86;">АНАЛИЗ ЗАВЕРШЁН</div>
+        <div class="signal-status">ВВЕРХ ↑</div>
+        <div style="font-size: 12px; color: #787b86;">СИЛА СИГНАЛА</div>
+        <div class="signal-strength">61</div>
+        <div class="signal-strength-label">Средний</div>
     </div>
 
-    <script>
-        // Инициализация Telegram Web App
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
+    <!-- 2. Блок Графика (копия из image_12.png) -->
+    <div id="chart-container">
+        <div class="chart-title">EUR/CHF OTC 92%</div>
+        <div id="chart"></div> <!-- Сюда будет встроен график -->
+    </div>
 
-        document.getElementById('mainBtn').addEventListener('click', function() {
-            tg.showAlert("Привет! Mini App успешно подключено к Telegram.");
+    <!-- 3. Блок Вход (цена) -->
+    <div id="entry-price">
+        <span>ВХОД (ЦЕНА)</span>
+        <span class="price-value">0.97460</span>
+    </div>
+
+    <!-- 4. Панель Навигации (копия из image_11.png) -->
+    <div id="bottom-nav">
+        <div class="nav-item">🗠 Сделки</div>
+        <div class="nav-item">⌂ Главная</div>
+        <div class="nav-item active">↑ Сигналы</div> <!-- Активная вкладка -->
+        <div class="nav-item">👤 Профиль</div>
+    </div>
+</div>
+
+<script>
+    // Инициализация графика с помощью Lightweight Charts
+    const chartContainer = document.getElementById('chart');
+    
+    const chart = LightweightCharts.createChart(chartContainer, {
+        layout: {
+            backgroundColor: '#1e222d',
+            textColor: '#d1d4dc',
+        },
+        grid: {
+            vertLines: { color: '#2a2e39' },
+            horzLines: { color: '#2a2e39' },
+        },
+        timeScale: {
+            timeVisible: true,
+            secondsVisible: false,
+        },
+        rightPriceScale: {
+            borderColor: '#2a2e39',
+        },
+    });
+
+    // Добавляем серию "японских свечей" (Candlestick)
+    const candleSeries = chart.addCandlestickSeries({
+        upColor: '#089981', // Зеленый для роста
+        downColor: '#f23645', // Красный для падения
+        borderDownColor: '#f23645',
+        borderUpColor: '#089981',
+        wickDownColor: '#737375',
+        wickUpColor: '#737375',
+    });
+
+    // Загружаем тестовые данные для графика (замените это на реальные данные с вашего бэкенда)
+    const data = [
+        { time: '2024-07-19', open: 0.97350, high: 0.97480, low: 0.97300, close: 0.97420 },
+        { time: '2024-07-20', open: 0.97420, high: 0.97550, low: 0.97400, close: 0.97490 },
+        { time: '2024-07-21', open: 0.97490, high: 0.97580, low: 0.97450, close: 0.97510 },
+        { time: '2024-07-22', open: 0.97510, high: 0.97620, low: 0.97490, close: 0.97600 },
+        { time: '2024-07-23', open: 0.97600, high: 0.97700, low: 0.97580, close: 0.97650 },
+        { time: '2024-07-24', open: 0.97650, high: 0.97680, low: 0.97400, close: 0.97450 }, // Падение
+        { time: '2024-07-25', open: 0.97450, high: 0.97500, low: 0.97350, close: 0.97400 }, // Флэт
+        { time: '2024-07-26', open: 0.97400, high: 0.97470, low: 0.97390, close: 0.97460 }, // Текущая цена
+    ];
+
+    candleSeries.setData(data);
+
+    // Адаптация графика под размер экрана при изменении окна
+    window.addEventListener('resize', () => {
+        chart.applyOptions({
+            width: chartContainer.clientWidth,
+            height: chartContainer.clientHeight,
         });
-    </script>
+    });
+
+    // Вызываем ресайз при первой загрузке
+    window.dispatchEvent(new Event('resize'));
+    
+</script>
+
 </body>
 </html>
