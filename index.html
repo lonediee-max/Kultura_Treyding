@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kultura_Treyding — Telegram Bot Terminal</title>
+    <title>Kultura_Treyding — Terminal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -18,22 +18,14 @@
             height: 100vh;
             background-color: #070707;
             color: #ffffff;
-            overflow-y: auto;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        /* Разрешаем выделение и ввод только для инпутов */
-        input {
-            -webkit-user-select: text;
-            user-select: text;
+            overflow: hidden;
         }
 
         .po-pages {
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), linear-gradient(0deg, rgb(9, 16, 29) 0%, rgb(7, 9, 15) 24%, rgb(7, 7, 7) 60%, rgb(7, 7, 7) 100%);
+            height: 100vh;
+            background: #070707;
         }
 
         /* Шапка */
@@ -41,15 +33,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 24px;
-            width: 100%;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            background: #0b0f19;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             z-index: 100;
         }
 
         .logo {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
@@ -58,7 +50,7 @@
 
         .logo span {
             color: #60a5fa;
-            font-size: 11px;
+            font-size: 10px;
             background: rgba(96, 165, 250, 0.1);
             padding: 2px 6px;
             border-radius: 4px;
@@ -67,7 +59,7 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
 
         .nav-menu {
@@ -90,241 +82,189 @@
         .lang-switcher {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 5px 10px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
         }
 
-        /* Основной контейнер */
+        /* Основной контент */
         main {
             flex: 1;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 10;
+            width: 100%;
+            height: calc(100vh - 49px);
+            overflow: hidden;
         }
 
         .screen {
             display: none;
             width: 100%;
-            max-width: 900px;
-            animation: fadeIn 0.3s ease-in-out;
+            height: 100%;
         }
 
         .screen.active {
-            display: block;
+            display: flex;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Экран авторизации (Центрированный) */
+        #auth-screen {
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), linear-gradient(0deg, rgb(9, 16, 29) 0%, rgb(7, 9, 15) 24%, rgb(7, 7, 7) 60%, rgb(7, 7, 7) 100%);
+            overflow-y: auto;
         }
 
-        /* Карточки и модалки */
-        .card {
+        .card-auth {
             background: rgba(15, 18, 25, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 28px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 440px;
-            margin: 0 auto;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
-        .card.wide {
-            max-width: 800px;
+        /* ТЕРМИНАЛ: Слева график (70%), Справа сигналы и бот (30%) */
+        .terminal-layout {
+            display: flex;
+            width: 100%;
+            height: 100%;
         }
 
-        .title-block {
+        .chart-pane {
+            flex: 0 0 70%;
+            height: 100%;
+            background: #0b0e14;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .control-pane {
+            flex: 0 0 30%;
+            height: 100%;
+            background: #0f131f;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            gap: 16px;
+            overflow-y: auto;
+        }
+
+        @media(max-width: 900px) {
+            .terminal-layout { flex-direction: column; }
+            .chart-pane { flex: 0 0 50%; width: 100%; }
+            .control-pane { flex: 0 0 50%; width: 100%; }
+        }
+
+        /* Элементы управления и сигналы справа */
+        .panel-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .panel-box h3 {
+            font-size: 13px;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signal-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #34d399;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signal-item.sell { border-left-color: #f87171; }
+        .signal-item b { font-size: 12px; display: block; }
+        .signal-item small { font-size: 10px; color: #94a3b8; }
+
+        .badge-call { background: rgba(52, 211, 153, 0.1); color: #34d399; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+        .badge-put { background: rgba(248, 113, 113, 0.1); color: #f87171; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
             text-align: center;
-            margin-bottom: 20px;
         }
+        .stat-item { background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; }
+        .stat-item span { font-size: 9px; color: #94a3b8; display: block; }
+        .stat-item b { font-size: 13px; color: #34d399; }
 
-        .title-block h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 6px;
+        /* Общие элементы формы */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
         }
+        .form-control:focus { border-color: #60a5fa; }
 
-        .title-block p {
-            font-size: 12px;
-            color: #94a3b8;
-            line-height: 1.4;
+        .btn {
+            width: 100%;
+            background: #60a5fa;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            padding: 11px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        .btn:hover { background: #93c5fd; }
 
-        /* Google кнопка */
         .google-btn {
             width: 100%;
             background: #ffffff;
             color: #000000;
             border: none;
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 8px;
+            padding: 10px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
-            margin-bottom: 16px;
-            transition: background 0.2s;
-        }
-
-        .google-btn:hover {
-            background: #f1f5f9;
-        }
-
-        /* Формы */
-        .form-group {
             margin-bottom: 14px;
-            position: relative;
-            z-index: 50;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-        }
-
-        .form-control {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 12px 14px;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-            position: relative;
-            z-index: 60;
-        }
-
-        .form-control:focus {
-            border-color: #60a5fa;
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: #60a5fa;
-            color: #0f172a;
-            border: none;
-            border-radius: 12px;
-            padding: 13px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 6px;
-            transition: background 0.2s;
-        }
-
-        .submit-btn:hover {
-            background: #93c5fd;
-        }
-
-        .footer-link {
-            text-align: center;
-            margin-top: 14px;
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .footer-link a {
-            color: #60a5fa;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Дашборд элементы */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        @media(max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; }
-        }
-
-        .signal-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #34d399;
-        }
-
-        .signal-box.sell { border-left-color: #f87171; }
-        .signal-box b { font-size: 14px; display: block; }
-        .signal-box small { color: #94a3b8; font-size: 11px; }
-        
-        .badge {
-            background: rgba(52, 211, 153, 0.1);
-            color: #34d399;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .signal-box.sell .badge {
-            background: rgba(248, 113, 113, 0.1);
-            color: #f87171;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 14px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .stat-card span { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px; }
-        .stat-card b { font-size: 18px; color: #34d399; }
-
-        /* Тосты */
         #toast-box {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 16px;
+            right: 16px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         .toast {
             background: #1e293b;
             color: #fff;
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
-            font-size: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .bot-footer {
-            text-align: center;
-            padding: 10px;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-size: 11px;
-            color: #64748b;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -335,7 +275,7 @@
             <div class="logo">Kultura_Treyding <span>PRO</span></div>
             <div class="header-right">
                 <nav class="nav-menu" id="nav-menu">
-                    <a onclick="switchTab('terminal')" class="active" id="t-btn">Сигналы</a>
+                    <a onclick="switchTab('terminal')" class="active" id="t-btn">Терминал</a>
                     <a onclick="switchTab('stats')" id="s-btn">Статистика</a>
                     <a onclick="logout()" style="color: #f87171;">Выйти</a>
                 </nav>
@@ -344,124 +284,154 @@
         </header>
 
         <main>
-            <!-- ЭКРАН 1: РЕГИСТРАЦИЯ / ВХОД -->
+            <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
             <section id="auth-screen" class="screen active">
-                <div class="card">
-                    <div class="title-block">
-                        <h1 id="txt-title">РЕГИСТРАЦИЯ</h1>
-                        <p id="txt-subtitle">Для полного доступа создадим аккаунт у брокера PocketOption</p>
+                <div class="card-auth">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <h1 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;" id="txt-title">РЕГИСТРАЦИЯ</h1>
+                        <p style="font-size: 11px; color: #94a3b8;" id="txt-subtitle">Создадим аккаунт для доступа к терминалу</p>
                     </div>
 
                     <button class="google-btn" type="button" onclick="loginSuccess()">
-                        <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.19-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.79 2.71v2.25h2.9c1.7-1.57 2.69-3.88 2.69-6.6z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.25c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.73H.95v2.33C2.42 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.95C.35 6.17 0 7.54 0 9s.35 2.83.95 4.03l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.47.89 11.43 0 9 0 5.48 0 2.42 2.02.95 4.97l3 2.33c.71-2.14 2.7-3.72 5.05-3.72z"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.19-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.79 2.71v2.25h2.9c1.7-1.57 2.69-3.88 2.69-6.6z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.25c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.73H.95v2.33C2.42 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.95C.35 6.17 0 7.54 0 9s.35 2.83.95 4.03l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.47.89 11.43 0 9 0 5.48 0 2.42 2.02.95 4.97l3 2.33c.71-2.14 2.7-3.72 5.05-3.72z"/></svg>
                         Регистрация через Google
                     </button>
 
                     <form onsubmit="event.preventDefault(); loginSuccess();">
                         <div class="form-group">
-                            <label>Электронная почта *</label>
+                            <label>Email *</label>
                             <input type="email" class="form-control" placeholder="name@gmail.com" required>
                         </div>
-
                         <div class="form-group">
                             <label>Пароль *</label>
                             <input type="password" class="form-control" placeholder="••••••••" required>
                         </div>
-
-                        <div class="form-group">
-                            <label>Повтор пароля *</label>
-                            <input type="password" class="form-control" placeholder="••••••••" required>
-                        </div>
-
-                        <button type="submit" class="submit-btn">Регистрация</button>
+                        <button type="submit" class="btn" style="margin-top: 6px;">Войти в терминал</button>
                     </form>
-
-                    <div class="footer-link">
-                        Уже есть аккаунт? <a onclick="loginSuccess()">Войти</a>
-                    </div>
                 </div>
             </section>
 
-            <!-- ЭКРАН 2: ТЕРМИНАЛ И ЖИВЫЕ СИГНАЛЫ -->
+            <!-- ЭКРАН 2: ТЕРМИНАЛ (График 70% слева + Сигналы 30% справа) -->
             <section id="terminal-screen" class="screen">
-                <div class="card wide">
-                    <div class="grid-2">
-                        <div>
-                            <h3 style="font-size: 15px; margin-bottom: 15px;">⚡ Живая лента сигналов бота</h3>
-                            <div class="signal-box">
+                <div class="terminal-layout">
+                    <!-- ЛЕВАЯ ЧАСТЬ: TradingView График (70%) -->
+                    <div class="chart-pane">
+                        <!-- Вставляем виджет TradingView Advanced Real-time Chart -->
+                        <div class="tradingview-widget-container" style="height:100%;width:100%;">
+                            <div id="tradingview_widget" style="height:100%;width:100%;"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                            <script type="text/javascript">
+                                new TradingView.widget(
+                                {
+                                "width": "100%",
+                                "height": "100%",
+                                "symbol": "FX:EURUSD",
+                                "interval": "5",
+                                "timezone": "Etc/UTC",
+                                "theme": "dark",
+                                "style": "1",
+                                "locale": "ru",
+                                "toolbar_bg": "#f1f3f6",
+                                "enable_publishing": false,
+                                "hide_top_toolbar": false,
+                                "save_image": false,
+                                "container_id": "tradingview_widget"
+                                }
+                                );
+                            </script>
+                        </div>
+                    </div>
+
+                    <!-- ПРАВАЯ ЧАСТЬ: Панель бота и сигналы (30%) -->
+                    <div class="control-pane">
+                        <div class="panel-box">
+                            <h3>⚡ Живые сигналы бота</h3>
+                            <div class="signal-item">
                                 <div>
                                     <b>EUR/USD (M5)</b>
                                     <small>RSI Oversold + SuperTrend</small>
                                 </div>
-                                <div class="badge">CALL (КУПИТЬ)</div>
+                                <span class="badge-call">CALL</span>
                             </div>
-                            <div class="signal-box sell">
+                            <div class="signal-item sell">
                                 <div>
                                     <b>GBP/JPY (M15)</b>
                                     <small>Fibonacci 61.8% Rejection</small>
                                 </div>
-                                <div class="badge">PUT (ПРОДАТЬ)</div>
+                                <span class="badge-put">PUT</span>
                             </div>
                         </div>
-                        <div>
-                            <h3 style="font-size: 15px; margin-bottom: 15px;">🤖 Telegram Бот</h3>
-                            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 10px; font-size: 12px; line-height: 1.6;">
-                                Статус: <b style="color: #34d399;">АКТИВЕН</b><br>
-                                Индикаторы: <b>Smart Money, RSI, Fib</b><br>
-                                Цикл: <b>120 сек</b>
+
+                        <div class="panel-box">
+                            <h3>🤖 Статус Telegram Бота</h3>
+                            <div style="font-size: 11px; color: #94a3b8; line-height: 1.5;">
+                                Состояние: <b style="color: #34d399;">АКТИВЕН</b><br>
+                                Стратегия: <b>Smart Money + Fib</b><br>
+                                Цикл опроса: <b>120 сек</b>
                             </div>
-                            <button class="submit-btn" style="margin-top: 15px;" onclick="showToast('Тестовый сигнал отправлен в Telegram!')">Тест сигнала</button>
+                            <button class="btn" style="margin-top: 10px; padding: 8px;" onclick="showToast('Тестовый сигнал отправлен!')">Тест сигнала</button>
+                        </div>
+
+                        <div class="panel-box">
+                            <h3>📊 Статистика WinRate</h3>
+                            <div class="stats-row">
+                                <div class="stat-item">
+                                    <span>День</span>
+                                    <b>84%</b>
+                                </div>
+                                <div class="stat-item">
+                                    <span>Неделя</span>
+                                    <b>79%</b>
+                                </div>
+                                <div class="stat-item">
+                                    <span>Месяц</span>
+                                    <b>81%</b>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- ЭКРАН 3: СТАТИСТИКА -->
-            <section id="stats-screen" class="screen">
-                <div class="card wide">
-                    <h3 style="font-size: 16px; margin-bottom: 15px;">📊 Аналитика сделок и WinRate</h3>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span>📅 За день</span>
-                            <b>+84.2%</b>
+            <section id="stats-screen" class="screen" style="padding: 20px; overflow-y: auto;">
+                <div style="max-width: 600px; margin: 0 auto; width: 100%;">
+                    <div class="panel-box">
+                        <h3 style="font-size: 16px; margin-bottom: 16px;">📈 Детальная статистика сделок</h3>
+                        <div class="stats-row" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 16px;">
+                            <div class="stat-item">
+                                <span>За день</span>
+                                <b style="font-size: 18px;">+84.2%</b>
+                            </div>
+                            <div class="stat-item">
+                                <span>За неделю</span>
+                                <b style="font-size: 18px;">+79.5%</b>
+                            </div>
+                            <div class="stat-item">
+                                <span>За месяц</span>
+                                <b style="font-size: 18px;">81.1%</b>
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <span>📆 За неделю</span>
-                            <b>+79.5%</b>
-                        </div>
-                        <div class="stat-card">
-                            <span>🗓 За месяц</span>
-                            <b>81.1% Win</b>
-                        </div>
+                        <p style="font-size: 11px; color: #94a3b8; text-align: center;">Данные синхронизируются через @Kultura_Treyding_bot</p>
                     </div>
-                    <p style="color: #94a3b8; font-size: 12px; text-align: center;">Синхронизировано с @Kultura_Treyding_bot</p>
                 </div>
             </section>
         </main>
-
-        <div class="bot-footer">@Kultura_Treyding_bot</div>
     </div>
 
     <div id="toast-box"></div>
 
     <script>
-        // Исправление фокуса для Telegram WebApp десктопа/мобилок
+        // Гарантированный фокус для полей в Telegram WebApp
         document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('click', (e) => {
-                e.stopPropagation();
-                input.focus();
-            });
-            input.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                input.focus();
-            });
+            input.addEventListener('click', (e) => { e.stopPropagation(); input.focus(); });
+            input.addEventListener('touchstart', (e) => { e.stopPropagation(); input.focus(); });
         });
 
         let currentLang = 'RU';
         function toggleLang() {
             currentLang = currentLang === 'RU' ? 'EN' : 'RU';
             document.getElementById('lang-lbl').innerText = currentLang === 'RU' ? '🇷🇺 RU' : '🇬🇧 EN';
-            document.getElementById('txt-title').innerText = currentLang === 'RU' ? 'РЕГИСТРАЦИЯ' : 'REGISTRATION';
             showToast('Язык изменен: ' + currentLang);
         }
 
@@ -469,7 +439,7 @@
             document.getElementById('auth-screen').classList.remove('active');
             document.getElementById('terminal-screen').classList.add('active');
             document.getElementById('nav-menu').style.display = 'flex';
-            showToast('Успешный вход в систему!');
+            showToast('Успешный вход в терминал!');
         }
 
         function logout() {
