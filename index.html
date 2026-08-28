@@ -2,231 +2,238 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PO Terminal - Вход</title>
-    <!-- Подключаем графики TradingView -->
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | PO Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
         body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0b0e14; color: #d1d4dc;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #070707;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .po-pages {
+            position: relative;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), linear-gradient(0deg, rgb(9, 16, 29) 0%, rgb(7, 9, 15) 24%, rgb(7, 7, 7) 60%, rgb(7, 7, 7) 100%);
             overflow: hidden;
         }
 
-        /* Общие контейнеры экранов */
-        .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; box-sizing: border-box;
+        /* Шапка */
+        header {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24rem 32rem;
+            max-width: 1200rem;
+            width: 100%;
+            margin: 0 auto;
         }
-        .hidden { display: none !important; }
 
-        /* --- ЭКРАН 1: АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ --- */
-        #auth-screen {
-            background: radial-gradient(circle at center, #161b22 0%, #0b0e14 100%);
-            justify-content: center; align-items: center; padding: 20px;
-            overflow-y: auto;
+        .logo {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.5px;
         }
-        .auth-card {
-            background-color: #12161f; border: 1px solid #21262d;
-            border-radius: 16px; padding: 30px; width: 100%; max-width: 400px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center;
+
+        .lang-switcher {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
         }
-        .auth-title { font-size: 24px; font-weight: bold; color: #ffffff; margin-bottom: 8px; }
-        .auth-subtitle { font-size: 13px; color: #8b949e; margin-bottom: 20px; }
-        
+
+        /* Основной контент */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(15, 18, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .title-block {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .title-block h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .title-block p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* Кнопка Google */
         .google-btn {
-            background-color: #ffffff; color: #24292e; border: none;
-            border-radius: 8px; padding: 12px; width: 100%; font-weight: bold;
-            font-size: 14px; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; gap: 10px; margin-bottom: 16px;
-        }
-        .divider { color: #8b949e; font-size: 12px; margin-bottom: 12px; }
-        
-        .input-field {
-            background-color: #0b0e14; border: 1px solid #30363d; border-radius: 8px;
-            padding: 12px; width: 100%; color: #fff; margin-bottom: 12px; box-sizing: border-box;
+            width: 100%;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.2s;
         }
+
+        .google-btn:hover {
+            background: #f1f5f9;
+        }
+
+        /* Форма */
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+        }
+
         .submit-btn {
-            background-color: #2f81f7; color: #ffffff; border: none; border-radius: 8px;
-            padding: 12px; width: 100%; font-weight: bold; font-size: 14px; cursor: pointer;
-            margin-top: 6px;
-        }
-        .submit-btn:hover { background-color: #388bfd; }
-
-        /* Блок реферальной ссылки и промокода */
-        .referral-box {
-            margin-top: 18px; padding-top: 14px; border-top: 1px solid #21262d;
-            font-size: 12px; color: #8b949e; text-align: left;
-        }
-        .referral-box a { color: #2f81f7; text-decoration: none; }
-        .promo-code {
-            background-color: #1a202c; border: 1px dashed #30363d; color: #58a6ff;
-            padding: 6px; border-radius: 6px; text-align: center; font-weight: bold;
-            margin-top: 6px; font-size: 13px; letter-spacing: 1px;
+            width: 100%;
+            background: #60a5fa;
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
         }
 
-        /* --- ЭКРАН 2: ТЕРМИНАЛ (Две колонки) --- */
-        #terminal-screen { background-color: #131722; }
-        
-        #header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 16px; background-color: #1e222d; border-bottom: 1px solid #2a2e39; font-size: 14px;
+        .submit-btn:hover {
+            background: #93c5fd;
         }
-        
-        #main-container { display: flex; flex-direction: row; flex-grow: 1; overflow: hidden; }
-        
-        /* Левая колонка - График (70%) */
-        #chart-column { flex: 7; position: relative; background-color: #1e222d; display: flex; flex-direction: column; border-right: 1px solid #2a2e39; }
-        .chart-header { padding: 10px; font-weight: bold; font-size: 15px; color: #fff; }
-        #tv-chart-div { flex-grow: 1; width: 100%; }
 
-        /* Правая колонка - Сигналы и Панель (30%) */
-        #info-column { flex: 3; background-color: #131722; overflow-y: auto; display: flex; flex-direction: column; }
-        
-        .signal-box { background-color: #1e222d; margin: 10px; padding: 14px; border-radius: 10px; text-align: center; }
-        .signal-up { font-size: 28px; font-weight: bold; color: #089981; margin: 6px 0; }
-        
-        .entry-box { background-color: #1e222d; margin: 0 10px 10px 10px; padding: 10px 14px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; color: #8b949e; }
-        .entry-val { color: #fff; font-weight: bold; }
+        .footer-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
 
-        /* Нижнее меню */
-        #bottom-nav { display: flex; justify-content: space-around; padding: 12px 0; background-color: #131722; border-top: 1px solid #2a2e39; }
-        .nav-item { font-size: 12px; color: #787b86; text-align: center; cursor: pointer; }
-        .nav-item.active { color: #2962ff; }
+        .footer-link a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
 
-        /* Адаптивность для мобильных */
-        @media (max-width: 768px) {
-            #main-container { flex-direction: column; }
-            #chart-column { height: 50%; border-right: none; border-bottom: 1px solid #2a2e39; }
-            #info-column { height: 50%; }
+        .footer-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ / РЕГИСТРАЦИИ -->
-    <div id="auth-screen" class="screen">
-        <div class="auth-card">
-            <div class="auth-title">ВХОД</div>
-            <div class="auth-subtitle">Используйте данные вашего аккаунта для входа</div>
-            
-            <button class="google-btn" onclick="loginSuccess()">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.15C3.17 21.32 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.18C.43 8.13 0 9.87 0 12s.43 3.87 1.18 5.4l4.09-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.68 1.18 6.6l4.09 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-                Продолжить через Google
-            </button>
-            
-            <div class="divider">или по электронной почте</div>
-            
-            <input type="email" class="input-field" placeholder="Электронная почта">
-            <input type="password" class="input-field" placeholder="Пароль">
-            
-            <button class="submit-btn" onclick="loginSuccess()">Войти</button>
-
-            <!-- Блок реферальной ссылки и промокода -->
-            <div class="referral-box">
-                Нет аккаунта? <a href="https://pocket-friends.co/r/u25lkma8wc" target="_blank">Зарегистрироваться</a>
-                <div style="margin-top: 8px;">Реферальный промокод:</div>
-                <div class="promo-code">FRIENDU25LKMA8WC</div>
+    <div class="po-pages">
+        <header>
+            <div class="logo">PO Terminal</div>
+            <div class="lang-switcher">
+                🇷🇺 RU ▾
             </div>
-        </div>
-    </div>
-
-    <!-- ЭКРАН ТЕРМИНАЛА -->
-    <div id="terminal-screen" class="screen hidden">
-        <header id="header">
-            <span style="font-weight: bold;">PO Terminal</span>
-            <span style="color: #787b86; cursor: pointer;" onclick="logout()">Выйти ✕</span>
         </header>
 
-        <div id="main-container">
-            <!-- Левая колонка: График -->
-            <div id="chart-column">
-                <div class="chart-header">EUR/CHF OTC 92%</div>
-                <div id="tv-chart-div"></div>
-            </div>
-
-            <!-- Правая колонка: Сигналы и меню -->
-            <div id="info-column">
-                <div class="signal-box">
-                    <div style="font-size: 11px; color: #787b86;">AUD/CAD OTC • M1</div>
-                    <div style="font-size: 11px; color: #787b86; margin-top: 4px;">АНАЛИЗ ЗАВЕРШЁН</div>
-                    <div class="signal-up">ВВЕРХ ↑</div>
-                    <div style="font-size: 12px; color: #787b86;">Сила сигнала: <b style="color:#fff;">61 (Средний)</b></div>
+        <main>
+            <div class="register-container">
+                <div class="title-block">
+                    <h1>РЕГИСТРАЦИЯ</h1>
+                    <p>Для полного доступа создадим аккаунт у брокера PocketOption</p>
                 </div>
 
-                <div class="entry-box">
-                    <span>Вход (Цена)</span>
-                    <span class="entry-val">0.97460</span>
-                </div>
+                <button class="google-btn">
+                    <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.19-1.84H9v3.48h4.84c-.21 1.12-.84 2.07-1.79 2.71v2.25h2.9c1.7-1.57 2.69-3.88 2.69-6.6z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.25c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.73H.95v2.33C2.42 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.95C.35 6.17 0 7.54 0 9s.35 2.83.95 4.03l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.47.89 11.43 0 9 0 5.48 0 2.42 2.02.95 4.97l3 2.33c.71-2.14 2.7-3.72 5.05-3.72z"/></svg>
+                    Регистрация через Google
+                </button>
 
-                <div class="signal-box" style="text-align: left;">
-                    <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Активные сделки</div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-                        <span>EUR/USD (M5)</span>
-                        <span style="color: #089981;">+$15.50</span>
+                <form>
+                    <div class="form-group">
+                        <label>Электронная почта *</label>
+                        <input type="email" class="form-control" placeholder="Электронная почта">
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                        <span>GBP/JPY (M1)</span>
-                        <span style="color: #f23645;">-$5.00</span>
+
+                    <div class="form-group">
+                        <label>Пароль *</label>
+                        <input type="password" class="form-control" placeholder="Пароль">
                     </div>
+
+                    <div class="form-group">
+                        <label>Повтор пароля *</label>
+                        <input type="password" class="form-control" placeholder="Повтор пароля">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Регистрация</button>
+                </form>
+
+                <div class="footer-link">
+                    Уже есть аккаунт? <a href="#">Войти</a>
                 </div>
             </div>
-        </div>
-
-        <nav id="bottom-nav">
-            <div class="nav-item">🗠 Сделки</div>
-            <div class="nav-item">⌂ Главная</div>
-            <div class="nav-item active">↑ Сигналы</div>
-            <div class="nav-item" onclick="logout()">👤 Профиль</div>
-        </nav>
+        </main>
     </div>
 
-    <script>
-        function loginSuccess() {
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('terminal-screen').classList.remove('hidden');
-            setTimeout(initChart, 100);
-        }
-
-        function logout() {
-            document.getElementById('terminal-screen').classList.add('hidden');
-            document.getElementById('auth-screen').classList.remove('hidden');
-        }
-
-        let chartInitialized = false;
-        function initChart() {
-            if (chartInitialized) return;
-            chartInitialized = true;
-
-            const chartElement = document.getElementById('tv-chart-div');
-            const chart = LightweightCharts.createChart(chartElement, {
-                layout: { backgroundColor: '#1e222d', textColor: '#d1d4dc' },
-                grid: { vertLines: { color: '#2a2e39' }, horzLines: { color: '#2a2e39' } },
-                timeScale: { timeVisible: true, secondsVisible: false, borderColor: '#2a2e39' },
-                rightPriceScale: { borderColor: '#2a2e39' },
-            });
-
-            const candleSeries = chart.addCandlestickSeries({
-                upColor: '#089981', downColor: '#f23645',
-                borderDownColor: '#f23645', borderUpColor: '#089981',
-                wickDownColor: '#737375', wickUpColor: '#737375',
-            });
-
-            candleSeries.setData([
-                { time: '2024-07-15', open: 0.97690, high: 0.97780, low: 0.97670, close: 0.97750 },
-                { time: '2024-07-16', open: 0.97750, high: 0.97800, low: 0.97720, close: 0.97780 },
-                { time: '2024-07-17', open: 0.97780, high: 0.97790, low: 0.97600, close: 0.97630 },
-                { time: '2024-07-18', open: 0.97630, high: 0.97660, low: 0.97580, close: 0.97600 },
-                { time: '2024-07-19', open: 0.97600, high: 0.97700, low: 0.97590, close: 0.97650 },
-            ]);
-
-            window.addEventListener('resize', () => {
-                chart.applyOptions({ width: chartElement.clientWidth, height: chartElement.clientHeight });
-            });
-            window.dispatchEvent(new Event('resize'));
-        }
-    </script>
 </body>
 </html>
