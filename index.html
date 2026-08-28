@@ -546,7 +546,7 @@
             }
         }
 
-        // Проверка при входе
+        // Проверка при входе (строгая проверка пароля)
         function handleLogin(event) {
             event.preventDefault();
             const email = document.getElementById('login-email').value.trim();
@@ -557,9 +557,11 @@
                 return;
             }
 
-            // Условие для примера неверного пароля (если меньше 6 символов)
-            if (pass.length < 6) {
-                showToast('Ошибка: Неверный пароль! Пароль должен содержать минимум 6 символов.', 'error');
+            // Укажите здесь ваш реальный пароль
+            const correctPassword = "12345Password";
+
+            if (pass !== correctPassword) {
+                showToast('Ошибка: Неверный пароль!', 'error');
                 return;
             }
 
