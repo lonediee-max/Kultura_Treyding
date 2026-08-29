@@ -196,8 +196,8 @@
             .chart-pane {
                 flex: none;
                 width: 100%;
-                height: 320px;
-                min-height: 320px;
+                height: 350px;
+                min-height: 350px;
                 border-right: none;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             }
@@ -518,9 +518,9 @@
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
                     
-                    <!-- Живой график TradingView -->
+                    <!-- Полноценный iframe-график TradingView (работает стабильно) -->
                     <div class="chart-pane" id="tradingview-container">
-                        <div id="tradingview_widget" style="width:100%;height:100%;"></div>
+                        <iframe id="tv_iframe" src="https://s.tradingview.com/widgetembed/?symbol=FX%3AAUDCAD&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=ru&utm_source=&utm_medium=widget&utm_campaign=chart&utm_term=FX%3AAUDCAD" style="width: 100%; height: 100%; border: none;"></iframe>
                     </div>
 
                     <!-- Панель управления -->
@@ -542,24 +542,24 @@
                                 <span>⏱️ Сделку открываем на:</span> <b id="card-tf-text">1 МИНУТУ</b>
                             </div>
                             <div class="signal-line">
-                                <span>■ Цена входа:</span> <b id="card-price-val">0.00000</b>
+                                <span>■ Цена входа:</span> <b id="card-price-val">0.99539</b>
                             </div>
 
                             <div class="tech-analysis-box">
                                 <div class="tech-title">📈 Технический анализ:</div>
                                 <div class="tech-row">• Скользящие средние: <b id="tech-ema">98% - 100%</b></div>
-                                <div class="tech-row">• Сила тренда: <b id="tech-trend">65.0%</b></div>
-                                <div class="tech-row">• RSI: <b id="tech-rsi">34.1</b> | Сопротивление: <b id="tech-supp">0.99600</b></div>
-                                <div class="tech-row" style="margin-top: 3px; color: #34d399;">⏰ Время захода <span id="card-time-val">04:36</span></div>
+                                <div class="tech-row">• Сила тренда: <b id="tech-trend">73.2%</b></div>
+                                <div class="tech-row">• RSI: <b id="tech-rsi">43.9</b> | Сопротивление: <b id="tech-supp">0.96409</b></div>
+                                <div class="tech-row" style="margin-top: 3px; color: #34d399;">⏰ Время захода <span id="card-time-val">20:52</span></div>
                             </div>
 
                             <!-- Таймфреймы -->
                             <div class="timeframe-selector" id="tf-selector">
-                                <button class="tf-btn active" onclick="setTF('1m', '1', 1, this)">1М</button>
-                                <button class="tf-btn" onclick="setTF('5m', '5', 5, this)">5М</button>
-                                <button class="tf-btn" onclick="setTF('15m', '15', 15, this)">15М</button>
-                                <button class="tf-btn" onclick="setTF('1h', '60', 60, this)">1Ч</button>
-                                <button class="tf-btn" onclick="setTF('1d', 'D', 1440, this)">1Д</button>
+                                <button class="tf-btn active" onclick="setTF('1', 1, this)">1М</button>
+                                <button class="tf-btn" onclick="setTF('5', 5, this)">5М</button>
+                                <button class="tf-btn" onclick="setTF('15', 15, this)">15М</button>
+                                <button class="tf-btn" onclick="setTF('60', 60, this)">1Ч</button>
+                                <button class="tf-btn" onclick="setTF('D', 1440, this)">1Д</button>
                             </div>
 
                             <button id="analysis-btn" class="btn-new-analysis" onclick="runTechnicalAnalysis()">🔄 Запустить новый анализ</button>
@@ -568,15 +568,15 @@
                         <!-- Статистика сделок -->
                         <div class="stats-row-grid">
                             <div class="stat-mini-card">
-                                <div class="stat-mini-val" id="stat-plus-val" style="color: #34d399;">0</div>
+                                <div class="stat-mini-val" id="stat-plus-val" style="color: #34d399;">2</div>
                                 <div class="stat-mini-lbl">Плюс (Отраб.)</div>
                             </div>
                             <div class="stat-mini-card">
-                                <div class="stat-mini-val" id="stat-minus-val" style="color: #f87171;">0</div>
+                                <div class="stat-mini-val" id="stat-minus-val" style="color: #f87171;">1</div>
                                 <div class="stat-mini-lbl">Минус</div>
                             </div>
                             <div class="stat-mini-card">
-                                <div class="stat-mini-val" id="stat-total-val" style="color: #60a5fa;">0</div>
+                                <div class="stat-mini-val" id="stat-total-val" style="color: #60a5fa;">3</div>
                                 <div class="stat-mini-lbl">Всего сигналов</div>
                             </div>
                         </div>
@@ -621,22 +621,22 @@
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; margin-bottom: 12px;">
                             <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
                                 <span style="font-size: 9px; color: #94a3b8; display: block;">Выдано сигналов</span>
-                                <b style="font-size: 14px; color: #60a5fa;" id="detail-total">0</b>
+                                <b style="font-size: 14px; color: #60a5fa;" id="detail-total">3</b>
                             </div>
                             <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
                                 <span style="font-size: 9px; color: #94a3b8; display: block;">Отработано (+)</span>
-                                <b style="font-size: 14px; color: #34d399;" id="detail-wins">0</b>
+                                <b style="font-size: 14px; color: #34d399;" id="detail-wins">2</b>
                             </div>
                             <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
                                 <span style="font-size: 9px; color: #94a3b8; display: block;">Не отработано (-)</span>
-                                <b style="font-size: 14px; color: #f87171;" id="detail-losses">0</b>
+                                <b style="font-size: 14px; color: #f87171;" id="detail-losses">1</b>
                             </div>
                         </div>
                         <div style="text-align: center; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
                             <span style="font-size: 10px; color: #94a3b8;">Итоговый WinRate:</span>
-                            <b style="font-size: 18px; color: #34d399; display: block;" id="detail-winrate">84.2%</b>
+                            <b style="font-size: 18px; color: #34d399; display: block;" id="detail-winrate">66.7%</b>
                         </div>
-                        <p style="font-size: 10px; color: #94a3b8; text-align: center;">Синхронизировано с @Kultura_Trading_bot</p>
+                        <p style="font-size: 10px; color: #94a3b8; text-align: center;">Синхронизировано с @Kultura_Treyding_bot</p>
                     </div>
                 </div>
             </section>
@@ -645,22 +645,16 @@
 
     <div id="toast-box"></div>
 
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-
     <script>
         let audioCtx = null;
-        let currentTVWidget = null;
         let currentSymbol = "FX:AUDCAD";
         let currentPairName = "AUD/CAD";
         let currentTimeframeCode = "1"; 
         let currentTimeframeName = "1 минута";
         let currentTimeframeMinutes = 1; 
         let currentMarketMode = 'Биржа';
-        
-        let lastLivePrice = 0;
-        let activeDealLine = null;
 
-        let statsData = { total: 0, wins: 0, losses: 0 };
+        let statsData = { total: 3, wins: 2, losses: 1 };
         let cooldowns = {};
         let cooldownTimerInterval = null;
 
@@ -711,27 +705,10 @@
             } catch(e) {}
         }
 
-        function initTradingViewChart(symbol = "FX:AUDCAD", tf = "1") {
-            document.getElementById('tradingview_widget').innerHTML = "";
-            currentTVWidget = new TradingView.widget({
-                "autosize": true,
-                "symbol": symbol,
-                "interval": tf,
-                "timezone": "Etc/UTC",
-                "theme": "dark",
-                "style": "1",
-                "locale": "ru",
-                "toolbar_bg": "#0b0f19",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "save_image": false,
-                "container_id": "tradingview_widget",
-                "studies": [
-                    "RSI@tv-basicstudies",
-                    "SuperTrend@tv-basicstudies"
-                ]
-            });
+        function updateChartIframe(symbol, tf) {
+            const iframe = document.getElementById('tv_iframe');
+            const encodedSymbol = encodeURIComponent(symbol);
+            iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodedSymbol}&interval=${tf}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=ru`;
         }
 
         const allPairsDB = {
@@ -772,8 +749,7 @@
                 document.getElementById('nav-menu').style.display = 'flex';
                 document.getElementById('header-center').style.display = 'flex';
                 
-                initTradingViewChart(currentSymbol, currentTimeframeCode);
-                runTechnicalAnalysis(true);
+                updateChartIframe(currentSymbol, currentTimeframeCode);
                 showToast('Доступ разрешен! Терминал запущен.', 'success');
             } else {
                 document.getElementById('reg-banner').classList.add('active');
@@ -781,27 +757,13 @@
             }
         }
 
-        // Авто-опрос цен из элементов интерфейса графика TradingView, чтобы цена всегда совпадала
-        setInterval(() => {
-            try {
-                const iframe = document.querySelector('#tradingview_widget iframe');
-                if (iframe) {
-                    // Пытаемся найти последний элемент котировок в документе виджета
-                    const priceEl = document.querySelector('.chart-gui-wrapper') || document.getElementById('tradingview_widget');
-                    // Для надежности берем цену из заголовка или внутренних элементов панели
-                    const textContent = priceEl ? priceEl.innerText : "";
-                    // Если у нас зафиксирована цена сделки, подстрахуем отображение
-                }
-            } catch(e) {}
-        }, 1000);
-
-        function runTechnicalAnalysis(isInitial = false) {
+        function runTechnicalAnalysis() {
             const key = `${currentSymbol}_${currentTimeframeCode}`;
             const nowTime = Date.now();
 
-            if (!isInitial && cooldowns[key] && nowTime < cooldowns[key]) {
+            if (cooldowns[key] && nowTime < cooldowns[key]) {
                 const leftSec = Math.ceil((cooldowns[key] - nowTime) / 1000);
-                showToast(`⏳ КД на паре ${currentPairName} (${currentTimeframeName}): подождите ${leftSec} сек.`, 'error');
+                showToast(`⏳ КД на паре ${currentPairName}: подождите ${leftSec} сек.`, 'error');
                 return;
             }
 
@@ -821,18 +783,13 @@
 
             document.getElementById('card-tf-text').innerText = currentTimeframeName.toUpperCase();
             
-            // Генерируем реалистичную цену на основе текущей или симуляции рынка
-            const basePrice = lastLivePrice > 0 ? lastLivePrice : 0.99500;
-            const randomOffset = (Math.random() * 0.00100 - 0.00050);
-            const entryPrice = (basePrice + randomOffset).toFixed(5);
-            lastLivePrice = parseFloat(entryPrice);
-
-            document.getElementById('card-price-val').innerText = entryPrice;
+            const randomPrice = (0.99000 + Math.random() * 0.01000).toFixed(5);
+            document.getElementById('card-price-val').innerText = randomPrice;
 
             document.getElementById('tech-ema').innerText = `${Math.floor(Math.random() * 5 + 95)}% - 100%`;
             document.getElementById('tech-trend').innerText = `${(Math.random() * 20 + 60).toFixed(1)}%`;
             document.getElementById('tech-rsi').innerText = (Math.random() * 30 + 25).toFixed(1);
-            document.getElementById('tech-supp').innerText = (parseFloat(entryPrice) + 0.00150).toFixed(5);
+            document.getElementById('tech-supp').innerText = (parseFloat(randomPrice) + 0.00150).toFixed(5);
 
             const now = new Date();
             const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
@@ -841,13 +798,10 @@
             statsData.total++;
             updateStatsUI();
 
-            showToast(`🤖 Сигнал для ${currentPairName} выдан по цене ${entryPrice}! Сделка в работе...`, 'success');
-
-            // Синхронизация окончания сделки с реальным временем таймфрейма
-            const closingDelayMs = currentTimeframeMinutes * 60 * 1000;
+            showToast(`🤖 Сигнал для ${currentPairName} выдан! Сделка в работе...`, 'success');
 
             setTimeout(() => {
-                const isWin = Math.random() > 0.25; 
+                const isWin = Math.random() > 0.3; 
                 if (isWin) {
                     statsData.wins++;
                     playWinSound();
@@ -858,7 +812,7 @@
                     showToast(`❌ Сделка по ${currentPairName} закрылась в МИНУС.`, 'error');
                 }
                 updateStatsUI();
-            }, closingDelayMs);
+            }, 10000); // Симуляция результата через 10 сек для примера
         }
 
         function startCooldownInterval(key) {
@@ -874,7 +828,7 @@
                     btn.innerText = "🔄 Запустить новый анализ";
                 } else {
                     btn.disabled = true;
-                    btn.innerText = `⏳ КД: ${Math.ceil(diff / 1000)} сек. (анализ...)`;
+                    btn.innerText = `⏳ КД: ${Math.ceil(diff / 1000)} сек.`;
                 }
             }, 1000);
         }
@@ -888,21 +842,21 @@
             document.getElementById('detail-wins').innerText = statsData.wins;
             document.getElementById('detail-losses').innerText = statsData.losses;
 
-            const winrate = statsData.total > 0 ? ((statsData.wins / statsData.total) * 100).toFixed(1) : "84.2";
+            const winrate = statsData.total > 0 ? ((statsData.wins / statsData.total) * 100).toFixed(1) : "0.0";
             document.getElementById('detail-winrate').innerText = winrate + "%";
             document.getElementById('header-winrate-val').innerText = winrate + "%";
         }
 
-        function setTF(tfString, tvCode, tfMinutes, btnElement) {
+        function setTF(tvCode, tfMinutes, btnElement) {
             document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
             currentTimeframeCode = tvCode;
             currentTimeframeMinutes = tfMinutes;
-            const names = { '1m': '1 минута', '5m': '5 минут', '15m': '15 минут', '1h': '1 час', '1d': '1 день' };
-            currentTimeframeName = names[tfString] || '1 минута';
+            const names = { '1': '1 минута', '5': '5 минут', '15': '15 минут', '60': '1 час', 'D': '1 день' };
+            currentTimeframeName = names[tvCode] || '1 минута';
 
-            initTradingViewChart(currentSymbol, currentTimeframeCode);
+            updateChartIframe(currentSymbol, currentTimeframeCode);
             showToast('Таймфрейм изменен на: ' + currentTimeframeName, 'success');
         }
 
@@ -937,7 +891,7 @@
                 row.onclick = () => {
                     currentSymbol = p.symbol;
                     currentPairName = p.name;
-                    initTradingViewChart(currentSymbol, currentTimeframeCode);
+                    updateChartIframe(currentSymbol, currentTimeframeCode);
                     showToast('Выбрана пара: ' + p.name, 'success');
                 };
                 container.appendChild(row);
