@@ -55,8 +55,141 @@
             z-index: 1;
             max-width: 420px;
             margin: 0 auto;
-            padding: 12px 16px 100px 16px;
+            padding: 12px 16px 30px 16px;
         }
+
+        /* ===== ЭКРАН ВХОДА ===== */
+        #authScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a12;
+            padding: 20px;
+        }
+
+        #authScreen .logo { font-size: 3rem; margin-bottom: 12px; }
+        #authScreen .title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        #authScreen .sub {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+        #authScreen .auth-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: rgba(20,20,42,0.6);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+        #authScreen .auth-input:focus { border-color: #7b2ffc; }
+        #authScreen .auth-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 12px;
+        }
+        #authScreen .auth-btn:active { opacity: 0.7; }
+        #authScreen .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        #authScreen .auth-error {
+            color: #ff1744;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 24px;
+        }
+
+        /* ===== РЕФЕРАЛЬНЫЙ ЭКРАН ===== */
+        #referralScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a12;
+            padding: 20px;
+        }
+        #referralScreen.active { display: flex; }
+        #referralScreen .error-icon { font-size: 3rem; margin-bottom: 12px; }
+        #referralScreen .title { font-size: 1.4rem; font-weight: 700; color: #ff1744; margin-bottom: 8px; }
+        #referralScreen .sub {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            text-align: center;
+            max-width: 320px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        #referralScreen .ref-link {
+            background: rgba(20,20,42,0.6);
+            padding: 12px 16px;
+            border-radius: 10px;
+            word-break: break-all;
+            border: 1px solid rgba(123,47,252,0.2);
+            margin-bottom: 10px;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+        }
+        #referralScreen .ref-link a { color: #7b2ffc; text-decoration: none; }
+        #referralScreen .ref-code {
+            background: rgba(20,20,42,0.6);
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px dashed rgba(0,210,255,0.3);
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #00d2ff;
+            cursor: pointer;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+        }
+        #referralScreen .auth-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        #referralScreen .auth-btn:active { opacity: 0.7; }
 
         /* ===== ПРИВЕТСТВИЕ ===== */
         #splashScreen {
@@ -66,14 +199,13 @@
             width: 100%;
             height: 100%;
             z-index: 9999;
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: #0a0a12;
-            animation: fadeOut 0.5s ease-out 2.5s forwards;
         }
-
+        #splashScreen.active { display: flex; }
         #splashScreen .logo { font-size: 3rem; margin-bottom: 12px; }
         #splashScreen .title {
             font-size: 2rem;
@@ -99,7 +231,6 @@
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeOut { 0% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 
         /* ===== ХЕДЕР ===== */
         .header {
@@ -111,71 +242,96 @@
             backdrop-filter: blur(20px);
             border-radius: 16px;
             border: 1px solid rgba(123, 47, 252, 0.15);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
         .header-logo {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             background: linear-gradient(135deg, #7b2ffc, #00d2ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .header-logo span {
-            font-size: 0.6rem;
-            -webkit-text-fill-color: rgba(255,255,255,0.3);
+            font-size: 0.55rem;
+            -webkit-text-fill-color: rgba(255,255,255,0.2);
             background: none;
         }
         .header-right {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: rgba(255,255,255,0.4);
         }
         .header-right .id { color: rgba(255,255,255,0.6); }
+        .header-right .live { color: #00c853; }
 
         /* ===== СТАТИСТИКА ===== */
         .daily-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 14px;
         }
 
         .stat-card {
-            background: rgba(20, 20, 42, 0.6);
+            background: rgba(20, 20, 42, 0.5);
             backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 12px 8px;
+            border-radius: 10px;
+            padding: 10px 6px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.04);
         }
-
-        .stat-card .value { font-size: 1.2rem; font-weight: 700; line-height: 1.4; }
-        .stat-card .label { font-size: 0.55rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+        .stat-card .label { font-size: 0.5rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-card .value.green { color: #00c853; }
         .stat-card .value.red { color: #ff1744; }
         .stat-card .value.yellow { color: #ffab00; }
         .stat-card .value.blue { color: #448aff; }
 
-        /* ===== ВАЛЮТНЫЕ ПАРЫ ===== */
+        /* ===== БЛОКИ ПАР ===== */
+        .block-section {
+            margin-bottom: 12px;
+        }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 4px 6px 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 6px;
+        }
+        .block-header .icon { font-size: 0.9rem; }
+        .block-header .label {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .block-header .count {
+            font-size: 0.55rem;
+            color: rgba(255,255,255,0.15);
+            margin-left: auto;
+        }
+
         .pair-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 16px;
+            gap: 4px;
         }
 
         .pair-item {
-            background: rgba(20, 20, 42, 0.5);
+            background: rgba(20, 20, 42, 0.4);
             backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 12px 16px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,0.03);
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
@@ -183,42 +339,68 @@
             align-items: center;
         }
 
-        .pair-item:hover { border-color: rgba(123, 47, 252, 0.2); transform: translateX(3px); }
+        .pair-item:hover { border-color: rgba(123, 47, 252, 0.15); transform: translateX(2px); }
         .pair-item:active { transform: scale(0.98); }
 
-        .pair-info { display: flex; flex-direction: column; gap: 1px; }
-        .pair-name { font-weight: 600; font-size: 0.9rem; color: #fff; }
-        .pair-price { font-size: 0.75rem; color: rgba(255,255,255,0.4); font-weight: 500; }
-        .pair-price .change.up { color: #00c853; }
-        .pair-price .change.down { color: #ff1744; }
+        .pair-item .info { display: flex; flex-direction: column; gap: 1px; }
+        .pair-item .name { font-weight: 600; font-size: 0.85rem; color: #fff; }
+        .pair-item .price {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.35);
+            font-weight: 500;
+        }
+        .pair-item .price .change.up { color: #00c853; }
+        .pair-item .price .change.down { color: #ff1744; }
 
-        .pair-signal { display: flex; align-items: center; gap: 8px; }
+        .pair-item .signal-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pair-item .arrow { font-size: 0.9rem; }
+        .pair-item .arrow.up { color: #00c853; }
+        .pair-item .arrow.down { color: #ff1744; }
+        .pair-item .arrow.neutral { color: #ffab00; }
 
-        .signal-badge {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.6rem;
+        .pair-item .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.55rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-        .signal-badge.up { background: rgba(0, 200, 83, 0.15); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.2); }
-        .signal-badge.down { background: rgba(255, 23, 68, 0.15); color: #ff1744; border: 1px solid rgba(255, 23, 68, 0.2); }
-        .signal-badge.neutral { background: rgba(255, 171, 0, 0.15); color: #ffab00; border: 1px solid rgba(255, 171, 0, 0.2); }
+        .pair-item .badge.up { background: rgba(0, 200, 83, 0.12); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.15); }
+        .pair-item .badge.down { background: rgba(255, 23, 68, 0.12); color: #ff1744; border: 1px solid rgba(255, 23, 68, 0.15); }
+        .pair-item .badge.neutral { background: rgba(255, 171, 0, 0.12); color: #ffab00; border: 1px solid rgba(255, 171, 0, 0.15); }
+        .pair-item .badge.waiting { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.04); }
 
-        .signal-arrow { font-size: 1rem; }
-        .signal-arrow.up { color: #00c853; }
-        .signal-arrow.down { color: #ff1744; }
-        .signal-arrow.neutral { color: #ffab00; }
+        .pair-item .strength-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .pair-item .strength-dot.high { background: #00c853; }
+        .pair-item .strength-dot.medium { background: #ffab00; }
+        .pair-item .strength-dot.low { background: #ff1744; }
 
-        .pair-category {
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.2);
-            text-transform: uppercase;
+        .pair-item.waiting { opacity: 0.4; }
+
+        /* ===== ФУТЕР ===== */
+        .footer {
+            text-align: center;
+            padding: 16px 0 8px 0;
+            color: rgba(255,255,255,0.08);
+            font-size: 0.65rem;
             letter-spacing: 1px;
-            padding: 8px 4px 4px 4px;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            margin-top: 4px;
+        }
+        .footer span {
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
         }
 
         /* ===== МОДАЛКА ===== */
@@ -277,35 +459,35 @@
         .modal-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
         .modal-price {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             text-align: center;
             color: #fff;
-            padding: 14px;
+            padding: 12px;
             background: rgba(255,255,255,0.03);
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
-        .modal-price .change { font-size: 0.9rem; font-weight: 500; margin-left: 8px; }
+        .modal-price .change { font-size: 0.8rem; font-weight: 500; margin-left: 8px; }
         .modal-price .change.up { color: #00c853; }
         .modal-price .change.down { color: #ff1744; }
 
         .modal-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 14px;
+            gap: 6px;
+            margin-bottom: 12px;
         }
 
         .modal-item {
             background: rgba(255,255,255,0.03);
             border-radius: 10px;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .modal-item .label { font-size: 0.55rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
-        .modal-item .value { font-size: 0.95rem; font-weight: 600; margin-top: 2px; color: #fff; }
+        .modal-item .label { font-size: 0.5rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal-item .value { font-size: 0.85rem; font-weight: 600; margin-top: 2px; color: #fff; }
         .modal-item .value.green { color: #00c853; }
         .modal-item .value.red { color: #ff1744; }
         .modal-item .value.yellow { color: #ffab00; }
@@ -314,13 +496,13 @@
         .modal-indicators {
             background: rgba(255,255,255,0.03);
             border-radius: 12px;
-            padding: 14px;
+            padding: 12px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin: 12px 0;
+            margin: 10px 0;
         }
-        .modal-indicators .title { font-size: 0.6rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .indicator-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.85rem; }
-        .indicator-row .name { color: rgba(255,255,255,0.5); }
+        .modal-indicators .title { font-size: 0.55rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .indicator-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.8rem; }
+        .indicator-row .name { color: rgba(255,255,255,0.4); }
         .indicator-row .value.buy { color: #00c853; }
         .indicator-row .value.sell { color: #ff1744; }
         .indicator-row .value.neutral { color: #ffab00; }
@@ -329,39 +511,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 14px;
+            padding: 8px 12px;
             background: rgba(255,255,255,0.03);
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-top: 8px;
+            margin-top: 6px;
         }
-        .strength-section .label { font-size: 0.6rem; color: rgba(255,255,255,0.35); text-transform: uppercase; }
-        .strength-section .value { font-size: 1rem; font-weight: 700; }
+        .strength-section .label { font-size: 0.55rem; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+        .strength-section .value { font-size: 0.9rem; font-weight: 700; }
 
         .strength-bar {
             width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.08);
+            height: 3px;
+            background: rgba(255,255,255,0.06);
             border-radius: 2px;
-            margin-top: 6px;
+            margin-top: 4px;
             overflow: hidden;
         }
         .strength-bar .fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #ff1744, #ffab00, #00c853); transition: width 0.6s; }
-
-        /* ===== ФУТЕР ===== */
-        .footer {
-            text-align: center;
-            padding: 20px 0 10px 0;
-            color: rgba(255,255,255,0.12);
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-        }
-        .footer span {
-            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 600;
-        }
 
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -369,62 +536,96 @@
 
         @media (max-width: 380px) {
             .daily-stats { grid-template-columns: repeat(2, 1fr); }
-            .pair-name { font-size: 0.8rem; }
+            .pair-item .name { font-size: 0.75rem; }
+            .pair-item .price { font-size: 0.6rem; }
         }
+
+        /* Скрытые элементы */
+        #mainScreen { display: none; }
+        #mainScreen.active { display: block; }
     </style>
 </head>
 <body>
 
+    <!-- ===== ЭКРАН ВХОДА ===== -->
+    <div id="authScreen">
+        <div class="logo">📡</div>
+        <div class="title">Kultura_Treyding</div>
+        <div class="sub">Введите ваш ID для входа</div>
+        <input type="text" class="auth-input" id="authInput" placeholder="Введите ID..." value="12345678">
+        <div class="auth-error" id="authError"></div>
+        <button class="auth-btn" id="authBtn">✅ Войти</button>
+    </div>
+
+    <!-- ===== РЕФЕРАЛЬНЫЙ ЭКРАН ===== -->
+    <div id="referralScreen">
+        <div class="error-icon">⚠️</div>
+        <div class="title">Требуется регистрация</div>
+        <div class="sub">
+            Вы не зарегистрированы по реферальной ссылке.<br>
+            Пожалуйста, перейдите по ссылке и зарегистрируйтесь:
+        </div>
+        <div class="ref-link">
+            <a href="https://pocket-friends.co/r/u25lkma8wc" target="_blank">
+                pocket-friends.co/r/u25lkma8wc
+            </a>
+        </div>
+        <div class="ref-code" id="refCodeCopy">
+            ✨ FRIENDU25LKMA8WC
+        </div>
+        <button class="auth-btn" id="retryAuthBtn">🔄 Попробовать снова</button>
+    </div>
+
     <!-- ===== ПРИВЕТСТВИЕ ===== -->
-    <div id="splashScreen">
+    <div id="splashScreen" class="active">
         <div class="logo">📡</div>
         <div class="title">Kultura_Treyding</div>
         <div class="sub">ТОРГОВЫЙ ТЕРМИНАЛ</div>
         <div class="loader"></div>
     </div>
 
-    <!-- ===== ФОН ===== -->
-    <div class="background"></div>
-
     <!-- ===== ОСНОВНОЙ ЭКРАН ===== -->
-    <div class="container">
+    <div id="mainScreen">
+        <div class="background"></div>
+        <div class="container">
 
-        <!-- Хедер -->
-        <div class="header">
-            <div class="header-logo">Kultura_Treyding<span>™</span></div>
-            <div class="header-right">
-                <span class="id">88808610</span>
-                <span style="color:rgba(255,255,255,0.15);">|</span>
-                <span style="color:#00c853;">● LIVE</span>
+            <!-- Хедер -->
+            <div class="header">
+                <div class="header-logo">Kultura_Treyding<span>™</span></div>
+                <div class="header-right">
+                    <span class="id" id="userIdDisplay">88808610</span>
+                    <span style="color:rgba(255,255,255,0.1);">|</span>
+                    <span class="live">● LIVE</span>
+                </div>
             </div>
-        </div>
 
-        <!-- Статистика -->
-        <div class="daily-stats">
-            <div class="stat-card">
-                <div class="value blue" id="totalSignals">0</div>
-                <div class="label">ВСЕГО</div>
+            <!-- Статистика -->
+            <div class="daily-stats">
+                <div class="stat-card">
+                    <div class="value blue" id="totalSignals">0</div>
+                    <div class="label">ВСЕГО</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value green" id="winSignals">0</div>
+                    <div class="label">+ В ПЛЮС</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value red" id="loseSignals">0</div>
+                    <div class="label">- В МИНУС</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value yellow" id="winRate">0%</div>
+                    <div class="label">ВИНРЕЙТ</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="value green" id="winSignals">0</div>
-                <div class="label">+ В ПЛЮС</div>
-            </div>
-            <div class="stat-card">
-                <div class="value red" id="loseSignals">0</div>
-                <div class="label">- В МИНУС</div>
-            </div>
-            <div class="stat-card">
-                <div class="value yellow" id="winRate">0%</div>
-                <div class="label">ВИНРЕЙТ</div>
-            </div>
-        </div>
 
-        <!-- Список пар -->
-        <div class="pair-list" id="pairList"></div>
+            <!-- Блоки пар -->
+            <div id="pairBlocks"></div>
 
-        <!-- Футер -->
-        <div class="footer">
-            <span>@Kultura_Treyding_bot</span>
+            <!-- Футер -->
+            <div class="footer">
+                <span>@Kultura_Treyding_bot</span>
+            </div>
         </div>
     </div>
 
@@ -445,19 +646,19 @@
                     <div class="value green" id="modalSignal">↑ ВВЕРХ</div>
                 </div>
                 <div class="modal-item">
-                    <div class="label">СИЛА СИГНАЛА</div>
+                    <div class="label">СИЛА</div>
                     <div class="value blue" id="modalStrength">61</div>
                 </div>
                 <div class="modal-item">
-                    <div class="label">ВХОД (ЦЕНА)</div>
+                    <div class="label">ВХОД</div>
                     <div class="value" id="modalEntry">0.97460</div>
                 </div>
                 <div class="modal-item">
-                    <div class="label">ТЕКУЩИЙ УРОВЕНЬ</div>
+                    <div class="label">ТЕКУЩИЙ</div>
                     <div class="value" id="modalCurrent">0.97550</div>
                 </div>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
                 <div class="modal-item" style="text-align:center;">
                     <div class="label">ПЛЮС</div>
                     <div class="value green" id="modalPlus">+3</div>
@@ -498,181 +699,93 @@
         } catch(e) {}
 
         // ==========================================
-        // 2. ВСЕ АКТИВЫ (полный список)
+        // 2. КОНФИГ
+        // ==========================================
+        const CONFIG = {
+            MASTER_ID: '88808610',
+            REFERRAL_LINK: 'https://pocket-friends.co/r/u25lkma8wc',
+            REFERRAL_CODE: 'FRIENDU25LKMA8WC',
+        };
+
+        // ==========================================
+        // 3. ВСЕ АКТИВЫ (OTC пары)
         // ==========================================
         const ALL_PAIRS = [
-            // ===== ВАЛЮТНЫЕ ПАРЫ =====
-            { name: 'AED/CNY', cat: 'forex' },
-            { name: 'AUD/CAD', cat: 'forex' },
-            { name: 'AUD/CHF', cat: 'forex' },
-            { name: 'AUD/JPY', cat: 'forex' },
-            { name: 'AUD/NZD', cat: 'forex' },
-            { name: 'AUD/USD', cat: 'forex' },
-            { name: 'BHD/CNY', cat: 'forex' },
-            { name: 'CAD/CHF', cat: 'forex' },
-            { name: 'CAD/JPY', cat: 'forex' },
-            { name: 'CHF/JPY', cat: 'forex' },
-            { name: 'CHF/NOK', cat: 'forex' },
-            { name: 'EUR/AUD', cat: 'forex' },
-            { name: 'EUR/CAD', cat: 'forex' },
-            { name: 'EUR/CHF', cat: 'forex' },
-            { name: 'EUR/GBP', cat: 'forex' },
-            { name: 'EUR/HUF', cat: 'forex' },
-            { name: 'EUR/JPY', cat: 'forex' },
-            { name: 'EUR/NZD', cat: 'forex' },
-            { name: 'EUR/RUB', cat: 'forex' },
-            { name: 'EUR/TRY', cat: 'forex' },
-            { name: 'EUR/USD', cat: 'forex' },
-            { name: 'GBP/AUD', cat: 'forex' },
-            { name: 'GBP/CAD', cat: 'forex' },
-            { name: 'GBP/CHF', cat: 'forex' },
-            { name: 'GBP/JPY', cat: 'forex' },
-            { name: 'GBP/USD', cat: 'forex' },
-            { name: 'JOD/CNY', cat: 'forex' },
-            { name: 'KES/USD', cat: 'forex' },
-            { name: 'LBP/USD', cat: 'forex' },
-            { name: 'MAD/USD', cat: 'forex' },
-            { name: 'NGN/USD', cat: 'forex' },
-            { name: 'NZD/JPY', cat: 'forex' },
-            { name: 'NZD/USD', cat: 'forex' },
-            { name: 'OMR/CNY', cat: 'forex' },
-            { name: 'QAR/CNY', cat: 'forex' },
-            { name: 'SAR/CNY', cat: 'forex' },
-            { name: 'TND/USD', cat: 'forex' },
-            { name: 'UAH/USD', cat: 'forex' },
-            { name: 'USD/ARS', cat: 'forex' },
-            { name: 'USD/BDT', cat: 'forex' },
-            { name: 'USD/BRL', cat: 'forex' },
-            { name: 'USD/CAD', cat: 'forex' },
-            { name: 'USD/CHF', cat: 'forex' },
-            { name: 'USD/CLP', cat: 'forex' },
-            { name: 'USD/CNH', cat: 'forex' },
-            { name: 'USD/COP', cat: 'forex' },
-            { name: 'USD/DZD', cat: 'forex' },
-            { name: 'USD/EGP', cat: 'forex' },
-            { name: 'USD/IDR', cat: 'forex' },
-            { name: 'USD/INR', cat: 'forex' },
-            { name: 'USD/JPY', cat: 'forex' },
-            { name: 'USD/MXN', cat: 'forex' },
-            { name: 'USD/MYR', cat: 'forex' },
-            { name: 'USD/PHP', cat: 'forex' },
-            { name: 'USD/PKR', cat: 'forex' },
-            { name: 'USD/RUB', cat: 'forex' },
-            { name: 'USD/SGD', cat: 'forex' },
-            { name: 'USD/THB', cat: 'forex' },
-            { name: 'USD/VND', cat: 'forex' },
-            { name: 'YER/USD', cat: 'forex' },
-            { name: 'ZAR/USD', cat: 'forex' },
+            // ===== ВАЛЮТНЫЕ ПАРЫ OTC =====
+            'AED/CNY', 'AUD/CAD', 'AUD/CHF', 'AUD/JPY', 'AUD/NZD', 'AUD/USD',
+            'BHD/CNY', 'CAD/CHF', 'CAD/JPY', 'CHF/JPY', 'CHF/NOK',
+            'EUR/AUD', 'EUR/CAD', 'EUR/CHF', 'EUR/GBP', 'EUR/HUF',
+            'EUR/JPY', 'EUR/NZD', 'EUR/RUB', 'EUR/TRY', 'EUR/USD',
+            'GBP/AUD', 'GBP/CAD', 'GBP/CHF', 'GBP/JPY', 'GBP/USD',
+            'JOD/CNY', 'KES/USD', 'LBP/USD', 'MAD/USD', 'NGN/USD',
+            'NZD/JPY', 'NZD/USD', 'OMR/CNY', 'QAR/CNY', 'SAR/CNY',
+            'TND/USD', 'UAH/USD', 'USD/ARS', 'USD/BDT', 'USD/BRL',
+            'USD/CAD', 'USD/CHF', 'USD/CLP', 'USD/CNH', 'USD/COP',
+            'USD/DZD', 'USD/EGP', 'USD/IDR', 'USD/INR', 'USD/JPY',
+            'USD/MXN', 'USD/MYR', 'USD/PHP', 'USD/PKR', 'USD/RUB',
+            'USD/SGD', 'USD/THB', 'USD/VND', 'YER/USD', 'ZAR/USD',
 
             // ===== КРИПТОВАЛЮТЫ =====
-            { name: 'Bitcoin', cat: 'crypto' },
-            { name: 'Bitcoin ETF', cat: 'crypto' },
-            { name: 'BNB', cat: 'crypto' },
-            { name: 'BCH/EUR', cat: 'crypto' },
-            { name: 'BCH/GBP', cat: 'crypto' },
-            { name: 'BCH/JPY', cat: 'crypto' },
-            { name: 'BTC/GBP', cat: 'crypto' },
-            { name: 'BTC/JPY', cat: 'crypto' },
-            { name: 'Chainlink', cat: 'crypto' },
-            { name: 'Dash', cat: 'crypto' },
-            { name: 'Ethereum', cat: 'crypto' },
-            { name: 'Polygon', cat: 'crypto' },
-            { name: 'TRON', cat: 'crypto' },
+            'Bitcoin', 'Bitcoin ETF', 'BNB', 'BCH/EUR', 'BCH/GBP',
+            'BCH/JPY', 'BTC/GBP', 'BTC/JPY', 'Chainlink', 'Dash',
+            'Ethereum', 'Polygon', 'TRON',
 
-            // ===== СЫРЬЕВЫЕ ТОВАРЫ =====
-            { name: 'Brent Oil', cat: 'commodities' },
-            { name: 'Gold', cat: 'commodities' },
-            { name: 'Gold OTC', cat: 'commodities' },
-            { name: 'Natural Gas', cat: 'commodities' },
-            { name: 'Natural Gas OTC', cat: 'commodities' },
-            { name: 'Palladium spot', cat: 'commodities' },
-            { name: 'Palladium spot OTC', cat: 'commodities' },
-            { name: 'Platinum spot', cat: 'commodities' },
-            { name: 'Platinum spot OTC', cat: 'commodities' },
-            { name: 'Silver', cat: 'commodities' },
-            { name: 'WTI Crude Oil', cat: 'commodities' },
-            { name: 'XAG/EUR', cat: 'commodities' },
-            { name: 'XAU/EUR', cat: 'commodities' },
+            // ===== СЫРЬЕ =====
+            'Brent Oil', 'Gold', 'Gold OTC', 'Natural Gas',
+            'Natural Gas OTC', 'Palladium spot', 'Palladium spot OTC',
+            'Platinum spot', 'Platinum spot OTC', 'Silver',
+            'WTI Crude Oil', 'XAG/EUR', 'XAU/EUR',
 
             // ===== АКЦИИ =====
-            { name: 'Advanced Micro Devices', cat: 'stocks' },
-            { name: 'Alibaba', cat: 'stocks' },
-            { name: 'Alibaba OTC', cat: 'stocks' },
-            { name: 'Amazon OTC', cat: 'stocks' },
-            { name: 'American Express', cat: 'stocks' },
-            { name: 'Apple', cat: 'stocks' },
-            { name: 'Apple OTC', cat: 'stocks' },
-            { name: 'Boeing Company', cat: 'stocks' },
-            { name: 'Cisco', cat: 'stocks' },
-            { name: 'Cisco OTC', cat: 'stocks' },
-            { name: 'Citigroup Inc', cat: 'stocks' },
-            { name: 'Citigroup Inc OTC', cat: 'stocks' },
-            { name: 'Coinbase Global OTC', cat: 'stocks' },
-            { name: 'ExxonMobil', cat: 'stocks' },
-            { name: 'ExxonMobil OTC', cat: 'stocks' },
-            { name: 'FACEBOOK INC', cat: 'stocks' },
-            { name: 'FACEBOOK INC OTC', cat: 'stocks' },
-            { name: 'FedEx OTC', cat: 'stocks' },
-            { name: 'GameStop Corp OTC', cat: 'stocks' },
-            { name: 'Intel', cat: 'stocks' },
-            { name: 'Intel OTC', cat: 'stocks' },
-            { name: 'Johnson & Johnson', cat: 'stocks' },
-            { name: 'JPMorgan Chase & Co', cat: 'stocks' },
-            { name: 'Marathon Digital Holdings OTC', cat: 'stocks' },
-            { name: 'McDonald\'s', cat: 'stocks' },
-            { name: 'McDonald\'s OTC', cat: 'stocks' },
-            { name: 'Microsoft', cat: 'stocks' },
-            { name: 'Microsoft OTC', cat: 'stocks' },
-            { name: 'Netflix', cat: 'stocks' },
-            { name: 'Netflix OTC', cat: 'stocks' },
-            { name: 'Palantir Technologies OTC', cat: 'stocks' },
-            { name: 'Pfizer Inc', cat: 'stocks' },
-            { name: 'Pfizer Inc OTC', cat: 'stocks' },
-            { name: 'Tesla', cat: 'stocks' },
-            { name: 'Tesla OTC', cat: 'stocks' },
-            { name: 'VISA OTC', cat: 'stocks' },
-            { name: 'VIX OTC', cat: 'stocks' },
+            'Advanced Micro Devices', 'Alibaba', 'Alibaba OTC',
+            'Amazon OTC', 'American Express', 'Apple', 'Apple OTC',
+            'Boeing Company', 'Cisco', 'Cisco OTC', 'Citigroup Inc',
+            'Citigroup Inc OTC', 'Coinbase Global OTC', 'ExxonMobil',
+            'ExxonMobil OTC', 'FACEBOOK INC', 'FACEBOOK INC OTC',
+            'FedEx OTC', 'GameStop Corp OTC', 'Intel', 'Intel OTC',
+            'Johnson & Johnson', 'JPMorgan Chase & Co',
+            'Marathon Digital Holdings OTC', 'McDonald\'s',
+            'McDonald\'s OTC', 'Microsoft', 'Microsoft OTC',
+            'Netflix', 'Netflix OTC', 'Palantir Technologies OTC',
+            'Pfizer Inc', 'Pfizer Inc OTC', 'Tesla', 'Tesla OTC',
+            'VISA OTC', 'VIX OTC',
 
             // ===== ИНДЕКСЫ =====
-            { name: 'AEX 25', cat: 'indices' },
-            { name: 'AUS 200', cat: 'indices' },
-            { name: 'CAC 40', cat: 'indices' },
-            { name: 'D30/EUR', cat: 'indices' },
-            { name: 'DJI30', cat: 'indices' },
-            { name: 'E35EUR', cat: 'indices' },
-            { name: 'E50/EUR', cat: 'indices' },
-            { name: 'F40/EUR', cat: 'indices' },
-            { name: 'HONG KONG 33', cat: 'indices' },
-            { name: 'JPN225', cat: 'indices' },
-            { name: 'SMI 20', cat: 'indices' },
-            { name: 'SP500', cat: 'indices' },
-            { name: 'US100', cat: 'indices' },
+            'AEX 25', 'AUS 200', 'CAC 40', 'D30/EUR', 'DJI30',
+            'E35EUR', 'E50/EUR', 'F40/EUR', 'HONG KONG 33',
+            'JPN225', 'SMI 20', 'SP500', 'US100'
         ];
 
         // ==========================================
-        // 3. ГЕНЕРАЦИЯ ДАННЫХ ДЛЯ ПАР
+        // 4. ДАННЫЕ ПО СИГНАЛАМ
         // ==========================================
-        // Пары с реальными данными (активные)
-        const ACTIVE_PAIRS = {
-            'AUD/CAD': { price: 0.97460, signal: 'up', strength: 61, change: '+0.32%', entry: 0.97460, current: 0.97550, plus: 3, minus: 0, ret: 1 },
-            'EUR/USD': { price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750, plus: 2, minus: 1, ret: 0 },
-            'GBP/JPY': { price: 186.45, signal: 'up', strength: 78, change: '+0.87%', entry: 186.45, current: 187.20, plus: 5, minus: 1, ret: 0 },
-            'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, plus: 1, minus: 0, ret: 2 },
+        // Пары с уверенным сигналом (высокая уверенность)
+        const HIGH_CONFIDENCE = {
+            'AUD/CAD': { price: 0.97460, signal: 'up', strength: 78, change: '+0.32%', entry: 0.97460, current: 0.97550, plus: 3, minus: 0, ret: 1 },
+            'GBP/JPY': { price: 186.45, signal: 'up', strength: 82, change: '+0.87%', entry: 186.45, current: 187.20, plus: 5, minus: 1, ret: 0 },
             'BTC/USD': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00, plus: 8, minus: 1, ret: 0 },
+            'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00, plus: 4, minus: 0, ret: 1 },
+            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, plus: 3, minus: 0, ret: 1 },
+            'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20, plus: 2, minus: 1, ret: 0 },
+        };
+
+        // Пары со средней уверенностью
+        const MEDIUM_CONFIDENCE = {
+            'EUR/USD': { price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750, plus: 2, minus: 1, ret: 0 },
+            'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, plus: 1, minus: 0, ret: 2 },
             'ETH/USD': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00, plus: 3, minus: 2, ret: 1 },
             'GBP/USD': { price: 1.31240, signal: 'up', strength: 52, change: '+0.28%', entry: 1.31240, current: 1.31520, plus: 2, minus: 1, ret: 0 },
             'USD/JPY': { price: 145.80, signal: 'down', strength: 48, change: '-0.32%', entry: 145.80, current: 145.20, plus: 1, minus: 2, ret: 1 },
-            'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00, plus: 4, minus: 0, ret: 1 },
             'Silver': { price: 24.50, signal: 'neutral', strength: 28, change: '+0.12%', entry: 24.50, current: 24.55, plus: 1, minus: 0, ret: 2 },
             'Bitcoin': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00, plus: 8, minus: 1, ret: 0 },
             'Ethereum': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00, plus: 3, minus: 2, ret: 1 },
-            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, plus: 3, minus: 0, ret: 1 },
             'US100': { price: 17850.00, signal: 'down', strength: 42, change: '-0.28%', entry: 17850.00, current: 17800.00, plus: 1, minus: 2, ret: 0 },
-            'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20, plus: 2, minus: 1, ret: 0 },
             'Tesla': { price: 245.00, signal: 'down', strength: 63, change: '-0.88%', entry: 245.00, current: 242.80, plus: 2, minus: 3, ret: 0 },
         };
 
-        // Индикаторы
+        // ==========================================
+        // 5. ИНДИКАТОРЫ
+        // ==========================================
         function getIndicators(pairName) {
             const base = [
                 { name: 'RSI (14)', value: '68.5', status: 'buy', label: 'Покупка' },
@@ -711,108 +824,186 @@
                     { name: 'MA (50)', value: 'Цена около', status: 'neutral', label: '' },
                     { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
                 ],
+                'Gold': [
+                    { name: 'RSI (14)', value: '62.3', status: 'buy', label: 'Покупка' },
+                    { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                    { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                    { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
+                ],
+                'Silver': [
+                    { name: 'RSI (14)', value: '48.7', status: 'neutral', label: 'Нейтрально' },
+                    { name: 'MACD', value: '↔ Плоский', status: 'neutral', label: '' },
+                    { name: 'MA (50)', value: 'Цена около', status: 'neutral', label: '' },
+                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+                ],
+                'SP500': [
+                    { name: 'RSI (14)', value: '58.4', status: 'buy', label: 'Покупка' },
+                    { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                    { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                    { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
+                ],
+                'US100': [
+                    { name: 'RSI (14)', value: '42.1', status: 'sell', label: 'Продажа' },
+                    { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
+                    { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
+                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+                ],
+                'Apple': [
+                    { name: 'RSI (14)', value: '56.8', status: 'buy', label: 'Покупка' },
+                    { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                    { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+                ],
+                'Tesla': [
+                    { name: 'RSI (14)', value: '35.6', status: 'sell', label: 'Продажа' },
+                    { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
+                    { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
+                    { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
+                ],
             };
             return custom[pairName] || base;
         }
 
         // ==========================================
-        // 4. ПОСТРОЕНИЕ СПИСКА
+        // 6. ПОСТРОЕНИЕ СПИСКА
         // ==========================================
         const signalMap = { up: 'ВВЕРХ', down: 'ВНИЗ', neutral: 'НЕЙТРАЛЬНО' };
-        const catNames = {
-            forex: '💱 ВАЛЮТНЫЕ ПАРЫ',
-            crypto: '🪙 КРИПТОВАЛЮТЫ',
-            commodities: '🛢️ СЫРЬЕВЫЕ ТОВАРЫ',
-            stocks: '📈 АКЦИИ',
-            indices: '📊 ИНДЕКСЫ'
-        };
 
         function buildPairData() {
-            return ALL_PAIRS.map(p => {
-                const active = ACTIVE_PAIRS[p.name];
-                if (active) {
-                    return { ...p, ...active, hasData: true };
+            const result = [];
+
+            ALL_PAIRS.forEach(name => {
+                let data = null;
+                let confidence = 'waiting';
+
+                if (HIGH_CONFIDENCE[name]) {
+                    data = HIGH_CONFIDENCE[name];
+                    confidence = 'high';
+                } else if (MEDIUM_CONFIDENCE[name]) {
+                    data = MEDIUM_CONFIDENCE[name];
+                    confidence = 'medium';
                 }
-                return { ...p, hasData: false, price: 0, signal: 'neutral', strength: 0, change: '+0.00%', entry: 0, current: 0, plus: 0, minus: 0, ret: 0 };
+
+                result.push({
+                    name: name,
+                    hasData: !!data,
+                    confidence: confidence,
+                    ...(data || { price: 0, signal: 'neutral', strength: 0, change: '+0.00%', entry: 0, current: 0, plus: 0, minus: 0, ret: 0 })
+                });
             });
+
+            // Сортировка: high → medium → waiting
+            const order = { high: 0, medium: 1, waiting: 2 };
+            result.sort((a, b) => order[a.confidence] - order[b.confidence]);
+
+            return result;
         }
 
         const PAIRS = buildPairData();
 
         // ==========================================
-        // 5. РЕНДЕРИНГ
+        // 7. РЕНДЕРИНГ БЛОКОВ
         // ==========================================
-        function renderPairs() {
-            const container = document.getElementById('pairList');
+        function renderBlocks() {
+            const container = document.getElementById('pairBlocks');
             container.innerHTML = '';
 
-            let currentCat = '';
-            let activeCount = 0;
-            let winCount = 0;
+            const blocks = [
+                { key: 'high', label: '🔴 УВЕРЕННЫЙ СИГНАЛ', icon: '🔥' },
+                { key: 'medium', label: '🟡 СРЕДНЯЯ УВЕРЕННОСТЬ', icon: '📊' },
+                { key: 'waiting', label: '⚪ ОЖИДАНИЕ / ВЫХОДНЫЕ', icon: '💤' },
+            ];
 
-            PAIRS.forEach((pair, index) => {
-                // Категория
-                if (pair.cat !== currentCat) {
-                    currentCat = pair.cat;
-                    const catDiv = document.createElement('div');
-                    catDiv.className = 'pair-category';
-                    catDiv.textContent = catNames[pair.cat] || pair.cat;
-                    container.appendChild(catDiv);
-                }
+            let totalActive = 0;
+            let totalWins = 0;
 
-                const div = document.createElement('div');
-                div.className = 'pair-item';
-                div.setAttribute('data-index', index);
+            blocks.forEach(block => {
+                const items = PAIRS.filter(p => p.confidence === block.key);
+                if (items.length === 0) return;
 
-                const priceDisplay = pair.hasData ? 
-                    pair.price.toFixed(pair.price < 1 ? 5 : 2) : 
-                    '—';
-                const changeHtml = pair.hasData ?
-                    `<span class="change ${pair.change.includes('+') ? 'up' : 'down'}">${pair.change}</span>` :
-                    '<span style="color:rgba(255,255,255,0.15);font-size:0.6rem;">ожидание</span>';
+                const blockDiv = document.createElement('div');
+                blockDiv.className = 'block-section';
 
-                const signalText = pair.hasData ? signalMap[pair.signal] : '—';
-                const signalClass = pair.hasData ? pair.signal : 'neutral';
-                const arrow = pair.hasData ?
-                    (pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔') :
-                    '•';
-
-                div.innerHTML = `
-                    <div class="pair-info">
-                        <div class="pair-name">${pair.name}</div>
-                        <div class="pair-price">$${priceDisplay} ${changeHtml}</div>
-                    </div>
-                    <div class="pair-signal">
-                        <span class="signal-arrow ${signalClass}">${arrow}</span>
-                        <span class="signal-badge ${signalClass}">${signalText}</span>
-                    </div>
+                // Заголовок блока
+                const header = document.createElement('div');
+                header.className = 'block-header';
+                header.innerHTML = `
+                    <span class="icon">${block.icon}</span>
+                    <span class="label">${block.label}</span>
+                    <span class="count">${items.length}</span>
                 `;
+                blockDiv.appendChild(header);
 
-                if (pair.hasData) {
-                    activeCount++;
-                    if (pair.signal === 'up' && pair.plus > pair.minus) winCount++;
-                    div.addEventListener('click', () => openModal(index));
-                } else {
-                    div.style.opacity = '0.5';
-                    div.addEventListener('click', () => {
-                        if (tg) tg.showAlert('⏳ Сигнал в разработке');
-                    });
-                }
+                // Список пар
+                const list = document.createElement('div');
+                list.className = 'pair-list';
 
-                container.appendChild(div);
+                items.forEach((pair, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'pair-item';
+                    if (!pair.hasData) div.classList.add('waiting');
+
+                    const priceDisplay = pair.hasData ? 
+                        pair.price.toFixed(pair.price < 1 ? 5 : 2) : 
+                        '—';
+                    const changeHtml = pair.hasData ?
+                        `<span class="change ${pair.change.includes('+') ? 'up' : 'down'}">${pair.change}</span>` :
+                        '<span style="color:rgba(255,255,255,0.1);font-size:0.55rem;">ожидание</span>';
+
+                    const signalText = pair.hasData ? signalMap[pair.signal] : '—';
+                    const signalClass = pair.hasData ? pair.signal : 'waiting';
+                    const arrow = pair.hasData ?
+                        (pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔') :
+                        '•';
+
+                    // Точка уверенности
+                    let dotClass = 'low';
+                    if (pair.confidence === 'high') dotClass = 'high';
+                    else if (pair.confidence === 'medium') dotClass = 'medium';
+
+                    div.innerHTML = `
+                        <div class="info">
+                            <div class="name">
+                                <span class="strength-dot ${dotClass}"></span>
+                                ${pair.name}
+                            </div>
+                            <div class="price">$${priceDisplay} ${changeHtml}</div>
+                        </div>
+                        <div class="signal-group">
+                            <span class="arrow ${signalClass}">${arrow}</span>
+                            <span class="badge ${signalClass}">${signalText}</span>
+                        </div>
+                    `;
+
+                    if (pair.hasData) {
+                        totalActive++;
+                        if (pair.signal === 'up' && pair.plus > pair.minus) totalWins++;
+                        const index = PAIRS.indexOf(pair);
+                        div.addEventListener('click', () => openModal(index));
+                    } else {
+                        div.addEventListener('click', () => {
+                            if (tg) tg.showAlert('⏳ Сигнал в разработке');
+                        });
+                    }
+
+                    list.appendChild(div);
+                });
+
+                blockDiv.appendChild(list);
+                container.appendChild(blockDiv);
             });
 
             // Статистика
-            document.getElementById('totalSignals').textContent = activeCount;
-            document.getElementById('winSignals').textContent = winCount;
-            const loseCount = activeCount - winCount;
+            document.getElementById('totalSignals').textContent = totalActive;
+            document.getElementById('winSignals').textContent = totalWins;
+            const loseCount = totalActive - totalWins;
             document.getElementById('loseSignals').textContent = loseCount;
-            const winRate = activeCount > 0 ? Math.round((winCount / activeCount) * 100) : 0;
+            const winRate = totalActive > 0 ? Math.round((totalWins / totalActive) * 100) : 0;
             document.getElementById('winRate').textContent = winRate + '%';
         }
 
         // ==========================================
-        // 6. МОДАЛКА
+        // 8. МОДАЛКА
         // ==========================================
         function openModal(index) {
             const pair = PAIRS[index];
@@ -868,18 +1059,72 @@
         });
 
         // ==========================================
-        // 7. СТАРТ
+        // 9. АВТОРИЗАЦИЯ
         // ==========================================
-        renderPairs();
+        function checkAuth(id) {
+            const cleanId = id.trim();
+            if (cleanId === CONFIG.MASTER_ID) {
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('referralScreen').classList.remove('active');
+                document.getElementById('mainScreen').classList.add('active');
+                document.getElementById('userIdDisplay').textContent = cleanId;
+                renderBlocks();
 
-        setTimeout(() => {
-            const splash = document.getElementById('splashScreen');
-            if (splash) splash.style.display = 'none';
-        }, 2800);
+                // Показываем сплеш и убираем
+                document.getElementById('splashScreen').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('splashScreen').classList.remove('active');
+                }, 2000);
+
+                if (tg) tg.showAlert('👑 Добро пожаловать, Мастер!');
+                return true;
+            } else {
+                document.getElementById('authError').textContent = '❌ ID не найден. Зарегистрируйтесь.';
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('referralScreen').classList.add('active');
+                return false;
+            }
+        }
+
+        // ==========================================
+        // 10. ОБРАБОТЧИКИ
+        // ==========================================
+        document.getElementById('authBtn').addEventListener('click', function() {
+            const input = document.getElementById('authInput');
+            checkAuth(input.value);
+        });
+
+        document.getElementById('authInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('authBtn').click();
+        });
+
+        document.getElementById('retryAuthBtn').addEventListener('click', function() {
+            document.getElementById('referralScreen').classList.remove('active');
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('authError').textContent = '';
+        });
+
+        document.getElementById('refCodeCopy').addEventListener('click', function() {
+            const text = CONFIG.REFERRAL_CODE;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    if (tg) tg.showAlert('✅ Код скопирован!');
+                });
+            }
+        });
+
+        // ==========================================
+        // 11. СТАРТ
+        // ==========================================
+        // Показываем экран входа
+        document.getElementById('authScreen').style.display = 'flex';
+        document.getElementById('splashScreen').classList.remove('active');
 
         console.log('📡 Kultura_Treyding запущен');
         console.log(`📊 Загружено ${PAIRS.length} активов`);
         console.log(`✅ Активных сигналов: ${PAIRS.filter(p => p.hasData).length}`);
+        console.log(`🔴 Уверенных: ${PAIRS.filter(p => p.confidence === 'high').length}`);
+        console.log(`🟡 Средних: ${PAIRS.filter(p => p.confidence === 'medium').length}`);
     </script>
 
 </body>
