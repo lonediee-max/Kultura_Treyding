@@ -236,50 +236,132 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* ===== ВЫБОР ТИПА ПАР ===== */
+        #choiceScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a12;
+            padding: 20px;
+        }
+        #choiceScreen.active { display: flex; }
+
+        #choiceScreen .icon { font-size: 3rem; margin-bottom: 16px; }
+        #choiceScreen .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        #choiceScreen .sub {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .choice-btn {
+            padding: 24px 16px;
+            border-radius: 16px;
+            border: 2px solid rgba(255,255,255,0.06);
+            background: rgba(20,20,42,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .choice-btn:hover {
+            border-color: rgba(123, 47, 252, 0.3);
+            transform: translateY(-2px);
+        }
+        .choice-btn:active { transform: scale(0.97); }
+
+        .choice-btn .emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+        .choice-btn .label { font-size: 0.9rem; font-weight: 600; color: #fff; }
+        .choice-btn .desc {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 4px;
+        }
+
+        .choice-btn.official {
+            border-color: rgba(0, 200, 83, 0.2);
+        }
+        .choice-btn.official:hover {
+            border-color: rgba(0, 200, 83, 0.5);
+            background: rgba(0, 200, 83, 0.05);
+        }
+
+        .choice-btn.otc {
+            border-color: rgba(123, 47, 252, 0.2);
+        }
+        .choice-btn.otc:hover {
+            border-color: rgba(123, 47, 252, 0.5);
+            background: rgba(123, 47, 252, 0.05);
+        }
+
         /* ===== ХЕДЕР ===== */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
+            padding: 10px 14px;
             background: rgba(20, 20, 42, 0.7);
             backdrop-filter: blur(20px);
-            border-radius: 16px;
+            border-radius: 14px;
             border: 1px solid rgba(123, 47, 252, 0.15);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
         .header-logo {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             background: linear-gradient(135deg, #7b2ffc, #00d2ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .header-logo span {
-            font-size: 0.55rem;
-            -webkit-text-fill-color: rgba(255,255,255,0.2);
+            font-size: 0.5rem;
+            -webkit-text-fill-color: rgba(255,255,255,0.15);
             background: none;
         }
         .header-right {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.65rem;
-            color: rgba(255,255,255,0.4);
+            gap: 6px;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.3);
         }
-        .header-right .id { color: rgba(255,255,255,0.6); }
+        .header-right .id { color: rgba(255,255,255,0.5); }
         .header-right .live { color: #00c853; }
 
         /* ===== СТАТИСТИКА ===== */
         .daily-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .stat-card {
@@ -290,8 +372,8 @@
             text-align: center;
             border: 1px solid rgba(255,255,255,0.04);
         }
-        .stat-card .value { font-size: 1.2rem; font-weight: 700; line-height: 1.3; }
-        .stat-card .label { font-size: 0.5rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+        .stat-card .label { font-size: 0.45rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-card .value.green { color: #00c853; }
         .stat-card .value.red { color: #ff1744; }
         .stat-card .value.yellow { color: #ffab00; }
@@ -299,43 +381,43 @@
 
         /* ===== БЛОКИ ПАР ===== */
         .block-section {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .block-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 4px 6px 4px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            margin-bottom: 6px;
+            padding: 6px 4px 4px 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            margin-bottom: 4px;
         }
-        .block-header .icon { font-size: 0.9rem; }
+        .block-header .icon { font-size: 0.8rem; }
         .block-header .label {
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.3);
+            font-size: 0.55rem;
+            color: rgba(255,255,255,0.25);
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
         }
         .block-header .count {
-            font-size: 0.55rem;
-            color: rgba(255,255,255,0.15);
+            font-size: 0.5rem;
+            color: rgba(255,255,255,0.12);
             margin-left: auto;
         }
 
         .pair-list {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .pair-item {
-            background: rgba(20, 20, 42, 0.4);
+            background: rgba(20, 20, 42, 0.35);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.02);
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
@@ -343,14 +425,14 @@
             align-items: center;
         }
 
-        .pair-item:hover { border-color: rgba(123, 47, 252, 0.15); transform: translateX(2px); }
+        .pair-item:hover { border-color: rgba(123, 47, 252, 0.12); transform: translateX(2px); }
         .pair-item:active { transform: scale(0.98); }
 
         .pair-item .info { display: flex; flex-direction: column; gap: 1px; }
-        .pair-item .name { font-weight: 600; font-size: 0.85rem; color: #fff; }
+        .pair-item .name { font-weight: 600; font-size: 0.8rem; color: #fff; }
         .pair-item .price {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.35);
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.3);
             font-weight: 500;
         }
         .pair-item .price .change.up { color: #00c853; }
@@ -359,44 +441,78 @@
         .pair-item .signal-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
-        .pair-item .arrow { font-size: 0.9rem; }
+        .pair-item .arrow { font-size: 0.8rem; }
         .pair-item .arrow.up { color: #00c853; }
         .pair-item .arrow.down { color: #ff1744; }
         .pair-item .arrow.neutral { color: #ffab00; }
 
         .pair-item .badge {
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.55rem;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 0.5rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-        .pair-item .badge.up { background: rgba(0, 200, 83, 0.12); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.15); }
-        .pair-item .badge.down { background: rgba(255, 23, 68, 0.12); color: #ff1744; border: 1px solid rgba(255, 23, 68, 0.15); }
-        .pair-item .badge.neutral { background: rgba(255, 171, 0, 0.12); color: #ffab00; border: 1px solid rgba(255, 171, 0, 0.15); }
-        .pair-item .badge.waiting { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.04); }
+        .pair-item .badge.up { background: rgba(0, 200, 83, 0.12); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.12); }
+        .pair-item .badge.down { background: rgba(255, 23, 68, 0.12); color: #ff1744; border: 1px solid rgba(255, 23, 68, 0.12); }
+        .pair-item .badge.neutral { background: rgba(255, 171, 0, 0.12); color: #ffab00; border: 1px solid rgba(255, 171, 0, 0.12); }
+        .pair-item .badge.waiting { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.03); }
 
         .pair-item .strength-dot {
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
             border-radius: 50%;
             display: inline-block;
             margin-right: 4px;
         }
         .pair-item .strength-dot.active { background: #00c853; }
-        .pair-item .strength-dot.waiting { background: rgba(255,255,255,0.1); }
+        .pair-item .strength-dot.waiting { background: rgba(255,255,255,0.08); }
 
-        .pair-item.waiting { opacity: 0.5; }
+        .pair-item.waiting { opacity: 0.45; }
+
+        /* Переключатель режима */
+        .mode-switch {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            background: rgba(20,20,42,0.4);
+            border-radius: 12px;
+            padding: 4px;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-btn.active {
+            background: rgba(123, 47, 252, 0.2);
+            color: #fff;
+            border: 1px solid rgba(123, 47, 252, 0.2);
+        }
+
+        .mode-btn:active { transform: scale(0.97); }
 
         /* ===== ФУТЕР ===== */
         .footer {
             text-align: center;
-            padding: 16px 0 8px 0;
-            color: rgba(255,255,255,0.08);
-            font-size: 0.65rem;
+            padding: 14px 0 6px 0;
+            color: rgba(255,255,255,0.06);
+            font-size: 0.6rem;
             letter-spacing: 1px;
         }
         .footer span {
@@ -426,12 +542,12 @@
 
         .modal {
             background: linear-gradient(180deg, #1a1a32, #0f0f1f);
-            border-radius: 24px;
-            max-width: 400px;
+            border-radius: 20px;
+            max-width: 380px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: 24px;
+            padding: 20px;
             border: 1px solid rgba(123, 47, 252, 0.2);
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             animation: slideUp 0.3s ease-out;
@@ -444,16 +560,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .modal-title { font-size: 1.2rem; font-weight: 700; color: #fff; }
+        .modal-title { font-size: 1.1rem; font-weight: 700; color: #fff; }
         .modal-close {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.4);
-            font-size: 1.5rem;
+            color: rgba(255,255,255,0.3);
+            font-size: 1.3rem;
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 8px;
@@ -462,35 +578,35 @@
         .modal-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
         .modal-price {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             text-align: center;
             color: #fff;
-            padding: 12px;
+            padding: 10px;
             background: rgba(255,255,255,0.03);
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
-        .modal-price .change { font-size: 0.8rem; font-weight: 500; margin-left: 8px; }
+        .modal-price .change { font-size: 0.75rem; font-weight: 500; margin-left: 6px; }
         .modal-price .change.up { color: #00c853; }
         .modal-price .change.down { color: #ff1744; }
 
         .modal-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin-bottom: 12px;
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
         .modal-item {
             background: rgba(255,255,255,0.03);
-            border-radius: 10px;
-            padding: 8px 10px;
+            border-radius: 8px;
+            padding: 6px 8px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .modal-item .label { font-size: 0.5rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; }
-        .modal-item .value { font-size: 0.85rem; font-weight: 600; margin-top: 2px; color: #fff; }
+        .modal-item .label { font-size: 0.45rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal-item .value { font-size: 0.8rem; font-weight: 600; margin-top: 1px; color: #fff; }
         .modal-item .value.green { color: #00c853; }
         .modal-item .value.red { color: #ff1744; }
         .modal-item .value.yellow { color: #ffab00; }
@@ -498,13 +614,13 @@
 
         .modal-indicators {
             background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin: 10px 0;
+            margin: 8px 0;
         }
-        .modal-indicators .title { font-size: 0.55rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-        .indicator-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.8rem; }
+        .modal-indicators .title { font-size: 0.5rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .indicator-row { display: flex; justify-content: space-between; padding: 2px 0; font-size: 0.75rem; }
         .indicator-row .name { color: rgba(255,255,255,0.4); }
         .indicator-row .value.buy { color: #00c853; }
         .indicator-row .value.sell { color: #ff1744; }
@@ -514,21 +630,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
+            padding: 6px 10px;
             background: rgba(255,255,255,0.03);
-            border-radius: 10px;
+            border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-top: 6px;
+            margin-top: 4px;
         }
-        .strength-section .label { font-size: 0.55rem; color: rgba(255,255,255,0.3); text-transform: uppercase; }
-        .strength-section .value { font-size: 0.9rem; font-weight: 700; }
+        .strength-section .label { font-size: 0.5rem; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+        .strength-section .value { font-size: 0.85rem; font-weight: 700; }
 
         .strength-bar {
             width: 100%;
             height: 3px;
             background: rgba(255,255,255,0.06);
             border-radius: 2px;
-            margin-top: 4px;
+            margin-top: 3px;
             overflow: hidden;
         }
         .strength-bar .fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #ff1744, #ffab00, #00c853); transition: width 0.6s; }
@@ -538,39 +654,39 @@
         ::-webkit-scrollbar-thumb { background: rgba(123, 47, 252, 0.3); border-radius: 10px; }
 
         @media (max-width: 380px) {
-            .daily-stats { grid-template-columns: repeat(2, 1fr); }
-            .pair-item .name { font-size: 0.75rem; }
-            .pair-item .price { font-size: 0.6rem; }
+            .daily-stats { grid-template-columns: repeat(3, 1fr); }
+            .pair-item .name { font-size: 0.7rem; }
+            .pair-item .price { font-size: 0.55rem; }
+            .choice-grid { grid-template-columns: 1fr; }
         }
 
         #mainScreen { display: none; }
         #mainScreen.active { display: block; }
 
-        /* Всплывающее уведомление о статусе рынка */
         .market-status {
-            background: rgba(20,20,42,0.6);
+            background: rgba(20,20,42,0.5);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 10px 14px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.03);
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.5);
+            gap: 8px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
         }
-        .market-status .status-icon { font-size: 1rem; }
+        .market-status .status-icon { font-size: 0.9rem; }
         .market-status .status-text { flex: 1; }
         .market-status .status-badge {
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.5rem;
             font-weight: 600;
             text-transform: uppercase;
         }
-        .market-status .status-badge.open { background: rgba(0,200,83,0.12); color: #00c853; border: 1px solid rgba(0,200,83,0.15); }
-        .market-status .status-badge.closed { background: rgba(255,171,0,0.12); color: #ffab00; border: 1px solid rgba(255,171,0,0.15); }
+        .market-status .status-badge.open { background: rgba(0,200,83,0.10); color: #00c853; border: 1px solid rgba(0,200,83,0.10); }
+        .market-status .status-badge.closed { background: rgba(255,171,0,0.10); color: #ffab00; border: 1px solid rgba(255,171,0,0.10); }
     </style>
 </head>
 <body>
@@ -612,6 +728,25 @@
         <div class="loader"></div>
     </div>
 
+    <!-- ===== ВЫБОР ТИПА ПАР ===== -->
+    <div id="choiceScreen">
+        <div class="icon">📊</div>
+        <div class="title">Выберите тип торгов</div>
+        <div class="sub">Выберите с какими активами вы хотите работать</div>
+        <div class="choice-grid">
+            <div class="choice-btn official" id="officialChoice">
+                <span class="emoji">🏛️</span>
+                <div class="label">Официальные</div>
+                <div class="desc">Основные валютные пары</div>
+            </div>
+            <div class="choice-btn otc" id="otcChoice">
+                <span class="emoji">📈</span>
+                <div class="label">OTC пары</div>
+                <div class="desc">Внебиржевые активы</div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== ОСНОВНОЙ ЭКРАН ===== -->
     <div id="mainScreen">
         <div class="background"></div>
@@ -622,9 +757,15 @@
                 <div class="header-logo">Kultura_Treyding<span>™</span></div>
                 <div class="header-right">
                     <span class="id" id="userIdDisplay">88808610</span>
-                    <span style="color:rgba(255,255,255,0.1);">|</span>
+                    <span style="color:rgba(255,255,255,0.05);">|</span>
                     <span class="live">● LIVE</span>
                 </div>
+            </div>
+
+            <!-- Переключатель режима -->
+            <div class="mode-switch" id="modeSwitch">
+                <button class="mode-btn active" data-mode="official" id="modeOfficial">🏛️ Официальные</button>
+                <button class="mode-btn" data-mode="otc" id="modeOtc">📈 OTC пары</button>
             </div>
 
             <!-- Статус рынка -->
@@ -647,10 +788,6 @@
                 <div class="stat-card">
                     <div class="value red" id="loseSignals">0</div>
                     <div class="label">- В МИНУС</div>
-                </div>
-                <div class="stat-card">
-                    <div class="value yellow" id="winRate">0%</div>
-                    <div class="label">ВИНРЕЙТ</div>
                 </div>
             </div>
 
@@ -693,7 +830,7 @@
                     <div class="value" id="modalCurrent">0.97550</div>
                 </div>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px;">
                 <div class="modal-item" style="text-align:center;">
                     <div class="label">ПЛЮС</div>
                     <div class="value green" id="modalPlus">+3</div>
@@ -743,35 +880,41 @@
         };
 
         // ==========================================
-        // 3. ВСЕ OTC ПАРЫ (ПОЛНЫЙ СПИСОК)
+        // 3. ВСЕ АКТИВЫ
         // ==========================================
-        const ALL_PAIRS = [
-            // ===== ВАЛЮТНЫЕ ПАРЫ OTC =====
-            'AED/CNY', 'AUD/CAD', 'AUD/CHF', 'AUD/JPY', 'AUD/NZD', 'AUD/USD',
-            'BHD/CNY', 'CAD/CHF', 'CAD/JPY', 'CHF/JPY', 'CHF/NOK',
-            'EUR/AUD', 'EUR/CAD', 'EUR/CHF', 'EUR/GBP', 'EUR/HUF',
-            'EUR/JPY', 'EUR/NZD', 'EUR/RUB', 'EUR/TRY', 'EUR/USD',
+        // Официальные пары (основные валютные)
+        const OFFICIAL_PAIRS = [
+            'AUD/CAD', 'AUD/CHF', 'AUD/JPY', 'AUD/NZD', 'AUD/USD',
+            'CAD/CHF', 'CAD/JPY', 'CHF/JPY',
+            'EUR/AUD', 'EUR/CAD', 'EUR/CHF', 'EUR/GBP', 'EUR/JPY', 'EUR/NZD', 'EUR/USD',
             'GBP/AUD', 'GBP/CAD', 'GBP/CHF', 'GBP/JPY', 'GBP/USD',
+            'NZD/JPY', 'NZD/USD',
+            'USD/CAD', 'USD/CHF', 'USD/JPY',
+        ];
+
+        // OTC пары (все остальные)
+        const OTC_PAIRS = [
+            // Валютные OTC
+            'AED/CNY', 'BHD/CNY', 'CHF/NOK', 'EUR/HUF', 'EUR/RUB', 'EUR/TRY',
             'JOD/CNY', 'KES/USD', 'LBP/USD', 'MAD/USD', 'NGN/USD',
-            'NZD/JPY', 'NZD/USD', 'OMR/CNY', 'QAR/CNY', 'SAR/CNY',
-            'TND/USD', 'UAH/USD', 'USD/ARS', 'USD/BDT', 'USD/BRL',
-            'USD/CAD', 'USD/CHF', 'USD/CLP', 'USD/CNH', 'USD/COP',
-            'USD/DZD', 'USD/EGP', 'USD/IDR', 'USD/INR', 'USD/JPY',
+            'OMR/CNY', 'QAR/CNY', 'SAR/CNY', 'TND/USD', 'UAH/USD',
+            'USD/ARS', 'USD/BDT', 'USD/BRL', 'USD/CLP', 'USD/CNH',
+            'USD/COP', 'USD/DZD', 'USD/EGP', 'USD/IDR', 'USD/INR',
             'USD/MXN', 'USD/MYR', 'USD/PHP', 'USD/PKR', 'USD/RUB',
             'USD/SGD', 'USD/THB', 'USD/VND', 'YER/USD', 'ZAR/USD',
 
-            // ===== КРИПТОВАЛЮТЫ =====
+            // Криптовалюты
             'Bitcoin', 'Bitcoin ETF', 'BNB', 'BCH/EUR', 'BCH/GBP',
             'BCH/JPY', 'BTC/GBP', 'BTC/JPY', 'Chainlink', 'Dash',
             'Ethereum', 'Polygon', 'TRON',
 
-            // ===== СЫРЬЕ =====
+            // Сырье
             'Brent Oil', 'Gold', 'Gold OTC', 'Natural Gas',
             'Natural Gas OTC', 'Palladium spot', 'Palladium spot OTC',
             'Platinum spot', 'Platinum spot OTC', 'Silver',
             'WTI Crude Oil', 'XAG/EUR', 'XAU/EUR',
 
-            // ===== АКЦИИ =====
+            // Акции
             'Advanced Micro Devices', 'Alibaba', 'Alibaba OTC',
             'Amazon OTC', 'American Express', 'Apple', 'Apple OTC',
             'Boeing Company', 'Cisco', 'Cisco OTC', 'Citigroup Inc',
@@ -785,61 +928,37 @@
             'Pfizer Inc', 'Pfizer Inc OTC', 'Tesla', 'Tesla OTC',
             'VISA OTC', 'VIX OTC',
 
-            // ===== ИНДЕКСЫ =====
+            // Индексы
             'AEX 25', 'AUS 200', 'CAC 40', 'D30/EUR', 'DJI30',
             'E35EUR', 'E50/EUR', 'F40/EUR', 'HONG KONG 33',
             'JPN225', 'SMI 20', 'SP500', 'US100'
         ];
 
         // ==========================================
-        // 4. АКТИВНЫЕ ПАРЫ (РЕАЛЬНЫЕ СИГНАЛЫ)
+        // 4. АКТИВНЫЕ СИГНАЛЫ
         // ==========================================
-        // Только те пары, по которым ЕСТЬ уверенный сигнал
         const ACTIVE_SIGNALS = {
-            // 🔴 Уверенный сигнал (высокая уверенность)
+            // Официальные
             'AUD/CAD': { price: 0.97460, signal: 'up', strength: 78, change: '+0.32%', entry: 0.97460, current: 0.97550, plus: 3, minus: 0, ret: 1 },
-            'GBP/JPY': { price: 186.45, signal: 'up', strength: 82, change: '+0.87%', entry: 186.45, current: 187.20, plus: 5, minus: 1, ret: 0 },
-            'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00, plus: 4, minus: 0, ret: 1 },
-            'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20, plus: 2, minus: 1, ret: 0 },
-            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, plus: 3, minus: 0, ret: 1 },
-
-            // 🟡 Средняя уверенность
             'EUR/USD': { price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750, plus: 2, minus: 1, ret: 0 },
+            'GBP/JPY': { price: 186.45, signal: 'up', strength: 82, change: '+0.87%', entry: 186.45, current: 187.20, plus: 5, minus: 1, ret: 0 },
             'GBP/USD': { price: 1.31240, signal: 'up', strength: 52, change: '+0.28%', entry: 1.31240, current: 1.31520, plus: 2, minus: 1, ret: 0 },
             'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, plus: 1, minus: 0, ret: 2 },
             'USD/JPY': { price: 145.80, signal: 'down', strength: 48, change: '-0.32%', entry: 145.80, current: 145.20, plus: 1, minus: 2, ret: 1 },
+
+            // OTC
+            'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00, plus: 4, minus: 0, ret: 1 },
+            'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20, plus: 2, minus: 1, ret: 0 },
+            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, plus: 3, minus: 0, ret: 1 },
+            'Bitcoin': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00, plus: 8, minus: 1, ret: 0 },
+            'Ethereum': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00, plus: 3, minus: 2, ret: 1 },
+            'Silver': { price: 24.50, signal: 'neutral', strength: 28, change: '+0.12%', entry: 24.50, current: 24.55, plus: 1, minus: 0, ret: 2 },
+            'Tesla': { price: 245.00, signal: 'down', strength: 63, change: '-0.88%', entry: 245.00, current: 242.80, plus: 2, minus: 3, ret: 0 },
+            'US100': { price: 17850.00, signal: 'down', strength: 42, change: '-0.28%', entry: 17850.00, current: 17800.00, plus: 1, minus: 2, ret: 0 },
         };
 
         // ==========================================
-        // 5. ОПРЕДЕЛЕНИЕ СТАТУСА РЫНКА
-        // ==========================================
-        function getMarketStatus() {
-            const now = new Date();
-            const day = now.getDay();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const time = hours + minutes / 60;
-
-            // Выходные (суббота и воскресенье)
-            if (day === 0 || day === 6) {
-                return { status: 'closed', text: 'Рынок закрыт (выходные)', badge: 'CLOSED' };
-            }
-
-            // Forex: открыт с 00:00 до 23:59, но основное время
-            // Крипто: 24/7
-            // Акции: 9:30 - 16:00 EST (16:30 - 23:00 MSK)
-            // Для демонстрации считаем что рынок открыт с 9:00 до 23:00 по МСК
-            if (time >= 9 && time < 23) {
-                return { status: 'open', text: 'Рынок открыт', badge: 'OPEN' };
-            } else if (time >= 0 && time < 9) {
-                return { status: 'closed', text: 'Рынок закрыт (ночные часы)', badge: 'CLOSED' };
-            } else {
-                return { status: 'closed', text: 'Рынок закрыт', badge: 'CLOSED' };
-            }
-        }
-
-        // ==========================================
-        // 6. ИНДИКАТОРЫ
+        // 5. ИНДИКАТОРЫ
         // ==========================================
         function getIndicators(pairName) {
             const base = [
@@ -879,10 +998,16 @@
                     { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
                     { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
                 ],
-                'GBP/USD': [
-                    { name: 'RSI (14)', value: '55.2', status: 'buy', label: 'Покупка' },
+                'Bitcoin': [
+                    { name: 'RSI (14)', value: '65.8', status: 'buy', label: 'Покупка' },
                     { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
                     { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                    { name: 'Объем', value: 'Очень высокий', status: 'buy', label: '' },
+                ],
+                'Ethereum': [
+                    { name: 'RSI (14)', value: '38.2', status: 'sell', label: 'Продажа' },
+                    { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
+                    { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
                     { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
                 ],
                 'USD/CHF': [
@@ -897,37 +1022,66 @@
                     { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
                     { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
                 ],
+                'Tesla': [
+                    { name: 'RSI (14)', value: '35.6', status: 'sell', label: 'Продажа' },
+                    { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
+                    { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
+                    { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
+                ],
             };
             return custom[pairName] || base;
         }
 
         // ==========================================
-        // 7. ПОСТРОЕНИЕ СПИСКА
+        // 6. СОСТОЯНИЕ
+        // ==========================================
+        let currentMode = 'official';
+        let PAIRS = [];
+
+        // ==========================================
+        // 7. ОПРЕДЕЛЕНИЕ СТАТУСА РЫНКА
+        // ==========================================
+        function getMarketStatus() {
+            const now = new Date();
+            const day = now.getDay();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const time = hours + minutes / 60;
+
+            if (day === 0 || day === 6) {
+                return { status: 'closed', text: 'Рынок закрыт (выходные)', badge: 'CLOSED' };
+            }
+
+            if (time >= 9 && time < 23) {
+                return { status: 'open', text: 'Рынок открыт', badge: 'OPEN' };
+            } else {
+                return { status: 'closed', text: 'Рынок закрыт (ночные часы)', badge: 'CLOSED' };
+            }
+        }
+
+        // ==========================================
+        // 8. ПОСТРОЕНИЕ ДАННЫХ
         // ==========================================
         const signalMap = { up: 'ВВЕРХ', down: 'ВНИЗ', neutral: 'НЕЙТРАЛЬНО' };
 
-        function buildPairData() {
-            const result = [];
+        function buildPairData(mode) {
+            const source = mode === 'official' ? OFFICIAL_PAIRS : OTC_PAIRS;
             const market = getMarketStatus();
+            const result = [];
 
-            ALL_PAIRS.forEach(name => {
+            source.forEach(name => {
                 const active = ACTIVE_SIGNALS[name];
                 let confidence = 'waiting';
                 let isActive = false;
 
                 if (active) {
                     isActive = true;
-                    // Определяем уверенность по силе сигнала
-                    if (active.strength >= 60) {
-                        confidence = 'high';
-                    } else if (active.strength >= 40) {
-                        confidence = 'medium';
-                    } else {
-                        confidence = 'low';
-                    }
+                    if (active.strength >= 60) confidence = 'high';
+                    else if (active.strength >= 40) confidence = 'medium';
+                    else confidence = 'low';
                 }
 
-                // Если рынок закрыт - все пары в ожидание (кроме крипто)
+                // Криптовалюты всегда активны
                 const isCrypto = ['Bitcoin', 'Ethereum', 'BNB', 'Chainlink', 'Dash', 'Polygon', 'TRON', 'Bitcoin ETF'].includes(name);
                 if (market.status === 'closed' && !isCrypto) {
                     confidence = 'waiting';
@@ -943,11 +1097,9 @@
                 });
             });
 
-            // Сортировка: active → waiting
             result.sort((a, b) => {
                 if (a.isActive && !b.isActive) return -1;
                 if (!a.isActive && b.isActive) return 1;
-                // Сортировка по уверенности
                 const order = { high: 0, medium: 1, low: 2, waiting: 3 };
                 return order[a.confidence] - order[b.confidence];
             });
@@ -956,7 +1108,7 @@
         }
 
         // ==========================================
-        // 8. РЕНДЕРИНГ БЛОКОВ
+        // 9. РЕНДЕРИНГ
         // ==========================================
         function renderBlocks() {
             const container = document.getElementById('pairBlocks');
@@ -964,12 +1116,11 @@
 
             const market = getMarketStatus();
 
-            // Обновляем статус рынка
-            const statusEl = document.getElementById('marketStatusText');
-            const badgeEl = document.getElementById('marketStatusBadge');
-            statusEl.textContent = market.text;
-            badgeEl.textContent = market.badge;
-            badgeEl.className = `status-badge ${market.status}`;
+            // Обновляем статус
+            document.getElementById('marketStatusText').textContent = market.text;
+            const badge = document.getElementById('marketStatusBadge');
+            badge.textContent = market.badge;
+            badge.className = `status-badge ${market.status}`;
 
             const blocks = [
                 { key: 'high', label: '🔴 УВЕРЕННЫЙ СИГНАЛ', icon: '🔥' },
@@ -1000,24 +1151,21 @@
                 const list = document.createElement('div');
                 list.className = 'pair-list';
 
-                items.forEach((pair, idx) => {
+                items.forEach(pair => {
                     const div = document.createElement('div');
                     div.className = 'pair-item';
                     if (!pair.isActive) div.classList.add('waiting');
 
                     const priceDisplay = pair.isActive ? 
-                        pair.price.toFixed(pair.price < 1 ? 5 : 2) : 
-                        '—';
+                        pair.price.toFixed(pair.price < 1 ? 5 : 2) : '—';
                     const changeHtml = pair.isActive ?
                         `<span class="change ${pair.change.includes('+') ? 'up' : 'down'}">${pair.change}</span>` :
-                        '<span style="color:rgba(255,255,255,0.1);font-size:0.55rem;">ожидание</span>';
+                        '<span style="color:rgba(255,255,255,0.08);font-size:0.5rem;">ожидание</span>';
 
                     const signalText = pair.isActive ? signalMap[pair.signal] : '—';
                     const signalClass = pair.isActive ? pair.signal : 'waiting';
                     const arrow = pair.isActive ?
-                        (pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔') :
-                        '•';
-
+                        (pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔') : '•';
                     const dotClass = pair.isActive ? 'active' : 'waiting';
 
                     div.innerHTML = `
@@ -1052,17 +1200,13 @@
                 container.appendChild(blockDiv);
             });
 
-            // Статистика
             document.getElementById('totalSignals').textContent = totalActive;
             document.getElementById('winSignals').textContent = totalWins;
-            const loseCount = totalActive - totalWins;
-            document.getElementById('loseSignals').textContent = loseCount;
-            const winRate = totalActive > 0 ? Math.round((totalWins / totalActive) * 100) : 0;
-            document.getElementById('winRate').textContent = winRate + '%';
+            document.getElementById('loseSignals').textContent = totalActive - totalWins;
         }
 
         // ==========================================
-        // 9. МОДАЛКА
+        // 10. МОДАЛКА
         // ==========================================
         function openModal(index) {
             const pair = PAIRS[index];
@@ -1118,17 +1262,29 @@
         });
 
         // ==========================================
-        // 10. АВТОРИЗАЦИЯ
+        // 11. ПЕРЕКЛЮЧЕНИЕ РЕЖИМА
         // ==========================================
-        let isAuthorized = false;
+        function switchMode(mode) {
+            currentMode = mode;
+            PAIRS = buildPairData(mode);
+            renderBlocks();
 
+            document.getElementById('modeOfficial').classList.toggle('active', mode === 'official');
+            document.getElementById('modeOtc').classList.toggle('active', mode === 'otc');
+        }
+
+        document.getElementById('modeOfficial').addEventListener('click', () => switchMode('official'));
+        document.getElementById('modeOtc').addEventListener('click', () => switchMode('otc'));
+
+        // ==========================================
+        // 12. АВТОРИЗАЦИЯ
+        // ==========================================
         function checkAuth(id) {
             const cleanId = id.trim();
             if (cleanId === CONFIG.MASTER_ID) {
-                isAuthorized = true;
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('referralScreen').classList.remove('active');
-                document.getElementById('mainScreen').classList.add('active');
+                document.getElementById('choiceScreen').classList.add('active');
                 document.getElementById('userIdDisplay').textContent = cleanId;
 
                 // Показываем приветствие
@@ -1136,12 +1292,7 @@
                 splash.classList.add('active');
                 setTimeout(() => {
                     splash.classList.remove('active');
-                }, 2800);
-
-                // Рендерим блоки
-                setTimeout(() => {
-                    renderBlocks();
-                }, 300);
+                }, 2500);
 
                 if (tg) tg.showAlert('👑 Добро пожаловать, Мастер!');
                 return true;
@@ -1154,7 +1305,22 @@
         }
 
         // ==========================================
-        // 11. ОБРАБОТЧИКИ
+        // 13. ВЫБОР ТИПА ПАР
+        // ==========================================
+        document.getElementById('officialChoice').addEventListener('click', function() {
+            document.getElementById('choiceScreen').classList.remove('active');
+            document.getElementById('mainScreen').classList.add('active');
+            switchMode('official');
+        });
+
+        document.getElementById('otcChoice').addEventListener('click', function() {
+            document.getElementById('choiceScreen').classList.remove('active');
+            document.getElementById('mainScreen').classList.add('active');
+            switchMode('otc');
+        });
+
+        // ==========================================
+        // 14. ОБРАБОТЧИКИ
         // ==========================================
         document.getElementById('authBtn').addEventListener('click', function() {
             const input = document.getElementById('authInput');
@@ -1181,26 +1347,17 @@
         });
 
         // ==========================================
-        // 12. ПОСТРОЕНИЕ ДАННЫХ
-        // ==========================================
-        let PAIRS = [];
-
-        function initApp() {
-            PAIRS = buildPairData();
-        }
-
-        initApp();
-
-        // ==========================================
-        // 13. СТАРТ
+        // 15. СТАРТ
         // ==========================================
         document.getElementById('authScreen').style.display = 'flex';
         document.getElementById('splashScreen').classList.remove('active');
 
+        PAIRS = buildPairData('official');
+
         console.log('📡 Kultura_Treyding запущен');
-        console.log(`📊 Загружено ${ALL_PAIRS.length} активов`);
+        console.log(`📊 Официальных пар: ${OFFICIAL_PAIRS.length}`);
+        console.log(`📈 OTC пар: ${OTC_PAIRS.length}`);
         console.log(`✅ Активных сигналов: ${Object.keys(ACTIVE_SIGNALS).length}`);
-        console.log('🔴 Рынок:', getMarketStatus().text);
     </script>
 
 </body>
