@@ -3,415 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Terminal</title>
+    <title>Kultura_Treyding</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--tg-theme-bg-color, #0f0f1a);
-            color: var(--tg-theme-text-color, #e0e0e0);
-            padding: 16px;
+            background-color: #0a0a12;
+            color: #e0e0e0;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+
+        /* ===== ФОН ===== */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(123, 47, 252, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 210, 255, 0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0a12 0%, #14142a 50%, #0a0a12 100%);
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.03), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.03), transparent),
+                radial-gradient(2px 2px at 50px 160px, rgba(255,255,255,0.03), transparent),
+                radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.03), transparent),
+                radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.03), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.03), transparent);
+            background-size: 200px 200px;
         }
 
         .container {
-            width: 100%;
+            position: relative;
+            z-index: 1;
             max-width: 420px;
+            margin: 0 auto;
+            padding: 12px 16px 100px 16px;
         }
 
-        /* ========== ЭКРАН ПРИВЕТСТВИЯ ========== */
-        #welcomeScreen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            text-align: center;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .welcome-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #00d2ff, #7b2ffc);
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 32px rgba(123, 47, 252, 0.3);
-        }
-
-        .welcome-title {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00d2ff, #7b2ffc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
-        }
-
-        .welcome-subtitle {
-            color: var(--tg-theme-hint-color, #8888aa);
-            font-size: 1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            padding: 16px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%;
-            max-width: 280px;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        /* ========== ЭКРАН ВВОДА ID ========== */
-        #idScreen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        #idScreen h2 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        #idScreen p {
-            color: var(--tg-theme-hint-color, #8888aa);
-            margin-bottom: 24px;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .input-group {
-            width: 100%;
-            max-width: 320px;
-            margin-bottom: 16px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--tg-theme-hint-color, #8888aa);
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 2px solid var(--tg-theme-secondary-bg-color, #2a2a44);
-            background-color: var(--tg-theme-secondary-bg-color, #16162a);
-            color: var(--tg-theme-text-color, #e0e0e0);
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            outline: none;
-        }
-
-        .input-group input:focus {
-            border-color: #7b2ffc;
-        }
-
-        .input-group input::placeholder {
-            color: #555577;
-        }
-
-        .btn-secondary {
-            background: var(--tg-theme-button-color, #7b2ffc);
-            color: var(--tg-theme-button-text-color, #fff);
-            border: none;
-            border-radius: 14px;
-            padding: 16px;
-            width: 100%;
-            max-width: 320px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn-secondary:active {
-            opacity: 0.7;
-        }
-
-        .btn-secondary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .error-message {
-            color: #ff1744;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            min-height: 24px;
-        }
-
-        /* ========== ЭКРАН РЕФЕРАЛЬНОЙ ОШИБКИ ========== */
-        #referralScreen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            text-align: center;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        #referralScreen .error-icon {
-            font-size: 3.5rem;
-            margin-bottom: 16px;
-        }
-
-        #referralScreen h2 {
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-            color: #ff1744;
-        }
-
-        #referralScreen p {
-            color: var(--tg-theme-hint-color, #8888aa);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            max-width: 320px;
-        }
-
-        .ref-link-box {
-            background: var(--tg-theme-secondary-bg-color, #16162a);
-            padding: 14px 18px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 340px;
-            word-break: break-all;
-            font-size: 0.85rem;
-            color: #7b2ffc;
-            border: 1px solid #7b2ffc40;
-            margin-bottom: 12px;
-        }
-
-        .ref-link-box a {
-            color: #7b2ffc;
-            text-decoration: none;
-        }
-
-        .ref-code-box {
-            background: var(--tg-theme-secondary-bg-color, #16162a);
-            padding: 10px 16px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 340px;
-            font-size: 0.9rem;
-            color: #00d2ff;
-            border: 1px dashed #00d2ff60;
-            margin-bottom: 20px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .ref-code-box:hover {
-            background: var(--tg-theme-secondary-bg-color, #1e1e3a);
-        }
-
-        /* ========== ОСНОВНОЙ ЭКРАН С СИГНАЛАМИ ========== */
-        #mainScreen {
-            display: none;
-            animation: fadeIn 0.4s ease-out;
-        }
-
+        /* ===== ХЕДЕР ===== */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 12px 16px;
-            background: var(--tg-theme-secondary-bg-color, #1a1a2e);
-            border-radius: 14px;
-            margin-bottom: 20px;
+            background: rgba(20, 20, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(123, 47, 252, 0.15);
+            margin-bottom: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .header h1 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #00d2ff, #7b2ffc);
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .status-badge {
-            background: #00c85320;
-            color: #00c853;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            border: 1px solid #00c85340;
+        .header-logo span {
+            font-size: 0.7rem;
+            -webkit-text-fill-color: rgba(255,255,255,0.4);
+            background: none;
         }
 
-        .user-badge {
-            font-size: 0.75rem;
-            color: var(--tg-theme-hint-color, #8888aa);
-            background: var(--tg-theme-secondary-bg-color, #1a1a2e);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid #7b2ffc40;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Сигналы */
-        .signal-card {
-            background: var(--tg-theme-secondary-bg-color, #16162a);
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00c853;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .status-text {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ===== СТАТИСТИКА ДНЯ ===== */
+        .daily-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: rgba(20, 20, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(123, 47, 252, 0.3);
+        }
+
+        .stat-card .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .stat-card .label {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value.green { color: #00c853; }
+        .stat-card .value.red { color: #ff1744; }
+        .stat-card .value.yellow { color: #ffab00; }
+        .stat-card .value.blue { color: #448aff; }
+
+        /* ===== ВАЛЮТНЫЕ ПАРЫ ===== */
+        .pair-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .pair-item {
+            background: rgba(20, 20, 42, 0.6);
+            backdrop-filter: blur(10px);
             border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 12px;
-            border-left: 4px solid #7b2ffc;
-            transition: all 0.2s;
-        }
-
-        .signal-card.buy {
-            border-left-color: #00c853;
-        }
-        .signal-card.sell {
-            border-left-color: #ff1744;
-        }
-        .signal-card.neutral {
-            border-left-color: #ffab00;
-        }
-
-        .signal-header {
+            padding: 14px 18px;
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
         }
-        .signal-pair {
+
+        .pair-item:hover {
+            border-color: rgba(123, 47, 252, 0.3);
+            transform: translateX(4px);
+        }
+
+        .pair-item:active {
+            transform: scale(0.98);
+        }
+
+        .pair-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .pair-name {
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            color: #fff;
         }
-        .signal-type {
+
+        .pair-price {
             font-size: 0.8rem;
-            padding: 2px 12px;
-            border-radius: 12px;
+            color: rgba(255,255,255,0.5);
             font-weight: 500;
         }
-        .signal-type.buy {
-            background: #00c85320;
-            color: #00c853;
-        }
-        .signal-type.sell {
-            background: #ff174420;
-            color: #ff1744;
-        }
-        .signal-type.neutral {
-            background: #ffab0020;
-            color: #ffab00;
-        }
 
-        .signal-details {
-            display: flex;
-            gap: 16px;
-            font-size: 0.85rem;
-            color: var(--tg-theme-hint-color, #8888aa);
-            flex-wrap: wrap;
-        }
-        .signal-details span {
+        .pair-signal {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 12px;
         }
 
-        .signal-time {
-            font-size: 0.75rem;
-            color: var(--tg-theme-hint-color, #666688);
-            margin-top: 8px;
-        }
-
-        .refresh-btn {
-            background: var(--tg-theme-button-color, #7b2ffc);
-            color: var(--tg-theme-button-text-color, #fff);
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: opacity 0.2s;
-        }
-        .refresh-btn:active {
-            opacity: 0.7;
-        }
-        .refresh-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .stat-item {
-            background: var(--tg-theme-secondary-bg-color, #16162a);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-        .stat-label {
+        .signal-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 0.7rem;
-            color: var(--tg-theme-hint-color, #8888aa);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* Загрузчик */
-        .loader {
-            border: 3px solid var(--tg-theme-secondary-bg-color, #2a2a44);
-            border-top: 3px solid #7b2ffc;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
+        .signal-badge.up {
+            background: rgba(0, 200, 83, 0.15);
+            color: #00c853;
+            border: 1px solid rgba(0, 200, 83, 0.3);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .signal-badge.down {
+            background: rgba(255, 23, 68, 0.15);
+            color: #ff1744;
+            border: 1px solid rgba(255, 23, 68, 0.3);
         }
 
-        @keyframes fadeIn {
+        .signal-badge.neutral {
+            background: rgba(255, 171, 0, 0.15);
+            color: #ffab00;
+            border: 1px solid rgba(255, 171, 0, 0.3);
+        }
+
+        .signal-arrow {
+            font-size: 1.2rem;
+        }
+
+        .signal-arrow.up { color: #00c853; }
+        .signal-arrow.down { color: #ff1744; }
+        .signal-arrow.neutral { color: #ffab00; }
+
+        /* ===== МОДАЛЬНОЕ ОКНО (ДЕТАЛИ) ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(180deg, #1a1a32, #0f0f1f);
+            border-radius: 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            border: 1px solid rgba(123, 47, 252, 0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -419,641 +293,704 @@
             }
         }
 
-        @keyframes pulse {
-            0% {
-                opacity: 0.6;
-                transform: scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        .signal-card.new {
-            animation: pulse 0.3s ease-out;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .hidden {
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .modal-price {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .modal-price .change {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .modal-price .change.up { color: #00c853; }
+        .modal-price .change.down { color: #ff1744; }
+
+        .modal-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .modal-info-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .modal-info-item .label {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-info-item .value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 2px;
+            color: #fff;
+        }
+
+        .modal-info-item .value.green { color: #00c853; }
+        .modal-info-item .value.red { color: #ff1744; }
+        .modal-info-item .value.yellow { color: #ffab00; }
+        .modal-info-item .value.blue { color: #448aff; }
+
+        .modal-indicators {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .modal-indicators .title {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .indicator-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.85rem;
+        }
+
+        .indicator-row .name {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .indicator-row .value.buy { color: #00c853; }
+        .indicator-row .value.sell { color: #ff1744; }
+        .indicator-row .value.neutral { color: #ffab00; }
+
+        .modal-signal-strength {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .modal-signal-strength .label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+        }
+
+        .modal-signal-strength .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .strength-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #ff1744, #ffab00, #00c853);
+            transition: width 0.6s;
+        }
+
+        /* ===== ФУТЕР ===== */
+        .footer {
+            text-align: center;
+            padding: 20px 0 10px 0;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .footer span {
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        /* ===== АНИМАЦИИ ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== СКРОЛЛБАР ===== */
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(123, 47, 252, 0.3);
+            border-radius: 10px;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 380px) {
+            .daily-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== СКРЫТЫЕ ЭКРАНЫ ===== */
+        #authScreen, #referralScreen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #authScreen.active, #referralScreen.active {
+            display: flex;
+        }
+
+        #mainScreen {
             display: none;
         }
 
-        /* Уведомления */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--tg-theme-secondary-bg-color, #1a1a2e);
-            color: var(--tg-theme-text-color, #e0e0e0);
-            padding: 12px 24px;
-            border-radius: 12px;
-            border: 1px solid #7b2ffc40;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            font-size: 0.9rem;
-            max-width: 90%;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease-out;
+        #mainScreen.active {
+            display: block;
         }
 
-        .toast.success { border-color: #00c85360; }
-        .toast.error { border-color: #ff174460; }
-        .toast.info { border-color: #7b2ffc60; }
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .auth-sub {
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .auth-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(20,20,42,0.6);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-input:focus {
+            border-color: #7b2ffc;
+        }
+
+        .auth-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7b2ffc, #00d2ff);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 12px;
+        }
+
+        .auth-btn:active {
+            opacity: 0.7;
+        }
+
+        .auth-error {
+            color: #ff1744;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 24px;
+        }
+
+        .ref-link {
+            color: #7b2ffc;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .ref-code {
+            background: rgba(20,20,42,0.6);
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px dashed rgba(0,210,255,0.3);
+            margin: 12px 0;
+            font-weight: 600;
+            color: #00d2ff;
+            cursor: pointer;
+            max-width: 340px;
+        }
+
+        .pair-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .pair-change.up { color: #00c853; }
+        .pair-change.down { color: #ff1744; }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- ===== ФОН ===== -->
+    <div class="background"></div>
 
-        <!-- ======================================== -->
-        <!-- ЭКРАН 1: ПРИВЕТСТВИЕ                      -->
-        <!-- ======================================== -->
-        <div id="welcomeScreen">
-            <div class="welcome-icon">📡</div>
-            <div class="welcome-title">Kultura_Treyding</div>
-            <div class="welcome-subtitle">
-                Профессиональные торговые сигналы<br>
-                в реальном времени
-            </div>
-            <button class="btn-primary" id="welcomeBtn">🚀 Начать</button>
+    <!-- ===== ЭКРАН АВТОРИЗАЦИИ ===== -->
+    <div id="authScreen" class="active">
+        <div style="max-width:340px;width:100%;">
+            <div style="font-size:3rem;margin-bottom:12px;">📡</div>
+            <div class="auth-title">Kultura_Treyding</div>
+            <div class="auth-sub">Введите ваш ID для входа</div>
+            <input type="text" class="auth-input" id="authInput" placeholder="Введите ID..." value="88808610">
+            <div class="auth-error" id="authError"></div>
+            <button class="auth-btn" id="authBtn">✅ Войти</button>
         </div>
+    </div>
 
-        <!-- ======================================== -->
-        <!-- ЭКРАН 2: ВВОД ID                         -->
-        <!-- ======================================== -->
-        <div id="idScreen">
-            <h2>🔑 Введите ваш ID</h2>
-            <p>Введите ID из приложения Pocket Friends<br>
-            для проверки регистрации</p>
-
-            <div class="input-group">
-                <label for="userIdInput">Ваш ID</label>
-                <input type="text" id="userIdInput" placeholder="Введите ID..." autocomplete="off" value="12345678">
-                <div class="error-message" id="idError"></div>
-            </div>
-
-            <button class="btn-secondary" id="checkIdBtn">✅ Проверить</button>
-        </div>
-
-        <!-- ======================================== -->
-        <!-- ЭКРАН 3: РЕФЕРАЛЬНАЯ ОШИБКА             -->
-        <!-- ======================================== -->
-        <div id="referralScreen">
-            <div class="error-icon">⚠️</div>
-            <h2>Требуется регистрация</h2>
-            <p>
-                Вы не зарегистрированы по реферальной ссылке.<br>
+    <!-- ===== ЭКРАН РЕФЕРАЛКИ ===== -->
+    <div id="referralScreen">
+        <div style="max-width:340px;width:100%;">
+            <div style="font-size:3rem;margin-bottom:12px;">⚠️</div>
+            <div style="font-size:1.4rem;font-weight:700;color:#ff1744;margin-bottom:8px;">Требуется регистрация</div>
+            <p style="color:rgba(255,255,255,0.5);margin-bottom:16px;font-size:0.9rem;line-height:1.6;">
+                Вы не зарегистрированы по реферальной ссылке.
                 Пожалуйста, перейдите по ссылке и зарегистрируйтесь:
             </p>
-
-            <div class="ref-link-box">
-                👉 <a href="https://pocket-friends.co/r/u25lkma8wc" target="_blank">
+            <div style="background:rgba(20,20,42,0.6);padding:12px 16px;border-radius:10px;margin-bottom:10px;word-break:break-all;border:1px solid rgba(123,47,252,0.2);">
+                <a href="https://pocket-friends.co/r/u25lkma8wc" target="_blank" style="color:#7b2ffc;text-decoration:none;">
                     pocket-friends.co/r/u25lkma8wc
                 </a>
             </div>
-
-            <div class="ref-code-box" id="refCodeBox">
-                ✨ Ваш реферальный код: <strong>FRIENDU25LKMA8WC</strong>
+            <div class="ref-code" id="refCodeCopy">
+                ✨ FRIENDU25LKMA8WC
             </div>
-
-            <button class="btn-secondary" id="retryBtn" style="max-width:280px;">
-                🔄 Проверить снова
-            </button>
+            <button class="auth-btn" id="retryAuthBtn" style="margin-top:0;">🔄 Попробовать снова</button>
         </div>
+    </div>
 
-        <!-- ======================================== -->
-        <!-- ЭКРАН 4: ОСНОВНОЙ (СИГНАЛЫ)             -->
-        <!-- ======================================== -->
-        <div id="mainScreen">
+    <!-- ===== ОСНОВНОЙ ЭКРАН ===== -->
+    <div id="mainScreen">
+        <div class="container">
 
+            <!-- Хедер -->
             <div class="header">
-                <h1>📡 Kultura_Treyding</h1>
-                <span class="status-badge">● Live</span>
-            </div>
-
-            <!-- ID пользователя -->
-            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <span class="user-badge" id="userDisplay">👤 ID: ---</span>
-                <span class="user-badge" style="border-color:#00c85360;">✅ Верифицирован</span>
-            </div>
-
-            <!-- Статистика -->
-            <div class="stats" id="stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="statBuy">0</div>
-                    <div class="stat-label">BUY</div>
+                <div class="header-left">
+                    <div class="header-logo">
+                        Kultura_Treyding
+                        <span>™</span>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statSell">0</div>
-                    <div class="stat-label">SELL</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statNeutral">0</div>
-                    <div class="stat-label">NEUTRAL</div>
+                <div class="header-right">
+                    <span class="status-dot"></span>
+                    <span class="status-text">LIVE</span>
                 </div>
             </div>
 
-            <!-- Сигналы -->
-            <div id="signalsContainer"></div>
+            <!-- Статистика дня -->
+            <div class="daily-stats">
+                <div class="stat-card">
+                    <div class="value blue" id="totalSignals">0</div>
+                    <div class="label">Всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value green" id="winSignals">0</div>
+                    <div class="label">+ В плюс</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value red" id="loseSignals">0</div>
+                    <div class="label">- В минус</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value yellow" id="winRate">0%</div>
+                    <div class="label">Винрейт</div>
+                </div>
+            </div>
 
-            <button class="refresh-btn" id="refreshBtn">🔄 Обновить сигналы</button>
+            <!-- Список пар -->
+            <div class="pair-list" id="pairList">
+                <!-- Генерируется JS -->
+            </div>
+
+            <!-- Футер -->
+            <div class="footer">
+                <span>@Kultura_Treyding_bot</span>
+            </div>
         </div>
+    </div>
 
+    <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalPairName">AUD/CAD</div>
+                <button class="modal-close" id="modalCloseBtn">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-price" id="modalPrice">
+                    0.97460
+                    <span class="change up" id="modalChange">+0.32%</span>
+                </div>
+
+                <div class="modal-info-grid">
+                    <div class="modal-info-item">
+                        <div class="label">Сигнал</div>
+                        <div class="value green" id="modalSignal">↑ ВВЕРХ</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="label">Сила сигнала</div>
+                        <div class="value blue" id="modalStrength">61</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="label">Вход (цена)</div>
+                        <div class="value" id="modalEntry">0.97460</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="label">Текущий уровень</div>
+                        <div class="value" id="modalCurrent">0.97550</div>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+                    <div class="modal-info-item" style="text-align:center;">
+                        <div class="label">Плюс</div>
+                        <div class="value green" id="modalPlus">+3</div>
+                    </div>
+                    <div class="modal-info-item" style="text-align:center;">
+                        <div class="label">Минус</div>
+                        <div class="value red" id="modalMinus">-0</div>
+                    </div>
+                    <div class="modal-info-item" style="text-align:center;">
+                        <div class="label">Возврат</div>
+                        <div class="value yellow" id="modalReturn">↔1</div>
+                    </div>
+                </div>
+
+                <div class="modal-indicators">
+                    <div class="title">📊 Индикаторы</div>
+                    <div class="indicator-row">
+                        <span class="name">RSI (14)</span>
+                        <span class="value buy">68.5 (Покупка)</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="name">MACD</span>
+                        <span class="value buy">↑ Бычий</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="name">MA (50)</span>
+                        <span class="value buy">Цена выше</span>
+                    </div>
+                    <div class="indicator-row">
+                        <span class="name">Объем</span>
+                        <span class="value neutral">Средний</span>
+                    </div>
+                </div>
+
+                <div class="modal-signal-strength">
+                    <span class="label">Сила сигнала</span>
+                    <span class="value" id="modalStrengthValue">61/100</span>
+                </div>
+                <div class="strength-bar">
+                    <div class="fill" id="modalStrengthBar" style="width:61%;"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         // ==========================================
-        // 1. ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP
+        // 1. TELEGRAM ИНИЦИАЛИЗАЦИЯ
         // ==========================================
         let tg = null;
-        let isTelegram = false;
-
         try {
             if (window.Telegram && window.Telegram.WebApp) {
                 tg = window.Telegram.WebApp;
                 tg.expand();
                 tg.ready();
-                isTelegram = true;
-                console.log('✅ Telegram Web App инициализирован');
-            } else {
-                console.warn('⚠️ Telegram Web App не найден, работаем в режиме preview');
             }
-        } catch (e) {
-            console.warn('⚠️ Ошибка инициализации Telegram:', e);
-        }
+        } catch(e) {}
 
         // ==========================================
-        // 2. КОНФИГУРАЦИЯ
+        // 2. КОНФИГ
         // ==========================================
         const CONFIG = {
-            // ⚠️ ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ API URL
-            API_URL: 'https://your-api.com/api',
-            
-            // Реферальные данные
+            MASTER_ID: '88808610',
             REFERRAL_LINK: 'https://pocket-friends.co/r/u25lkma8wc',
             REFERRAL_CODE: 'FRIENDU25LKMA8WC',
-            
-            // ⚠️ ВАШ ID ДЛЯ ИСКЛЮЧЕНИЯ (всегда пропускается)
-            MASTER_ID: '88808610',
-            
-            // Таймаут запросов (мс)
-            TIMEOUT: 10000,
         };
 
         // ==========================================
-        // 3. API КЛИЕНТ
+        // 3. ДЕМО-ДАННЫЕ
         // ==========================================
-        const ApiClient = {
-            /**
-             * Проверка пользователя по ID
-             * @param {string} userId - ID пользователя
-             * @returns {Promise<{success: boolean, registered?: boolean, user?: any, error?: string}>}
-             */
-            async checkUser(userId) {
-                // ⚠️ ЕСЛИ ЭТО МАСТЕР-ID - ПРОПУСКАЕМ БЕЗ ПРОВЕРКИ
-                if (userId.trim() === CONFIG.MASTER_ID) {
-                    console.log('👑 Мастер-ID обнаружен, пропускаем проверку');
-                    return {
-                        success: true,
-                        registered: true,
-                        user: { id: CONFIG.MASTER_ID, name: 'Master', isMaster: true },
-                        isMaster: true,
-                    };
-                }
+        const PAIRS = [
+            { name: 'AUD/CAD', price: 0.97460, signal: 'up', strength: 61, change: '+0.32%', entry: 0.97460, current: 0.97550, plus: 3, minus: 0, ret: 1 },
+            { name: 'EUR/USD', price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750, plus: 2, minus: 1, ret: 0 },
+            { name: 'GBP/JPY', price: 186.45, signal: 'up', strength: 78, change: '+0.87%', entry: 186.45, current: 187.20, plus: 5, minus: 1, ret: 0 },
+            { name: 'USD/CHF', price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, plus: 1, minus: 0, ret: 2 },
+            { name: 'BTC/USD', price: 67250, signal: 'up', strength: 89, change: '+2.15%', entry: 67250, current: 68200, plus: 8, minus: 1, ret: 0 },
+            { name: 'ETH/USD', price: 3450, signal: 'down', strength: 55, change: '-0.75%', entry: 3450, current: 3425, plus: 3, minus: 2, ret: 1 },
+        ];
 
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
-
-                    const response = await fetch(`${CONFIG.API_URL}/check-user`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ userId: userId.trim() }),
-                        signal: controller.signal,
-                    });
-
-                    clearTimeout(timeoutId);
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    return {
-                        success: true,
-                        registered: data.registered === true,
-                        user: data.user || null,
-                    };
-                } catch (error) {
-                    console.error('API Error (checkUser):', error);
-                    
-                    // ⚠️ ПРИ ОШИБКЕ - ПОКАЗЫВАЕМ РЕФЕРАЛЬНЫЙ ЭКРАН
-                    return {
-                        success: false,
-                        error: error.name === 'AbortError' 
-                            ? 'Превышено время ожидания ответа от сервера' 
-                            : '❌ Ошибка соединения с сервером',
-                        showReferral: true, // Флаг для показа реферального экрана
-                    };
-                }
-            },
-
-            /**
-             * Получение сигналов
-             * @param {string} userId - ID пользователя
-             * @returns {Promise<{success: boolean, signals?: Array, error?: string}>}
-             */
-            async getSignals(userId) {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
-
-                    const response = await fetch(`${CONFIG.API_URL}/signals`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ userId: userId.trim() }),
-                        signal: controller.signal,
-                    });
-
-                    clearTimeout(timeoutId);
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    return {
-                        success: true,
-                        signals: data.signals || [],
-                    };
-                } catch (error) {
-                    console.error('API Error (getSignals):', error);
-                    return {
-                        success: false,
-                        error: error.name === 'AbortError' 
-                            ? 'Превышено время ожидания ответа от сервера' 
-                            : 'Ошибка получения сигналов',
-                    };
-                }
-            },
+        const INDICATORS = {
+            'AUD/CAD': [
+                { name: 'RSI (14)', value: '68.5', status: 'buy', label: 'Покупка' },
+                { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+            ],
+            'EUR/USD': [
+                { name: 'RSI (14)', value: '42.3', status: 'sell', label: 'Продажа' },
+                { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
+                { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
+                { name: 'Объем', value: 'Низкий', status: 'neutral', label: '' },
+            ],
+            'GBP/JPY': [
+                { name: 'RSI (14)', value: '72.1', status: 'buy', label: 'Покупка' },
+                { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
+            ],
+            'USD/CHF': [
+                { name: 'RSI (14)', value: '50.0', status: 'neutral', label: 'Нейтрально' },
+                { name: 'MACD', value: '↔ Плоский', status: 'neutral', label: '' },
+                { name: 'MA (50)', value: 'Цена около', status: 'neutral', label: '' },
+                { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+            ],
+            'BTC/USD': [
+                { name: 'RSI (14)', value: '65.8', status: 'buy', label: 'Покупка' },
+                { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
+                { name: 'Объем', value: 'Очень высокий', status: 'buy', label: '' },
+            ],
+            'ETH/USD': [
+                { name: 'RSI (14)', value: '38.2', status: 'sell', label: 'Продажа' },
+                { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
+                { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
+                { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+            ],
         };
 
-        // ==========================================
-        // 4. СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-        // ==========================================
-        let state = {
-            userId: null,
-            userData: null,
-            isChecking: false,
-            isLoadingSignals: false,
-            isMaster: false,
-        };
+        const signalMap = { up: 'ВВЕРХ', down: 'ВНИЗ', neutral: 'НЕЙТРАЛЬНО' };
+        const signalClass = { up: 'up', down: 'down', neutral: 'neutral' };
 
         // ==========================================
-        // 5. УПРАВЛЕНИЕ ЭКРАНАМИ
+        // 4. РЕНДЕРИНГ
         // ==========================================
-        function showScreen(screenId) {
-            const screens = ['welcomeScreen', 'idScreen', 'referralScreen', 'mainScreen'];
-            screens.forEach(id => {
-                const el = document.getElementById(id);
-                if (id === screenId) {
-                    el.style.display = 'flex';
-                } else {
-                    el.style.display = 'none';
-                }
-            });
-        }
-
-        // ==========================================
-        // 6. УВЕДОМЛЕНИЯ (TOAST)
-        // ==========================================
-        function showToast(message, type = 'info', duration = 3000) {
-            const oldToast = document.querySelector('.toast');
-            if (oldToast) oldToast.remove();
-
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.3s';
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
-        }
-
-        // ==========================================
-        // 7. ПРОВЕРКА ID
-        // ==========================================
-        async function checkUserId(id) {
-            const cleanId = id.trim();
-
-            if (!cleanId) {
-                document.getElementById('idError').textContent = '⚠️ Пожалуйста, введите ID';
-                return false;
-            }
-
-            if (state.isChecking) return false;
-
-            state.isChecking = true;
-            const btn = document.getElementById('checkIdBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ Проверка...';
-            document.getElementById('idError').textContent = '';
-            document.getElementById('idError').style.color = '#ffab00';
-
-            try {
-                const result = await ApiClient.checkUser(cleanId);
-
-                // Если ошибка API - показываем реферальный экран
-                if (!result.success) {
-                    document.getElementById('idError').textContent = result.error || '❌ Ошибка проверки';
-                    document.getElementById('idError').style.color = '#ff1744';
-                    
-                    // ⚠️ Показываем реферальный экран при ошибке
-                    if (result.showReferral !== false) {
-                        showToast('❌ Ошибка соединения. Пожалуйста, зарегистрируйтесь.', 'error');
-                        setTimeout(() => {
-                            showScreen('referralScreen');
-                        }, 500);
-                    }
-                    return false;
-                }
-
-                // Если пользователь зарегистрирован или это мастер
-                if (result.registered) {
-                    state.userId = cleanId;
-                    state.userData = result.user;
-                    state.isMaster = result.isMaster || false;
-                    
-                    document.getElementById('idError').textContent = '';
-                    document.getElementById('idError').style.color = '#ff1744';
-                    
-                    const welcomeMsg = state.isMaster ? '👑 Добро пожаловать, Мастер!' : `✅ Добро пожаловать, ${cleanId}!`;
-                    showToast(welcomeMsg, 'success');
-                    
-                    showScreen('mainScreen');
-                    const displayName = state.isMaster ? '👑 MASTER' : `👤 ID: ${state.userId}`;
-                    document.getElementById('userDisplay').textContent = displayName;
-                    
-                    await loadSignals(true);
-                    return true;
-                } else {
-                    // Пользователь не зарегистрирован
-                    document.getElementById('idError').textContent = '';
-                    document.getElementById('idError').style.color = '#ff1744';
-                    showScreen('referralScreen');
-                    
-                    if (tg) {
-                        tg.showAlert('❌ ID не найден. Пожалуйста, зарегистрируйтесь по реферальной ссылке.');
-                    }
-                    return false;
-                }
-            } catch (error) {
-                console.error('Ошибка проверки ID:', error);
-                document.getElementById('idError').textContent = '❌ Ошибка соединения с сервером';
-                document.getElementById('idError').style.color = '#ff1744';
-                showToast('❌ Ошибка соединения с сервером', 'error');
-                
-                // ⚠️ Показываем реферальный экран при любой ошибке
-                setTimeout(() => {
-                    showScreen('referralScreen');
-                }, 500);
-                return false;
-            } finally {
-                state.isChecking = false;
-                btn.disabled = false;
-                btn.textContent = '✅ Проверить';
-            }
-        }
-
-        // ==========================================
-        // 8. ЗАГРУЗКА СИГНАЛОВ
-        // ==========================================
-        async function loadSignals(silent = false) {
-            if (!state.userId) {
-                showToast('ID пользователя не найден', 'error');
-                return;
-            }
-
-            if (state.isLoadingSignals) return;
-
-            state.isLoadingSignals = true;
-            const btn = document.getElementById('refreshBtn');
-            if (btn) {
-                btn.disabled = true;
-                btn.textContent = '⏳ Загрузка...';
-            }
-
-            const container = document.getElementById('signalsContainer');
-            if (!silent) {
-                container.innerHTML = `
-                    <div style="display:flex;justify-content:center;padding:40px 0;">
-                        <div class="loader"></div>
-                    </div>
-                `;
-            }
-
-            try {
-                const result = await ApiClient.getSignals(state.userId);
-
-                if (!result.success) {
-                    showToast(result.error || 'Ошибка загрузки сигналов', 'error');
-                    if (!silent) {
-                        container.innerHTML = `
-                            <div style="text-align:center;padding:30px 0;color:var(--tg-theme-hint-color,#8888aa);">
-                                ❌ ${result.error || 'Ошибка загрузки сигналов'}<br>
-                                <span style="font-size:0.85rem;">Попробуйте обновить позже</span>
-                            </div>
-                        `;
-                    }
-                    return;
-                }
-
-                if (result.signals && result.signals.length > 0) {
-                    renderSignals(result.signals);
-                } else {
-                    const demoSignals = generateDemoSignals(6);
-                    renderSignals(demoSignals);
-                    
-                    if (!silent) {
-                        showToast('📊 Используются демо-сигналы', 'info');
-                    }
-                }
-
-                if (!silent) {
-                    showToast('✅ Сигналы обновлены', 'success');
-                }
-            } catch (error) {
-                console.error('Ошибка загрузки сигналов:', error);
-                if (!silent) {
-                    showToast('Ошибка загрузки сигналов', 'error');
-                }
-            } finally {
-                state.isLoadingSignals = false;
-                if (btn) {
-                    btn.disabled = false;
-                    btn.textContent = '🔄 Обновить сигналы';
-                }
-            }
-        }
-
-        // ==========================================
-        // 9. ДЕМО-ДАННЫЕ
-        // ==========================================
-        const demoPairs = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'TON/USDT'];
-        const demoTypes = ['buy', 'sell', 'neutral'];
-        const typeLabels = { buy: 'BUY', sell: 'SELL', neutral: 'NEUTRAL' };
-
-        function generateDemoSignal() {
-            const pair = demoPairs[Math.floor(Math.random() * demoPairs.length)];
-            const type = demoTypes[Math.floor(Math.random() * demoTypes.length)];
-            const price = (Math.random() * 1000 + 100).toFixed(2);
-            const time = new Date().toLocaleTimeString();
-            return { pair, type, price, time };
-        }
-
-        function generateDemoSignals(count = 6) {
-            const signals = [];
-            for (let i = 0; i < count; i++) {
-                signals.push(generateDemoSignal());
-            }
-            return signals;
-        }
-
-        // ==========================================
-        // 10. РЕНДЕРИНГ СИГНАЛОВ
-        // ==========================================
-        function renderSignals(signals) {
-            const container = document.getElementById('signalsContainer');
+        function renderPairs() {
+            const container = document.getElementById('pairList');
             container.innerHTML = '';
 
-            if (!signals || signals.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align:center;padding:30px 0;color:var(--tg-theme-hint-color,#8888aa);">
-                        📭 Нет активных сигналов<br>
-                        <span style="font-size:0.85rem;">Ожидайте новых сигналов</span>
+            PAIRS.forEach((pair, index) => {
+                const div = document.createElement('div');
+                div.className = 'pair-item';
+                div.setAttribute('data-index', index);
+                div.innerHTML = `
+                    <div class="pair-info">
+                        <div class="pair-name">${pair.name}</div>
+                        <div class="pair-price">$${pair.price.toFixed(pair.price < 1 ? 5 : 2)} <span class="pair-change ${pair.change.includes('+') ? 'up' : 'down'}">${pair.change}</span></div>
+                    </div>
+                    <div class="pair-signal">
+                        <span class="signal-arrow ${pair.signal}">${pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔'}</span>
+                        <span class="signal-badge ${pair.signal}">${signalMap[pair.signal]}</span>
                     </div>
                 `;
-                updateStats([]);
-                return;
-            }
-
-            signals.forEach((signal, index) => {
-                const card = document.createElement('div');
-                card.className = `signal-card ${signal.type || 'neutral'} ${index === 0 ? 'new' : ''}`;
-
-                const typeLabel = typeLabels[signal.type] || 'NEUTRAL';
-                const typeClass = signal.type || 'neutral';
-
-                card.innerHTML = `
-                    <div class="signal-header">
-                        <span class="signal-pair">${signal.pair || 'Unknown'}</span>
-                        <span class="signal-type ${typeClass}">${typeLabel}</span>
-                    </div>
-                    <div class="signal-details">
-                        <span>💰 $${signal.price || '0.00'}</span>
-                        <span>📊 ${signal.type === 'buy' ? '↑ Long' : signal.type === 'sell' ? '↓ Short' : '⟷ Hold'}</span>
-                    </div>
-                    <div class="signal-time">⏱ ${signal.time || new Date().toLocaleTimeString()}</div>
-                `;
-
-                container.appendChild(card);
+                div.addEventListener('click', () => openModal(index));
+                container.appendChild(div);
             });
 
-            updateStats(signals);
+            updateStats();
         }
 
-        function updateStats(signals) {
-            const buy = signals.filter(s => s.type === 'buy').length;
-            const sell = signals.filter(s => s.type === 'sell').length;
-            const neutral = signals.filter(s => s.type === 'neutral' || !s.type).length;
+        function updateStats() {
+            const total = PAIRS.length;
+            const wins = PAIRS.filter(p => p.signal === 'up' && p.plus > p.minus).length;
+            const loses = PAIRS.filter(p => p.signal === 'down' && p.minus > p.plus).length;
+            const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
 
-            document.getElementById('statBuy').textContent = buy;
-            document.getElementById('statSell').textContent = sell;
-            document.getElementById('statNeutral').textContent = neutral;
+            document.getElementById('totalSignals').textContent = total;
+            document.getElementById('winSignals').textContent = wins;
+            document.getElementById('loseSignals').textContent = loses;
+            document.getElementById('winRate').textContent = winRate + '%';
         }
 
         // ==========================================
-        // 11. ОБРАБОТЧИКИ СОБЫТИЙ
+        // 5. МОДАЛЬНОЕ ОКНО
         // ==========================================
+        function openModal(index) {
+            const pair = PAIRS[index];
+            const indicators = INDICATORS[pair.name] || INDICATORS['AUD/CAD'];
 
-        document.getElementById('welcomeBtn').addEventListener('click', function() {
-            showScreen('idScreen');
-            setTimeout(() => document.getElementById('userIdInput').focus(), 100);
+            document.getElementById('modalPairName').textContent = pair.name;
+            document.getElementById('modalPrice').innerHTML = `
+                $${pair.price.toFixed(pair.price < 1 ? 5 : 2)}
+                <span class="change ${pair.change.includes('+') ? 'up' : 'down'}">${pair.change}</span>
+            `;
+            document.getElementById('modalSignal').textContent = `${pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔'} ${signalMap[pair.signal]}`;
+            document.getElementById('modalSignal').className = `value ${pair.signal === 'up' ? 'green' : pair.signal === 'down' ? 'red' : 'yellow'}`;
+            document.getElementById('modalStrength').textContent = pair.strength;
+            document.getElementById('modalEntry').textContent = pair.entry.toFixed(pair.entry < 1 ? 5 : 2);
+            document.getElementById('modalCurrent').textContent = pair.current.toFixed(pair.current < 1 ? 5 : 2);
+            document.getElementById('modalPlus').textContent = `+${pair.plus}`;
+            document.getElementById('modalMinus').textContent = `-${pair.minus}`;
+            document.getElementById('modalReturn').textContent = `↔${pair.ret}`;
+            document.getElementById('modalStrengthValue').textContent = `${pair.strength}/100`;
+            document.getElementById('modalStrengthBar').style.width = `${pair.strength}%`;
+
+            // Индикаторы
+            const container = document.querySelector('.modal-indicators');
+            let html = '<div class="title">📊 Индикаторы</div>';
+            indicators.forEach(ind => {
+                const statusClass = ind.status === 'buy' ? 'buy' : ind.status === 'sell' ? 'sell' : 'neutral';
+                const label = ind.label ? ` (${ind.label})` : '';
+                html += `
+                    <div class="indicator-row">
+                        <span class="name">${ind.name}</span>
+                        <span class="value ${statusClass}">${ind.value}${label}</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
         });
 
-        document.getElementById('checkIdBtn').addEventListener('click', function() {
-            const input = document.getElementById('userIdInput');
-            checkUserId(input.value);
-        });
-
-        document.getElementById('userIdInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('checkIdBtn').click();
-            }
-        });
-
-        document.getElementById('retryBtn').addEventListener('click', function() {
-            showScreen('idScreen');
-            document.getElementById('userIdInput').value = CONFIG.MASTER_ID;
-            document.getElementById('userIdInput').focus();
-            document.getElementById('idError').textContent = '';
-        });
-
-        document.getElementById('refreshBtn').addEventListener('click', function() {
-            loadSignals(false);
-        });
-
-        document.getElementById('refCodeBox').addEventListener('click', function() {
-            const code = CONFIG.REFERRAL_CODE;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(code).then(() => {
-                    showToast('✅ Реферальный код скопирован!', 'success');
-                    if (tg) tg.showAlert('✅ Реферальный код скопирован!');
-                }).catch(() => copyFallback(code));
+        // ==========================================
+        // 6. АВТОРИЗАЦИЯ
+        // ==========================================
+        function checkAuth(id) {
+            if (id.trim() === CONFIG.MASTER_ID) {
+                document.getElementById('authScreen').classList.remove('active');
+                document.getElementById('mainScreen').classList.add('active');
+                renderPairs();
+                if (tg) tg.showAlert('👑 Добро пожаловать, Мастер!');
+                return true;
             } else {
-                copyFallback(code);
+                document.getElementById('authError').textContent = '❌ ID не найден. Зарегистрируйтесь по ссылке.';
+                document.getElementById('authScreen').classList.remove('active');
+                document.getElementById('referralScreen').classList.add('active');
+                return false;
+            }
+        }
+
+        document.getElementById('authBtn').addEventListener('click', function() {
+            const input = document.getElementById('authInput');
+            checkAuth(input.value);
+        });
+
+        document.getElementById('authInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('authBtn').click();
+        });
+
+        document.getElementById('retryAuthBtn').addEventListener('click', function() {
+            document.getElementById('referralScreen').classList.remove('active');
+            document.getElementById('authScreen').classList.add('active');
+            document.getElementById('authError').textContent = '';
+        });
+
+        // Копирование реферального кода
+        document.getElementById('refCodeCopy').addEventListener('click', function() {
+            const text = CONFIG.REFERRAL_CODE;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    if (tg) tg.showAlert('✅ Код скопирован!');
+                });
             }
         });
 
-        function copyFallback(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                showToast('✅ Реферальный код скопирован!', 'success');
-                if (tg) tg.showAlert('✅ Реферальный код скопирован!');
-            } catch (e) {
-                showToast('❌ Не удалось скопировать', 'error');
+        // ==========================================
+        // 7. СТАРТ
+        // ==========================================
+        // Если ID уже вставлен - автовход для теста
+        setTimeout(() => {
+            const input = document.getElementById('authInput');
+            if (input.value === CONFIG.MASTER_ID) {
+                // Не автовходим, ждем кнопку
             }
-            document.body.removeChild(textarea);
-        }
+        }, 100);
 
-        // ==========================================
-        // 12. СТАРТ
-        // ==========================================
-        showScreen('welcomeScreen');
         console.log('📡 Kultura_Treyding запущен');
         console.log('👑 Мастер-ID:', CONFIG.MASTER_ID);
-        console.log('🔧 API URL:', CONFIG.API_URL);
-
-        // ==========================================
-        // 13. ИНСТРУКЦИЯ
-        // ==========================================
-        console.log('%c📌 НАСТРОЙКА:', 'font-size:16px;font-weight:bold;');
-        console.log('1. Ваш мастер-ID: 88808610 (всегда пропускает проверку)');
-        console.log('2. Замените CONFIG.API_URL на ваш реальный URL');
-        console.log('3. При ошибке API показывает реферальный экран');
-        console.log('4. Для обычных пользователей - проверка через API');
     </script>
 
 </body>
