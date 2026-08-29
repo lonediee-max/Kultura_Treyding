@@ -79,14 +79,6 @@
             gap: 12px;
         }
 
-        /* Скрытый контейнер для фонового плеера YouTube */
-        #youtube-container {
-            display: none;
-            position: absolute;
-            top: -9999px;
-            left: -9999px;
-        }
-
         .nav-menu {
             display: none;
             gap: 15px;
@@ -175,7 +167,7 @@
             font-weight: 600;
         }
 
-        /* ТЕРМИНАЛ */
+        /* ТЕРМИНАЛ (70% график, 30% панель сигнала как на скриншоте) */
         .terminal-layout {
             display: flex;
             width: 100%;
@@ -190,14 +182,20 @@
             position: relative;
         }
 
+        .chart-pane iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         .control-pane {
             flex: 0 0 30%;
             height: 100%;
-            background: #0f131f;
+            background: #0b0f19;
             display: flex;
             flex-direction: column;
-            padding: 12px;
-            gap: 10px;
+            padding: 10px;
+            gap: 8px;
             overflow-y: auto;
         }
 
@@ -207,6 +205,139 @@
             .control-pane { flex: 0 0 50%; width: 100%; }
         }
 
+        /* БЛОК АНАЛИЗА И СИГНАЛА (Точь-в-точь как на скриншоте) */
+        .signal-card {
+            background: linear-gradient(180deg, rgba(16, 37, 30, 0.9) 0%, rgba(11, 20, 26, 0.95) 100%);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(52, 211, 153, 0.1);
+        }
+
+        .signal-card.down {
+            background: linear-gradient(180deg, rgba(45, 18, 22, 0.9) 0%, rgba(26, 11, 14, 0.95) 100%);
+            border-color: rgba(248, 113, 113, 0.4);
+            box-shadow: 0 4px 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .signal-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .signal-status-tag {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .signal-card.down .signal-status-tag {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+        }
+
+        .signal-title-top {
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .signal-direction {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .signal-card.up .signal-direction { color: #34d399; }
+        .signal-card.down .signal-direction { color: #f87171; }
+
+        .signal-power-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 6px;
+            margin: 8px 0;
+        }
+
+        .signal-power-val {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .signal-power-label {
+            font-size: 9px;
+            color: #94a3b8;
+        }
+
+        .power-dots {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        .dot {
+            width: 14px;
+            height: 3px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+        }
+        .dot.active { background: #34d399; }
+        .signal-card.down .dot.active { background: #f87171; }
+
+        .entry-price-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 6px;
+            margin-top: 8px;
+            text-align: left;
+        }
+        .entry-price-title {
+            font-size: 8px;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+        .entry-price-val {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* СТАТИСТИКА СДЕЛОК (+3 / -0 / Возврат) */
+        .stats-row-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .stat-mini-card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 6px;
+            text-align: center;
+        }
+        .stat-mini-val {
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .stat-mini-lbl {
+            font-size: 9px;
+            color: #94a3b8;
+        }
+
+        /* ПАНЕЛЬ ВЫБОРА ПАР */
         .bot-panel-box {
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -217,7 +348,7 @@
         .bot-panel-title {
             font-size: 11px;
             color: #94a3b8;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -233,7 +364,7 @@
             background: #1b2234;
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #ffffff;
-            padding: 9px 6px;
+            padding: 8px 6px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 600;
@@ -262,12 +393,12 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #cbd5e1;
-            padding: 7px;
+            padding: 6px;
             border-radius: 8px;
             font-size: 11px;
             cursor: pointer;
             text-align: center;
-            margin-top: 6px;
+            margin-top: 4px;
         }
         .back-btn:hover { background: rgba(255, 255, 255, 0.08); }
 
@@ -275,7 +406,7 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
-            max-height: 220px;
+            max-height: 160px;
             overflow-y: auto;
             padding-right: 2px;
         }
@@ -345,6 +476,23 @@
         }
         .btn-reg:hover { background: #6ee7b7; }
 
+        .btn-new-analysis {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 9px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 6px;
+            transition: background 0.2s;
+        }
+        .btn-new-analysis:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         #toast-box {
             position: fixed;
             bottom: 16px;
@@ -368,11 +516,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Скрытый плеер фоновой музыки -->
-    <div id="youtube-container">
-        <div id="yt-player"></div>
-    </div>
 
     <div class="po-pages">
         <header>
@@ -425,66 +568,90 @@
             <!-- ЭКРАН 2: ТЕРМИНАЛ -->
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
+                    <!-- ЛЕВАЯ СТОРОНА (70%): График TradingView со всеми вашими индикаторами -->
                     <div class="chart-pane">
-                        <div class="tradingview-widget-container" style="height:100%;width:100%;">
-                            <div id="tradingview_widget" style="height:100%;width:100%;"></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                            <script type="text/javascript">
-                                function loadTV(symbolName) {
-                                    document.getElementById('tradingview_widget').innerHTML = "";
-                                    new TradingView.widget({
-                                        "width": "100%",
-                                        "height": "100%",
-                                        "symbol": symbolName,
-                                        "interval": "5",
-                                        "timezone": "Etc/UTC",
-                                        "theme": "dark",
-                                        "style": "1",
-                                        "locale": "ru",
-                                        "toolbar_bg": "#f1f3f6",
-                                        "enable_publishing": false,
-                                        "hide_top_toolbar": false,
-                                        "container_id": "tradingview_widget"
-                                    });
-                                }
-                                loadTV("FX:EURUSD");
-                            </script>
-                        </div>
+                        <iframe id="tv-iframe" src="https://ru.tradingview.com/chart/aYwUo0sQ/?symbol=FX%3AGBPJPY&utm_source=lonediee-max.github.io&utm_medium=widget&utm_campaign=chart-logo&utm_term=FX%3AGBPJPY" allowtransparency="true" scrolling="no" allowfullscreen></iframe>
                     </div>
 
+                    <!-- ПРАВАЯ СТОРОНА (30%): Точная копия панели анализа как на скриншоте + меню -->
                     <div class="control-pane">
-                        <div id="menu-market" class="bot-panel-box">
-                            <div class="bot-panel-title">🌐 Выберите режим торговли:</div>
-                            <div class="menu-grid-2">
-                                <button class="bot-btn active-market" onclick="selectMarket('Официальная биржа')">🏦 Официальная биржа</button>
-                                <button class="bot-btn" onclick="selectMarket('OTC Рынок')">🔄 OTC Рынок</button>
+                        
+                        <!-- Блок сигнала со скриншота -->
+                        <div id="signal-display-card" class="signal-card up">
+                            <div class="signal-header-top">
+                                <span id="current-pair-badge" style="font-weight: 700; color: #fff;">GBP/JPY OTC · M1</span>
+                                <span class="signal-status-tag">● LIVE</span>
+                            </div>
+                            <div class="signal-title-top">Анализ завершён</div>
+                            <div id="signal-dir-text" class="signal-direction">
+                                <span>↑</span> ВВЕРХ
+                            </div>
+                            
+                            <div class="signal-power-box">
+                                <div class="signal-power-label">Сила сигнала</div>
+                                <div id="signal-power-num" class="signal-power-val">74</div>
+                                <div class="power-dots">
+                                    <div class="dot active"></div>
+                                    <div class="dot active"></div>
+                                    <div class="dot active"></div>
+                                    <div class="dot active"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                </div>
+                            </div>
+
+                            <div class="entry-price-box">
+                                <div class="entry-price-title">Вход (цена)</div>
+                                <div id="signal-price-val" class="entry-price-val">216.649</div>
+                            </div>
+
+                            <button class="btn-new-analysis" onclick="runNewAnalysis()">🔄 Начать новый анализ</button>
+                        </div>
+
+                        <!-- Мини статистика сделок (+3 / -0 / Возврат) -->
+                        <div class="stats-row-grid">
+                            <div class="stat-mini-card" onclick="playWinSound()" style="cursor: pointer;" title="Тест звука победы">
+                                <div class="stat-mini-val" style="color: #34d399;">+3</div>
+                                <div class="stat-mini-lbl">Плюс</div>
+                            </div>
+                            <div class="stat-mini-card" onclick="playLossSound()" style="cursor: pointer;" title="Тест звука проигрыша">
+                                <div class="stat-mini-val" style="color: #f87171;">-0</div>
+                                <div class="stat-mini-lbl">Минус</div>
+                            </div>
+                            <div class="stat-mini-card">
+                                <div class="stat-mini-val" style="color: #60a5fa;">1</div>
+                                <div class="stat-mini-lbl">Возврат</div>
                             </div>
                         </div>
 
+                        <!-- Выбор режима рынка -->
+                        <div id="menu-market" class="bot-panel-box">
+                            <div class="bot-panel-title">🌐 Режим торговли:</div>
+                            <div class="menu-grid-2">
+                                <button class="bot-btn active-market" onclick="selectMarket('Официальная биржа')">🏦 Биржа</button>
+                                <button class="bot-btn" onclick="selectMarket('OTC Рынок')">🔄 OTC</button>
+                            </div>
+                        </div>
+
+                        <!-- Выбор категории -->
                         <div id="menu-category" class="bot-panel-box" style="display: none;">
                             <div class="bot-panel-title"><span id="lbl-market-mode">Режим: Биржа</span></div>
                             <div class="menu-grid-2">
                                 <button class="bot-btn" onclick="selectCategory('Валютные пары')">Валютные пары</button>
                                 <button class="bot-btn" onclick="selectCategory('Криптовалюта')">Криптовалюта</button>
-                                <button class="bot-btn" onclick="selectCategory('Сырьевые товары')">Сырьевые товары</button>
-                                <button class="bot-btn" onclick="selectCategory('Акции и Индексы')">Акции и Индексы</button>
+                                <button class="bot-btn" onclick="selectCategory('Сырьевые товары')">Сырьевые</button>
+                                <button class="bot-btn" onclick="selectCategory('Акции и Индексы')">Акции</button>
                             </div>
-                            <button class="back-btn" onclick="goBackToMarket()">◀ Назад к выбору рынка</button>
+                            <button class="back-btn" onclick="goBackToMarket()">◀ Назад</button>
                         </div>
 
+                        <!-- Список пар -->
                         <div id="menu-pairs" class="bot-panel-box" style="display: none; flex: 1; flex-direction: column;">
-                            <div class="bot-panel-title"><span id="lbl-cat-title">Активные и неактивные пары</span></div>
+                            <div class="bot-panel-title"><span id="lbl-cat-title">Выберите пару</span></div>
                             <div class="pairs-container" id="pairs-list-container"></div>
-                            <button class="back-btn" onclick="goBackToCategory()">◀ Назад к категориям</button>
+                            <button class="back-btn" onclick="goBackToCategory()">◀ Назад</button>
                         </div>
 
-                        <div class="bot-panel-box" style="margin-top: auto;">
-                            <div class="bot-panel-title">⚡ Последний сигнал бота</div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
-                                <span>EUR/USD (M5): <b>CALL</b></span>
-                                <button class="bot-btn" style="padding: 4px 8px;" onclick="showToast('Тестовый сигнал отправлен!', 'success')">Тест</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -495,16 +662,16 @@
                     <div class="bot-panel-box" style="padding: 20px;">
                         <h3 style="font-size: 15px; margin-bottom: 14px; text-align: center;">📊 Детальная статистика WinRate</h3>
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; margin-bottom: 16px;">
-                            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
-                                <span style="font-size: 10px; color: #94a3b8; display: block;">За день</span>
+                            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;" onclick="playWinSound()">
+                                <span style="font-size: 10px; color: #94a3b8; display: block;">За день (Победа)</span>
                                 <b style="font-size: 16px; color: #34d399;">+84.2%</b>
                             </div>
                             <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
                                 <span style="font-size: 10px; color: #94a3b8; display: block;">За неделю</span>
                                 <b style="font-size: 16px; color: #34d399;">+79.5%</b>
                             </div>
-                            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
-                                <span style="font-size: 10px; color: #94a3b8; display: block;">За месяц</span>
+                            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;" onclick="playLossSound()">
+                                <span style="font-size: 10px; color: #94a3b8; display: block;">За месяц (Лонг)</span>
                                 <b style="font-size: 16px; color: #34d399;">81.1%</b>
                             </div>
                         </div>
@@ -517,66 +684,97 @@
 
     <div id="toast-box"></div>
 
-    <!-- Подключаем YouTube IFrame API -->
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let ytPlayer;
+        // WEB AUDIO API ДЛЯ ЗВУКОВ ПОБЕДЫ И ПРОИГРЫША КАК В POCKET OPTION
+        let audioCtx = null;
 
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('yt-player', {
-                height: '0',
-                width: '0',
-                videoId: 'jfKfPfyJRdk', // 攬佬SKAI ISYOURGOD – 八方來財
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': 'jfKfPfyJRdk'
-                },
-                events: {
-                    'onReady': (event) => {
-                        event.target.setVolume(40);
-                        event.target.playVideo();
-                    }
-                }
-            });
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Звук Победы (приятный восходящий аккорд звонких колокольчиков/монет)
+        function playWinSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                
+                // Тройной звенящий аккорд победы
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.08);
+                    
+                    gain.gain.setValueAtTime(0.15, now + index * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.08 + 0.5);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now + index * 0.08);
+                    osc.stop(now + index * 0.08 + 0.5);
+                });
+            } catch(e) { console.log(e); }
+        }
+
+        // Звук Проигрыша (глуховатый нисходящий тон)
+        function playLossSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                
+                [330, 290, 220].forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.12);
+                    
+                    gain.gain.setValueAtTime(0.2, now + index * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.12 + 0.4);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now + index * 0.12);
+                    osc.stop(now + index * 0.12 + 0.4);
+                });
+            } catch(e) { console.log(e); }
         }
 
         const allPairsDB = {
             "Валютные пары": [
-                { name: "EUR/USD", status: "active", tv: "FX:EURUSD" },
-                { name: "GBP/USD", status: "active", tv: "FX:GBPUSD" },
-                { name: "USD/JPY", status: "active", tv: "FX:USDJPY" },
-                { name: "AUD/CAD", status: "active", tv: "FX:AUDCAD" },
-                { name: "AUD/CHF", status: "inactive", tv: "FX:AUDCHF" },
-                { name: "AUD/JPY", status: "active", tv: "FX:AUDJPY" },
-                { name: "CAD/CHF", status: "inactive", tv: "FX:CADCHF" },
-                { name: "EUR/AUD", status: "active", tv: "FX:EURAUD" },
-                { name: "GBP/JPY", status: "active", tv: "FX:GBPJPY" }
+                { name: "GBP/JPY", status: "active", tvSymbol: "FX%3AGBPJPY" },
+                { name: "EUR/USD", status: "active", tvSymbol: "FX%3AEURUSD" },
+                { name: "GBP/USD", status: "active", tvSymbol: "FX%3AGBPUSD" },
+                { name: "USD/JPY", status: "active", tvSymbol: "FX%3AUSDJPY" },
+                { name: "AUD/CAD", status: "active", tvSymbol: "FX%3AAUDCAD" }
             ],
             "Криптовалюта": [
-                { name: "BTC/USD", status: "active", tv: "BINANCE:BTCUSDT" },
-                { name: "ETH/USD", status: "active", tv: "BINANCE:ETHUSDT" },
-                { name: "LTC/USD", status: "inactive", tv: "BINANCE:LTCUSDT" },
-                { name: "XRP/USD", status: "active", tv: "BINANCE:XRPUSDT" }
+                { name: "BTC/USD", status: "active", tvSymbol: "BINANCE%3ABTCUSDT" },
+                { name: "ETH/USD", status: "active", tvSymbol: "BINANCE%3AETHUSDT" }
             ],
             "Сырьевые товары": [
-                { name: "GOLD (Золото)", status: "active", tv: "OANDA:XAUUSD" },
-                { name: "SILVER (Серебро)", status: "inactive", tv: "OANDA:XAGUSD" },
-                { name: "BRENT (Нефть)", status: "active", tv: "TVC:UKOIL" }
+                { name: "GOLD (Золото)", status: "active", tvSymbol: "OANDA%3AXAUUSD" },
+                { name: "BRENT (Нефть)", status: "active", tvSymbol: "TVC%3AUKOIL" }
             ],
             "Акции и Индексы": [
-                { name: "APPLE Inc", status: "active", tv: "NASDAQ:AAPL" },
-                { name: "TESLA Inc", status: "active", tv: "NASDAQ:TSLA" },
-                { name: "S&P 500", status: "inactive", tv: "FOREXCOM:SPXUSD" }
+                { name: "APPLE Inc", status: "active", tvSymbol: "NASDAQ%3AAAPL" },
+                { name: "TESLA Inc", status: "active", tvSymbol: "NASDAQ%3ATSLA" }
             ]
         };
 
         let currentMarketMode = 'Официальная биржа';
-        let currentCategoryName = '';
 
         function handleIdCheck(event) {
             event.preventDefault();
+            initAudio(); // Разрешаем аудиоконтекст по клику входа
             const poId = document.getElementById('pocket-id-input').value.trim();
 
             if (!poId) {
@@ -592,16 +790,37 @@
                 document.getElementById('nav-menu').style.display = 'flex';
                 document.getElementById('header-center').style.display = 'flex';
                 
-                // На случай жестких политик браузера автозапуска аудио
-                if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-                    ytPlayer.playVideo();
-                }
-
-                showToast('ID успешно подтвержден! Музыка играет на фоне 🎧', 'success');
+                showToast('Доступ разрешен! Терминал запущен.', 'success');
             } else {
                 document.getElementById('reg-banner').classList.add('active');
                 showToast('ID не найден среди рефералов или нет верификации', 'error');
             }
+        }
+
+        // Генерация случайного нового анализа (как на скриншоте)
+        function runNewAnalysis() {
+            const card = document.getElementById('signal-display-card');
+            const dirText = document.getElementById('signal-dir-text');
+            const powerNum = document.getElementById('signal-power-num');
+            const priceVal = document.getElementById('signal-price-val');
+
+            const isUp = Math.random() > 0.45;
+            const power = Math.floor(Math.random() * 25) + 60; // от 60 до 84
+            const randomPrice = (Math.random() * 10 + 210).toFixed(3);
+
+            card.className = `signal-card ${isUp ? 'up' : 'down'}`;
+            dirText.innerHTML = isUp ? '<span>↑</span> ВВЕРХ' : '<span>↓</span> ВНИЗ';
+            powerNum.innerText = power;
+            priceVal.innerText = randomPrice;
+
+            // Звуковой эффект для демонстрации
+            if (isUp) {
+                playWinSound();
+            } else {
+                playLossSound();
+            }
+
+            showToast('Новый анализ рынка успешно выполнен!', 'success');
         }
 
         function selectMarket(market) {
@@ -617,7 +836,6 @@
         }
 
         function selectCategory(category) {
-            currentCategoryName = category;
             document.getElementById('lbl-cat-title').innerText = "Категория: " + category;
             document.getElementById('menu-category').style.display = 'none';
             
@@ -637,7 +855,10 @@
                     <span class="pair-status">${isActive ? 'Активна' : 'Неактивна'}</span>
                 `;
                 row.onclick = () => {
-                    loadTV(p.tv);
+                    const iframe = document.getElementById('tv-iframe');
+                    iframe.src = `https://ru.tradingview.com/chart/aYwUo0sQ/?symbol=${p.tvSymbol}&utm_source=lonediee-max.github.io&utm_medium=widget&utm_campaign=chart-logo&utm_term=${p.tvSymbol}`;
+                    document.getElementById('current-pair-badge').innerText = p.name + (currentMarketMode.includes('OTC') ? ' OTC' : '') + ' · M1';
+                    runNewAnalysis();
                     showToast('График переключен на: ' + p.name, 'success');
                 };
                 container.appendChild(row);
