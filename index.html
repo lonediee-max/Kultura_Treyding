@@ -79,57 +79,12 @@
             gap: 12px;
         }
 
-        /* YouTube плеер в шапке */
-        .music-player {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-        }
-
-        .music-player select {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            font-size: 11px;
-            outline: none;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            max-width: 170px;
-            text-overflow: ellipsis;
-        }
-        .music-player select option {
-            background: #0b0f19;
-            color: #fff;
-        }
-
-        .music-btn {
-            background: none;
-            border: none;
-            color: #60a5fa;
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2px;
-        }
-
-        /* Скрытый контейнер для YouTube iframe */
+        /* Скрытый контейнер для фонового плеера YouTube */
         #youtube-container {
             display: none;
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 200px;
-            height: 110px;
-            z-index: 999;
-            opacity: 0.1; /* Сделан практически невидимым для фона, можно убрать */
-            pointer-events: none;
+            top: -9999px;
+            left: -9999px;
         }
 
         .nav-menu {
@@ -414,7 +369,7 @@
 </head>
 <body>
 
-    <!-- Контейнер для YouTube IFrame плеера -->
+    <!-- Скрытый плеер фоновой музыки -->
     <div id="youtube-container">
         <div id="yt-player"></div>
     </div>
@@ -431,17 +386,6 @@
             </div>
 
             <div class="header-right">
-                <!-- Плеер YouTube в шапке -->
-                <div class="music-player">
-                    <button class="music-btn" id="play-pause-btn" onclick="toggleYouTubeMusic()" title="Включить / Выключить">▶</button>
-                    <select id="track-select" onchange="changeYouTubeTrack()">
-                        <option value="jfKfPfyJRdk" selected>🧧 八方來財 (SKAI)</option>
-                        <option value="5qap5aO4i9A">🎵 Lo-Fi Hip Hop Radio</option>
-                        <option value="DWcJFNfaw9c">🌌 Chill Ambient Space</option>
-                        <option value="8ZgK9X2J29A">⚡ Cyberpunk Synthwave</option>
-                    </select>
-                </div>
-
                 <nav class="nav-menu" id="nav-menu">
                     <a onclick="switchTab('terminal')" class="active" id="t-btn">Терминал</a>
                     <a onclick="switchTab('stats')" id="s-btn">Статистика</a>
@@ -452,7 +396,7 @@
         </header>
 
         <main>
-            <!-- ЭКРАН 1: ПРОВЕРКА POCKET OPTION ID (Чистое поле без примеров) -->
+            <!-- ЭКРАН 1: ПРОВЕРКА POCKET OPTION ID -->
             <section id="auth-screen" class="screen active">
                 <div class="card-auth">
                     <div style="text-align: center; margin-bottom: 16px;">
@@ -577,62 +521,25 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         let ytPlayer;
-        let isPlaying = false;
 
         function onYouTubeIframeAPIReady() {
-            const trackSelect = document.getElementById('track-select');
             ytPlayer = new YT.Player('yt-player', {
-                height: '100',
-                width: '200',
-                videoId: trackSelect.value,
+                height: '0',
+                width: '0',
+                videoId: 'jfKfPfyJRdk', // 攬佬SKAI ISYOURGOD – 八方來財
                 playerVars: {
-                    'autoplay': 0,
+                    'autoplay': 1,
                     'controls': 0,
                     'loop': 1,
-                    'playlist': trackSelect.value
+                    'playlist': 'jfKfPfyJRdk'
                 },
                 events: {
-                    'onReady': () => {
-                        ytPlayer.setVolume(40);
+                    'onReady': (event) => {
+                        event.target.setVolume(40);
+                        event.target.playVideo();
                     }
                 }
             });
-        }
-
-        function toggleYouTubeMusic() {
-            const playBtn = document.getElementById('play-pause-btn');
-            if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') {
-                showToast('Плеер еще загружается...', 'error');
-                return;
-            }
-
-            const state = ytPlayer.getPlayerState();
-            if (state === YT.PlayerState.PLAYING) {
-                ytPlayer.pauseVideo();
-                playBtn.innerText = "▶";
-                isPlaying = false;
-                showToast('Музыка на паузе', 'success');
-            } else {
-                ytPlayer.playVideo();
-                playBtn.innerText = "⏸";
-                isPlaying = true;
-                showToast('Музыка из YouTube играет 🎧', 'success');
-            }
-        }
-
-        function changeYouTubeTrack() {
-            const trackSelect = document.getElementById('track-select');
-            const videoId = trackSelect.value;
-            if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
-                ytPlayer.loadVideoById({
-                    'videoId': videoId,
-                    'suggestedQuality': 'small'
-                });
-                const playBtn = document.getElementById('play-pause-btn');
-                playBtn.innerText = "⏸";
-                isPlaying = true;
-                showToast('Трек с YouTube загружен', 'success');
-            }
         }
 
         const allPairsDB = {
@@ -684,7 +591,13 @@
                 document.getElementById('terminal-screen').classList.add('active');
                 document.getElementById('nav-menu').style.display = 'flex';
                 document.getElementById('header-center').style.display = 'flex';
-                showToast('ID успешно подтвержден! Добро пожаловать.', 'success');
+                
+                // На случай жестких политик браузера автозапуска аудио
+                if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                    ytPlayer.playVideo();
+                }
+
+                showToast('ID успешно подтвержден! Музыка играет на фоне 🎧', 'success');
             } else {
                 document.getElementById('reg-banner').classList.add('active');
                 showToast('ID не найден среди рефералов или нет верификации', 'error');
