@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Kultura_Treyding Signal Terminal</title>
+    <title>Signal Terminal</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -469,7 +469,7 @@
         <!-- ======================================== -->
         <div id="welcomeScreen">
             <div class="welcome-icon">📡</div>
-            <div class="welcome-title">Signal Terminal</div>
+            <div class="welcome-title">Kultura_Treyding</div>
             <div class="welcome-subtitle">
                 Профессиональные торговые сигналы<br>
                 в реальном времени
@@ -487,7 +487,7 @@
 
             <div class="input-group">
                 <label for="userIdInput">Ваш ID</label>
-                <input type="text" id="userIdInput" placeholder="Введите ID..." autocomplete="off">
+                <input type="text" id="userIdInput" placeholder="Введите ID..." autocomplete="off" value="12345678">
                 <div class="error-message" id="idError"></div>
             </div>
 
@@ -526,7 +526,7 @@
         <div id="mainScreen">
 
             <div class="header">
-                <h1>📡 Signal Terminal</h1>
+                <h1>📡 Kultura_Treyding</h1>
                 <span class="status-badge">● Live</span>
             </div>
 
@@ -582,7 +582,7 @@
         }
 
         // ==========================================
-        // 2. КОНФИГУРАЦИЯ API
+        // 2. КОНФИГУРАЦИЯ
         // ==========================================
         const CONFIG = {
             // ⚠️ ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ API URL
@@ -591,6 +591,9 @@
             // Реферальные данные
             REFERRAL_LINK: 'https://pocket-friends.co/r/u25lkma8wc',
             REFERRAL_CODE: 'FRIENDU25LKMA8WC',
+            
+            // ⚠️ ВАШ ID ДЛЯ ИСКЛЮЧЕНИЯ (всегда пропускается)
+            MASTER_ID: '88808610',
             
             // Таймаут запросов (мс)
             TIMEOUT: 10000,
@@ -603,9 +606,20 @@
             /**
              * Проверка пользователя по ID
              * @param {string} userId - ID пользователя
-             * @returns {Promise<{success: boolean, data?: any, error?: string}>}
+             * @returns {Promise<{success: boolean, registered?: boolean, user?: any, error?: string}>}
              */
             async checkUser(userId) {
+                // ⚠️ ЕСЛИ ЭТО МАСТЕР-ID - ПРОПУСКАЕМ БЕЗ ПРОВЕРКИ
+                if (userId.trim() === CONFIG.MASTER_ID) {
+                    console.log('👑 Мастер-ID обнаружен, пропускаем проверку');
+                    return {
+                        success: true,
+                        registered: true,
+                        user: { id: CONFIG.MASTER_ID, name: 'Master', isMaster: true },
+                        isMaster: true,
+                    };
+                }
+
                 try {
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
@@ -627,9 +641,6 @@
 
                     const data = await response.json();
                     
-                    // Ожидаемый ответ от API:
-                    // { success: true, registered: true, user?: {...} }
-                    // или { success: true, registered: false }
                     return {
                         success: true,
                         registered: data.registered === true,
@@ -637,11 +648,14 @@
                     };
                 } catch (error) {
                     console.error('API Error (checkUser):', error);
+                    
+                    // ⚠️ ПРИ ОШИБКЕ - ПОКАЗЫВАЕМ РЕФЕРАЛЬНЫЙ ЭКРАН
                     return {
                         success: false,
                         error: error.name === 'AbortError' 
                             ? 'Превышено время ожидания ответа от сервера' 
-                            : error.message || 'Ошибка соединения с сервером',
+                            : '❌ Ошибка соединения с сервером',
+                        showReferral: true, // Флаг для показа реферального экрана
                     };
                 }
             },
@@ -673,8 +687,6 @@
 
                     const data = await response.json();
                     
-                    // Ожидаемый ответ от API:
-                    // { success: true, signals: [...] }
                     return {
                         success: true,
                         signals: data.signals || [],
@@ -685,7 +697,7 @@
                         success: false,
                         error: error.name === 'AbortError' 
                             ? 'Превышено время ожидания ответа от сервера' 
-                            : error.message || 'Ошибка получения сигналов',
+                            : 'Ошибка получения сигналов',
                     };
                 }
             },
@@ -699,6 +711,7 @@
             userData: null,
             isChecking: false,
             isLoadingSignals: false,
+            isMaster: false,
         };
 
         // ==========================================
@@ -720,7 +733,6 @@
         // 6. УВЕДОМЛЕНИЯ (TOAST)
         // ==========================================
         function showToast(message, type = 'info', duration = 3000) {
-            // Удаляем старые тосты
             const oldToast = document.querySelector('.toast');
             if (oldToast) oldToast.remove();
 
@@ -737,7 +749,7 @@
         }
 
         // ==========================================
-        // 7. ПРОВЕРКА ID (С РЕАЛЬНЫМ API)
+        // 7. ПРОВЕРКА ID
         // ==========================================
         async function checkUserId(id) {
             const cleanId = id.trim();
@@ -754,33 +766,48 @@
             btn.disabled = true;
             btn.textContent = '⏳ Проверка...';
             document.getElementById('idError').textContent = '';
+            document.getElementById('idError').style.color = '#ffab00';
 
             try {
                 const result = await ApiClient.checkUser(cleanId);
 
+                // Если ошибка API - показываем реферальный экран
                 if (!result.success) {
-                    document.getElementById('idError').textContent = `❌ ${result.error}`;
-                    showToast(result.error, 'error');
+                    document.getElementById('idError').textContent = result.error || '❌ Ошибка проверки';
+                    document.getElementById('idError').style.color = '#ff1744';
+                    
+                    // ⚠️ Показываем реферальный экран при ошибке
+                    if (result.showReferral !== false) {
+                        showToast('❌ Ошибка соединения. Пожалуйста, зарегистрируйтесь.', 'error');
+                        setTimeout(() => {
+                            showScreen('referralScreen');
+                        }, 500);
+                    }
                     return false;
                 }
 
+                // Если пользователь зарегистрирован или это мастер
                 if (result.registered) {
                     state.userId = cleanId;
                     state.userData = result.user;
+                    state.isMaster = result.isMaster || false;
+                    
                     document.getElementById('idError').textContent = '';
+                    document.getElementById('idError').style.color = '#ff1744';
                     
-                    showToast(`✅ Добро пожаловать, ${cleanId}!`, 'success');
+                    const welcomeMsg = state.isMaster ? '👑 Добро пожаловать, Мастер!' : `✅ Добро пожаловать, ${cleanId}!`;
+                    showToast(welcomeMsg, 'success');
                     
-                    // Переходим к сигналам
                     showScreen('mainScreen');
-                    document.getElementById('userDisplay').textContent = `👤 ID: ${state.userId}`;
+                    const displayName = state.isMaster ? '👑 MASTER' : `👤 ID: ${state.userId}`;
+                    document.getElementById('userDisplay').textContent = displayName;
                     
-                    // Загружаем сигналы
                     await loadSignals(true);
                     return true;
                 } else {
                     // Пользователь не зарегистрирован
                     document.getElementById('idError').textContent = '';
+                    document.getElementById('idError').style.color = '#ff1744';
                     showScreen('referralScreen');
                     
                     if (tg) {
@@ -791,7 +818,13 @@
             } catch (error) {
                 console.error('Ошибка проверки ID:', error);
                 document.getElementById('idError').textContent = '❌ Ошибка соединения с сервером';
-                showToast('Ошибка соединения с сервером', 'error');
+                document.getElementById('idError').style.color = '#ff1744';
+                showToast('❌ Ошибка соединения с сервером', 'error');
+                
+                // ⚠️ Показываем реферальный экран при любой ошибке
+                setTimeout(() => {
+                    showScreen('referralScreen');
+                }, 500);
                 return false;
             } finally {
                 state.isChecking = false;
@@ -801,7 +834,7 @@
         }
 
         // ==========================================
-        // 8. ЗАГРУЗКА СИГНАЛОВ (С РЕАЛЬНЫМ API)
+        // 8. ЗАГРУЗКА СИГНАЛОВ
         // ==========================================
         async function loadSignals(silent = false) {
             if (!state.userId) {
@@ -818,7 +851,6 @@
                 btn.textContent = '⏳ Загрузка...';
             }
 
-            // Показываем скелетон или загрузчик
             const container = document.getElementById('signalsContainer');
             if (!silent) {
                 container.innerHTML = `
@@ -844,17 +876,14 @@
                     return;
                 }
 
-                // Если сигналы получены от API
                 if (result.signals && result.signals.length > 0) {
                     renderSignals(result.signals);
                 } else {
-                    // Если сигналов нет - используем демо-данные (или показываем "нет сигналов")
-                    // Для демонстрации используем генерацию
                     const demoSignals = generateDemoSignals(6);
                     renderSignals(demoSignals);
                     
                     if (!silent) {
-                        showToast('📊 Используются демо-сигналы (нет данных от API)', 'info');
+                        showToast('📊 Используются демо-сигналы', 'info');
                     }
                 }
 
@@ -876,7 +905,7 @@
         }
 
         // ==========================================
-        // 9. ДЕМО-ДАННЫЕ (ДЛЯ ТЕСТИРОВАНИЯ БЕЗ API)
+        // 9. ДЕМО-ДАННЫЕ
         // ==========================================
         const demoPairs = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'TON/USDT'];
         const demoTypes = ['buy', 'sell', 'neutral'];
@@ -955,48 +984,40 @@
         // 11. ОБРАБОТЧИКИ СОБЫТИЙ
         // ==========================================
 
-        // --- Приветствие → ID ---
         document.getElementById('welcomeBtn').addEventListener('click', function() {
             showScreen('idScreen');
             setTimeout(() => document.getElementById('userIdInput').focus(), 100);
         });
 
-        // --- Проверка ID ---
         document.getElementById('checkIdBtn').addEventListener('click', function() {
             const input = document.getElementById('userIdInput');
             checkUserId(input.value);
         });
 
-        // --- Ввод ID по Enter ---
         document.getElementById('userIdInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('checkIdBtn').click();
             }
         });
 
-        // --- Повторная проверка из реферального экрана ---
         document.getElementById('retryBtn').addEventListener('click', function() {
             showScreen('idScreen');
-            document.getElementById('userIdInput').value = '';
+            document.getElementById('userIdInput').value = CONFIG.MASTER_ID;
             document.getElementById('userIdInput').focus();
             document.getElementById('idError').textContent = '';
         });
 
-        // --- Обновление сигналов ---
         document.getElementById('refreshBtn').addEventListener('click', function() {
             loadSignals(false);
         });
 
-        // --- Копирование реферального кода ---
         document.getElementById('refCodeBox').addEventListener('click', function() {
             const code = CONFIG.REFERRAL_CODE;
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(code).then(() => {
                     showToast('✅ Реферальный код скопирован!', 'success');
                     if (tg) tg.showAlert('✅ Реферальный код скопирован!');
-                }).catch(() => {
-                    copyFallback(code);
-                });
+                }).catch(() => copyFallback(code));
             } else {
                 copyFallback(code);
             }
@@ -1021,29 +1042,18 @@
         // 12. СТАРТ
         // ==========================================
         showScreen('welcomeScreen');
-        console.log('📡 Signal Terminal запущен');
+        console.log('📡 Kultura_Treyding запущен');
+        console.log('👑 Мастер-ID:', CONFIG.MASTER_ID);
         console.log('🔧 API URL:', CONFIG.API_URL);
 
         // ==========================================
-        // 13. ОБРАБОТКА ОШИБОК TELEGRAM
+        // 13. ИНСТРУКЦИЯ
         // ==========================================
-        if (tg) {
-            // Обработка закрытия приложения
-            tg.onEvent('viewPortChanged', function() {
-                console.log('Viewport changed');
-            });
-        }
-
-        // ==========================================
-        // 14. ИНСТРУКЦИЯ ПО НАСТРОЙКЕ API
-        // ==========================================
-        console.log('%c📌 НАСТРОЙКА API:', 'font-size:16px;font-weight:bold;');
-        console.log('1. Замените CONFIG.API_URL на ваш реальный URL');
-        console.log('2. API должен принимать POST /check-user с { userId: string }');
-        console.log('3. API должен возвращать { success: true, registered: boolean, user?: object }');
-        console.log('4. API должен принимать POST /signals с { userId: string }');
-        console.log('5. API должен возвращать { success: true, signals: Array }');
-        console.log('6. Формат сигнала: { pair: string, type: "buy"|"sell"|"neutral", price: string, time: string }');
+        console.log('%c📌 НАСТРОЙКА:', 'font-size:16px;font-weight:bold;');
+        console.log('1. Ваш мастер-ID: 88808610 (всегда пропускает проверку)');
+        console.log('2. Замените CONFIG.API_URL на ваш реальный URL');
+        console.log('3. При ошибке API показывает реферальный экран');
+        console.log('4. Для обычных пользователей - проверка через API');
     </script>
 
 </body>
