@@ -464,7 +464,7 @@
         .toast.success { border-left: 3px solid #34d399; }
     </style>
 </head>
-<body>
+<body onclick="initAudio()">
 
     <div class="po-pages">
         <header>
@@ -488,7 +488,6 @@
         </header>
 
         <main>
-            <!-- АВТОРИЗАЦИЯ ID -->
             <section id="auth-screen" class="screen active">
                 <div class="card-auth">
                     <div style="text-align: center; margin-bottom: 14px;">
@@ -514,16 +513,13 @@
                 </div>
             </section>
 
-            <!-- ТЕРМИНАЛ -->
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
                     
-                    <!-- Полноценный iframe-график TradingView (работает стабильно) -->
                     <div class="chart-pane" id="tradingview-container">
-                        <iframe id="tv_iframe" src="https://s.tradingview.com/widgetembed/?symbol=FX%3AAUDCAD&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=ru&utm_source=&utm_medium=widget&utm_campaign=chart&utm_term=FX%3AAUDCAD" style="width: 100%; height: 100%; border: none;"></iframe>
+                        <iframe id="tv_iframe" src="https://s.tradingview.com/widgetembed/?symbol=FX%3AAUDCAD&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=ru" style="width: 100%; height: 100%; border: none;" allowtransparency="true" scrolling="no"></iframe>
                     </div>
 
-                    <!-- Панель управления -->
                     <div class="control-pane">
                         
                         <div id="signal-display-card" class="signal-card up">
@@ -550,10 +546,9 @@
                                 <div class="tech-row">• Скользящие средние: <b id="tech-ema">98% - 100%</b></div>
                                 <div class="tech-row">• Сила тренда: <b id="tech-trend">73.2%</b></div>
                                 <div class="tech-row">• RSI: <b id="tech-rsi">43.9</b> | Сопротивление: <b id="tech-supp">0.96409</b></div>
-                                <div class="tech-row" style="margin-top: 3px; color: #34d399;">⏰ Время захода <span id="card-time-val">20:52</span></div>
+                                <div class="tech-row" style="margin-top: 3px; color: #34d399;">⏰ Время захода <span id="card-time-val">20:52</span> <small style="color: #94a3b8;">(с запасом 1 мин)</small></div>
                             </div>
 
-                            <!-- Таймфреймы -->
                             <div class="timeframe-selector" id="tf-selector">
                                 <button class="tf-btn active" onclick="setTF('1', 1, this)">1М</button>
                                 <button class="tf-btn" onclick="setTF('5', 5, this)">5М</button>
@@ -565,7 +560,6 @@
                             <button id="analysis-btn" class="btn-new-analysis" onclick="runTechnicalAnalysis()">🔄 Запустить новый анализ</button>
                         </div>
 
-                        <!-- Статистика сделок -->
                         <div class="stats-row-grid">
                             <div class="stat-mini-card">
                                 <div class="stat-mini-val" id="stat-plus-val" style="color: #34d399;">2</div>
@@ -581,7 +575,6 @@
                             </div>
                         </div>
 
-                        <!-- Выбор рынка -->
                         <div id="menu-market" class="bot-panel-box">
                             <div class="bot-panel-title">🌐 Режим торговли:</div>
                             <div class="menu-grid-2">
@@ -590,7 +583,6 @@
                             </div>
                         </div>
 
-                        <!-- Выбор категории -->
                         <div id="menu-category" class="bot-panel-box" style="display: none;">
                             <div class="bot-panel-title"><span id="lbl-market-mode">Режим: Биржа</span></div>
                             <div class="menu-grid-2">
@@ -602,7 +594,6 @@
                             <button class="back-btn" onclick="goBackToMarket()">◀ Назад</button>
                         </div>
 
-                        <!-- Список пар -->
                         <div id="menu-pairs" class="bot-panel-box" style="display: none; flex: 1; flex-direction: column;">
                             <div class="bot-panel-title"><span id="lbl-cat-title">Выберите пару</span></div>
                             <div class="pairs-container" id="pairs-list-container"></div>
@@ -613,7 +604,6 @@
                 </div>
             </section>
 
-            <!-- СТАТИСТИКА ДЕТАЛЬНАЯ -->
             <section id="stats-screen" class="screen" style="padding: 16px; overflow-y: auto; align-items: center; justify-content: center;">
                 <div style="max-width: 480px; width: 100%;">
                     <div class="bot-panel-box" style="padding: 16px;">
@@ -676,7 +666,7 @@
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(freq, now + index * 0.08);
-                    gain.gain.setValueAtTime(0.15, now + index * 0.08);
+                    gain.gain.setValueAtTime(0.2, now + index * 0.08);
                     gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.08 + 0.5);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -695,7 +685,7 @@
                     const gain = audioCtx.createGain();
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(freq, now + index * 0.12);
-                    gain.gain.setValueAtTime(0.2, now + index * 0.12);
+                    gain.gain.setValueAtTime(0.25, now + index * 0.12);
                     gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.12 + 0.4);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -706,9 +696,10 @@
         }
 
         function updateChartIframe(symbol, tf) {
-            const iframe = document.getElementById('tv_iframe');
+            const container = document.getElementById('tradingview-container');
             const encodedSymbol = encodeURIComponent(symbol);
-            iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodedSymbol}&interval=${tf}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=ru`;
+            // Создаем чистый безопасный iframe заново, чтобы исключить баги кэширования графиков
+            container.innerHTML = `<iframe id="tv_iframe" src="https://s.tradingview.com/widgetembed/?symbol=${encodedSymbol}&interval=${tf}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=ru" style="width: 100%; height: 100%; border: none;" allowtransparency="true" scrolling="no"></iframe>`;
         }
 
         const allPairsDB = {
@@ -758,6 +749,7 @@
         }
 
         function runTechnicalAnalysis() {
+            initAudio();
             const key = `${currentSymbol}_${currentTimeframeCode}`;
             const nowTime = Date.now();
 
@@ -784,164 +776,4 @@
             document.getElementById('card-tf-text').innerText = currentTimeframeName.toUpperCase();
             
             const randomPrice = (0.99000 + Math.random() * 0.01000).toFixed(5);
-            document.getElementById('card-price-val').innerText = randomPrice;
-
-            document.getElementById('tech-ema').innerText = `${Math.floor(Math.random() * 5 + 95)}% - 100%`;
-            document.getElementById('tech-trend').innerText = `${(Math.random() * 20 + 60).toFixed(1)}%`;
-            document.getElementById('tech-rsi').innerText = (Math.random() * 30 + 25).toFixed(1);
-            document.getElementById('tech-supp').innerText = (parseFloat(randomPrice) + 0.00150).toFixed(5);
-
-            const now = new Date();
-            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('card-time-val').innerText = timeStr;
-
-            statsData.total++;
-            updateStatsUI();
-
-            showToast(`🤖 Сигнал для ${currentPairName} выдан! Сделка в работе...`, 'success');
-
-            setTimeout(() => {
-                const isWin = Math.random() > 0.3; 
-                if (isWin) {
-                    statsData.wins++;
-                    playWinSound();
-                    showToast(`✅ Сделка по ${currentPairName} закрылась в ПЛЮС!`, 'success');
-                } else {
-                    statsData.losses++;
-                    playLossSound();
-                    showToast(`❌ Сделка по ${currentPairName} закрылась в МИНУС.`, 'error');
-                }
-                updateStatsUI();
-            }, 10000); // Симуляция результата через 10 сек для примера
-        }
-
-        function startCooldownInterval(key) {
-            const btn = document.getElementById('analysis-btn');
-            if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
-
-            cooldownTimerInterval = setInterval(() => {
-                const now = Date.now();
-                const diff = cooldowns[key] - now;
-                if (diff <= 0) {
-                    clearInterval(cooldownTimerInterval);
-                    btn.disabled = false;
-                    btn.innerText = "🔄 Запустить новый анализ";
-                } else {
-                    btn.disabled = true;
-                    btn.innerText = `⏳ КД: ${Math.ceil(diff / 1000)} сек.`;
-                }
-            }, 1000);
-        }
-
-        function updateStatsUI() {
-            document.getElementById('stat-plus-val').innerText = statsData.wins;
-            document.getElementById('stat-minus-val').innerText = statsData.losses;
-            document.getElementById('stat-total-val').innerText = statsData.total;
-
-            document.getElementById('detail-total').innerText = statsData.total;
-            document.getElementById('detail-wins').innerText = statsData.wins;
-            document.getElementById('detail-losses').innerText = statsData.losses;
-
-            const winrate = statsData.total > 0 ? ((statsData.wins / statsData.total) * 100).toFixed(1) : "0.0";
-            document.getElementById('detail-winrate').innerText = winrate + "%";
-            document.getElementById('header-winrate-val').innerText = winrate + "%";
-        }
-
-        function setTF(tvCode, tfMinutes, btnElement) {
-            document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            currentTimeframeCode = tvCode;
-            currentTimeframeMinutes = tfMinutes;
-            const names = { '1': '1 минута', '5': '5 минут', '15': '15 минут', '60': '1 час', 'D': '1 день' };
-            currentTimeframeName = names[tvCode] || '1 минута';
-
-            updateChartIframe(currentSymbol, currentTimeframeCode);
-            showToast('Таймфрейм изменен на: ' + currentTimeframeName, 'success');
-        }
-
-        function selectMarket(market) {
-            currentMarketMode = market;
-            document.getElementById('lbl-market-mode').innerText = "Режим: " + market;
-            document.getElementById('menu-market').style.display = 'none';
-            document.getElementById('menu-category').style.display = 'block';
-        }
-
-        function goBackToMarket() {
-            document.getElementById('menu-category').style.display = 'none';
-            document.getElementById('menu-market').style.display = 'block';
-        }
-
-        function selectCategory(category) {
-            document.getElementById('lbl-cat-title').innerText = "Категория: " + category;
-            document.getElementById('menu-category').style.display = 'none';
-            document.getElementById('menu-pairs').style.display = 'flex';
-
-            const container = document.getElementById('pairs-list-container');
-            container.innerHTML = '';
-
-            const pairs = allPairsDB[category] || [];
-            pairs.forEach(p => {
-                const row = document.createElement('div');
-                row.className = 'pair-row active-pair';
-                row.innerHTML = `
-                    <span><b>${p.name}</b> <small style="color:#94a3b8">${currentMarketMode}</small></span>
-                    <span class="pair-status">Активна</span>
-                `;
-                row.onclick = () => {
-                    currentSymbol = p.symbol;
-                    currentPairName = p.name;
-                    updateChartIframe(currentSymbol, currentTimeframeCode);
-                    showToast('Выбрана пара: ' + p.name, 'success');
-                };
-                container.appendChild(row);
-            });
-        }
-
-        function goBackToCategory() {
-            document.getElementById('menu-pairs').style.display = 'none';
-            document.getElementById('menu-category').style.display = 'block';
-        }
-
-        let currentLang = 'RU';
-        function toggleLang() {
-            currentLang = currentLang === 'RU' ? 'EN' : 'RU';
-            document.getElementById('lang-lbl').innerText = currentLang === 'RU' ? '🇷🇺 RU' : '🇬🇧 EN';
-            showToast('Язык изменен: ' + currentLang, 'success');
-        }
-
-        function logout() {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('auth-screen').classList.add('active');
-            document.getElementById('nav-menu').style.display = 'none';
-            document.getElementById('header-center').style.display = 'none';
-            document.getElementById('pocket-id-input').value = '';
-            document.getElementById('reg-banner').classList.remove('active');
-            showToast('Вы вышли из системы', 'success');
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('t-btn').classList.remove('active');
-            document.getElementById('s-btn').classList.remove('active');
-
-            if(tab === 'terminal') {
-                document.getElementById('terminal-screen').classList.add('active');
-                document.getElementById('t-btn').classList.add('active');
-            } else if(tab === 'stats') {
-                document.getElementById('stats-screen').classList.add('active');
-                document.getElementById('s-btn').classList.add('active');
-            }
-        }
-
-        function showToast(text, type = 'success') {
-            const box = document.getElementById('toast-box');
-            const t = document.createElement('div');
-            t.className = `toast ${type}`;
-            t.innerText = text;
-            box.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('card-price-val').innerText =
