@@ -204,26 +204,30 @@
             align-items: center;
             justify-content: center;
             background: #0a0a12;
+            padding: 20px;
+            text-align: center;
         }
         #splashScreen.active { display: flex; }
-        #splashScreen .logo { font-size: 3rem; margin-bottom: 12px; }
-        #splashScreen .title {
-            font-size: 2rem;
-            font-weight: 700;
+        #splashScreen .logo { font-size: 3rem; margin-bottom: 16px; }
+        #splashScreen .greeting {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        #splashScreen .greeting span {
             background: linear-gradient(135deg, #7b2ffc, #00d2ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        #splashScreen .sub {
-            color: rgba(255,255,255,0.3);
-            font-size: 0.9rem;
-            margin-top: 8px;
-            letter-spacing: 2px;
+        #splashScreen .sub-greeting {
+            color: rgba(255,255,255,0.4);
+            font-size: 1rem;
+            margin-bottom: 20px;
         }
         #splashScreen .loader {
-            margin-top: 24px;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 3px solid rgba(255,255,255,0.05);
             border-top: 3px solid #7b2ffc;
             border-radius: 50%;
@@ -286,7 +290,7 @@
             text-align: center;
             border: 1px solid rgba(255,255,255,0.04);
         }
-        .stat-card .value { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+        .stat-card .value { font-size: 1.2rem; font-weight: 700; line-height: 1.3; }
         .stat-card .label { font-size: 0.5rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-card .value.green { color: #00c853; }
         .stat-card .value.red { color: #ff1744; }
@@ -373,7 +377,7 @@
         .pair-item .badge.up { background: rgba(0, 200, 83, 0.12); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.15); }
         .pair-item .badge.down { background: rgba(255, 23, 68, 0.12); color: #ff1744; border: 1px solid rgba(255, 23, 68, 0.15); }
         .pair-item .badge.neutral { background: rgba(255, 171, 0, 0.12); color: #ffab00; border: 1px solid rgba(255, 171, 0, 0.15); }
-        .pair-item .badge.waiting { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.04); }
+        .pair-item .badge.waiting { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.04); }
 
         .pair-item .strength-dot {
             width: 4px;
@@ -382,11 +386,10 @@
             display: inline-block;
             margin-right: 4px;
         }
-        .pair-item .strength-dot.high { background: #00c853; }
-        .pair-item .strength-dot.medium { background: #ffab00; }
-        .pair-item .strength-dot.low { background: #ff1744; }
+        .pair-item .strength-dot.active { background: #00c853; }
+        .pair-item .strength-dot.waiting { background: rgba(255,255,255,0.1); }
 
-        .pair-item.waiting { opacity: 0.4; }
+        .pair-item.waiting { opacity: 0.5; }
 
         /* ===== ФУТЕР ===== */
         .footer {
@@ -540,9 +543,34 @@
             .pair-item .price { font-size: 0.6rem; }
         }
 
-        /* Скрытые элементы */
         #mainScreen { display: none; }
         #mainScreen.active { display: block; }
+
+        /* Всплывающее уведомление о статусе рынка */
+        .market-status {
+            background: rgba(20,20,42,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+        }
+        .market-status .status-icon { font-size: 1rem; }
+        .market-status .status-text { flex: 1; }
+        .market-status .status-badge {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .market-status .status-badge.open { background: rgba(0,200,83,0.12); color: #00c853; border: 1px solid rgba(0,200,83,0.15); }
+        .market-status .status-badge.closed { background: rgba(255,171,0,0.12); color: #ffab00; border: 1px solid rgba(255,171,0,0.15); }
     </style>
 </head>
 <body>
@@ -552,7 +580,7 @@
         <div class="logo">📡</div>
         <div class="title">Kultura_Treyding</div>
         <div class="sub">Введите ваш ID для входа</div>
-        <input type="text" class="auth-input" id="authInput" placeholder="Введите ID..." value="12345678">
+        <input type="text" class="auth-input" id="authInput" placeholder="Введите ID..." value="0000000">
         <div class="auth-error" id="authError"></div>
         <button class="auth-btn" id="authBtn">✅ Войти</button>
     </div>
@@ -577,10 +605,10 @@
     </div>
 
     <!-- ===== ПРИВЕТСТВИЕ ===== -->
-    <div id="splashScreen" class="active">
-        <div class="logo">📡</div>
-        <div class="title">Kultura_Treyding</div>
-        <div class="sub">ТОРГОВЫЙ ТЕРМИНАЛ</div>
+    <div id="splashScreen">
+        <div class="logo">👋</div>
+        <div class="greeting">Рад вас снова видеть, <span>Мастер</span></div>
+        <div class="sub-greeting">Готовы к торгам?</div>
         <div class="loader"></div>
     </div>
 
@@ -597,6 +625,13 @@
                     <span style="color:rgba(255,255,255,0.1);">|</span>
                     <span class="live">● LIVE</span>
                 </div>
+            </div>
+
+            <!-- Статус рынка -->
+            <div class="market-status" id="marketStatus">
+                <span class="status-icon">📊</span>
+                <span class="status-text" id="marketStatusText">Рынок: Активен</span>
+                <span class="status-badge open" id="marketStatusBadge">OPEN</span>
             </div>
 
             <!-- Статистика -->
@@ -708,7 +743,7 @@
         };
 
         // ==========================================
-        // 3. ВСЕ АКТИВЫ (OTC пары)
+        // 3. ВСЕ OTC ПАРЫ (ПОЛНЫЙ СПИСОК)
         // ==========================================
         const ALL_PAIRS = [
             // ===== ВАЛЮТНЫЕ ПАРЫ OTC =====
@@ -757,34 +792,54 @@
         ];
 
         // ==========================================
-        // 4. ДАННЫЕ ПО СИГНАЛАМ
+        // 4. АКТИВНЫЕ ПАРЫ (РЕАЛЬНЫЕ СИГНАЛЫ)
         // ==========================================
-        // Пары с уверенным сигналом (высокая уверенность)
-        const HIGH_CONFIDENCE = {
+        // Только те пары, по которым ЕСТЬ уверенный сигнал
+        const ACTIVE_SIGNALS = {
+            // 🔴 Уверенный сигнал (высокая уверенность)
             'AUD/CAD': { price: 0.97460, signal: 'up', strength: 78, change: '+0.32%', entry: 0.97460, current: 0.97550, plus: 3, minus: 0, ret: 1 },
             'GBP/JPY': { price: 186.45, signal: 'up', strength: 82, change: '+0.87%', entry: 186.45, current: 187.20, plus: 5, minus: 1, ret: 0 },
-            'BTC/USD': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00, plus: 8, minus: 1, ret: 0 },
             'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00, plus: 4, minus: 0, ret: 1 },
-            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, plus: 3, minus: 0, ret: 1 },
             'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20, plus: 2, minus: 1, ret: 0 },
-        };
+            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, plus: 3, minus: 0, ret: 1 },
 
-        // Пары со средней уверенностью
-        const MEDIUM_CONFIDENCE = {
+            // 🟡 Средняя уверенность
             'EUR/USD': { price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750, plus: 2, minus: 1, ret: 0 },
-            'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, plus: 1, minus: 0, ret: 2 },
-            'ETH/USD': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00, plus: 3, minus: 2, ret: 1 },
             'GBP/USD': { price: 1.31240, signal: 'up', strength: 52, change: '+0.28%', entry: 1.31240, current: 1.31520, plus: 2, minus: 1, ret: 0 },
+            'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, plus: 1, minus: 0, ret: 2 },
             'USD/JPY': { price: 145.80, signal: 'down', strength: 48, change: '-0.32%', entry: 145.80, current: 145.20, plus: 1, minus: 2, ret: 1 },
-            'Silver': { price: 24.50, signal: 'neutral', strength: 28, change: '+0.12%', entry: 24.50, current: 24.55, plus: 1, minus: 0, ret: 2 },
-            'Bitcoin': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00, plus: 8, minus: 1, ret: 0 },
-            'Ethereum': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00, plus: 3, minus: 2, ret: 1 },
-            'US100': { price: 17850.00, signal: 'down', strength: 42, change: '-0.28%', entry: 17850.00, current: 17800.00, plus: 1, minus: 2, ret: 0 },
-            'Tesla': { price: 245.00, signal: 'down', strength: 63, change: '-0.88%', entry: 245.00, current: 242.80, plus: 2, minus: 3, ret: 0 },
         };
 
         // ==========================================
-        // 5. ИНДИКАТОРЫ
+        // 5. ОПРЕДЕЛЕНИЕ СТАТУСА РЫНКА
+        // ==========================================
+        function getMarketStatus() {
+            const now = new Date();
+            const day = now.getDay();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const time = hours + minutes / 60;
+
+            // Выходные (суббота и воскресенье)
+            if (day === 0 || day === 6) {
+                return { status: 'closed', text: 'Рынок закрыт (выходные)', badge: 'CLOSED' };
+            }
+
+            // Forex: открыт с 00:00 до 23:59, но основное время
+            // Крипто: 24/7
+            // Акции: 9:30 - 16:00 EST (16:30 - 23:00 MSK)
+            // Для демонстрации считаем что рынок открыт с 9:00 до 23:00 по МСК
+            if (time >= 9 && time < 23) {
+                return { status: 'open', text: 'Рынок открыт', badge: 'OPEN' };
+            } else if (time >= 0 && time < 9) {
+                return { status: 'closed', text: 'Рынок закрыт (ночные часы)', badge: 'CLOSED' };
+            } else {
+                return { status: 'closed', text: 'Рынок закрыт', badge: 'CLOSED' };
+            }
+        }
+
+        // ==========================================
+        // 6. ИНДИКАТОРЫ
         // ==========================================
         function getIndicators(pairName) {
             const base = [
@@ -806,34 +861,16 @@
                     { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
                     { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
                 ],
-                'BTC/USD': [
-                    { name: 'RSI (14)', value: '65.8', status: 'buy', label: 'Покупка' },
-                    { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
-                    { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
-                    { name: 'Объем', value: 'Очень высокий', status: 'buy', label: '' },
-                ],
-                'ETH/USD': [
-                    { name: 'RSI (14)', value: '38.2', status: 'sell', label: 'Продажа' },
-                    { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
-                    { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
-                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
-                ],
-                'USD/CHF': [
-                    { name: 'RSI (14)', value: '50.0', status: 'neutral', label: 'Нейтрально' },
-                    { name: 'MACD', value: '↔ Плоский', status: 'neutral', label: '' },
-                    { name: 'MA (50)', value: 'Цена около', status: 'neutral', label: '' },
-                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
-                ],
                 'Gold': [
                     { name: 'RSI (14)', value: '62.3', status: 'buy', label: 'Покупка' },
                     { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
                     { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
                     { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
                 ],
-                'Silver': [
-                    { name: 'RSI (14)', value: '48.7', status: 'neutral', label: 'Нейтрально' },
-                    { name: 'MACD', value: '↔ Плоский', status: 'neutral', label: '' },
-                    { name: 'MA (50)', value: 'Цена около', status: 'neutral', label: '' },
+                'Apple': [
+                    { name: 'RSI (14)', value: '56.8', status: 'buy', label: 'Покупка' },
+                    { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
+                    { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
                     { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
                 ],
                 'SP500': [
@@ -842,75 +879,102 @@
                     { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
                     { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
                 ],
-                'US100': [
-                    { name: 'RSI (14)', value: '42.1', status: 'sell', label: 'Продажа' },
-                    { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
-                    { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
-                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
-                ],
-                'Apple': [
-                    { name: 'RSI (14)', value: '56.8', status: 'buy', label: 'Покупка' },
+                'GBP/USD': [
+                    { name: 'RSI (14)', value: '55.2', status: 'buy', label: 'Покупка' },
                     { name: 'MACD', value: '↑ Бычий', status: 'buy', label: '' },
                     { name: 'MA (50)', value: 'Цена выше', status: 'buy', label: '' },
                     { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
                 ],
-                'Tesla': [
-                    { name: 'RSI (14)', value: '35.6', status: 'sell', label: 'Продажа' },
+                'USD/CHF': [
+                    { name: 'RSI (14)', value: '50.0', status: 'neutral', label: 'Нейтрально' },
+                    { name: 'MACD', value: '↔ Плоский', status: 'neutral', label: '' },
+                    { name: 'MA (50)', value: 'Цена около', status: 'neutral', label: '' },
+                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
+                ],
+                'USD/JPY': [
+                    { name: 'RSI (14)', value: '38.7', status: 'sell', label: 'Продажа' },
                     { name: 'MACD', value: '↓ Медвежий', status: 'sell', label: '' },
                     { name: 'MA (50)', value: 'Цена ниже', status: 'sell', label: '' },
-                    { name: 'Объем', value: 'Высокий', status: 'buy', label: '' },
+                    { name: 'Объем', value: 'Средний', status: 'neutral', label: '' },
                 ],
             };
             return custom[pairName] || base;
         }
 
         // ==========================================
-        // 6. ПОСТРОЕНИЕ СПИСКА
+        // 7. ПОСТРОЕНИЕ СПИСКА
         // ==========================================
         const signalMap = { up: 'ВВЕРХ', down: 'ВНИЗ', neutral: 'НЕЙТРАЛЬНО' };
 
         function buildPairData() {
             const result = [];
+            const market = getMarketStatus();
 
             ALL_PAIRS.forEach(name => {
-                let data = null;
+                const active = ACTIVE_SIGNALS[name];
                 let confidence = 'waiting';
+                let isActive = false;
 
-                if (HIGH_CONFIDENCE[name]) {
-                    data = HIGH_CONFIDENCE[name];
-                    confidence = 'high';
-                } else if (MEDIUM_CONFIDENCE[name]) {
-                    data = MEDIUM_CONFIDENCE[name];
-                    confidence = 'medium';
+                if (active) {
+                    isActive = true;
+                    // Определяем уверенность по силе сигнала
+                    if (active.strength >= 60) {
+                        confidence = 'high';
+                    } else if (active.strength >= 40) {
+                        confidence = 'medium';
+                    } else {
+                        confidence = 'low';
+                    }
+                }
+
+                // Если рынок закрыт - все пары в ожидание (кроме крипто)
+                const isCrypto = ['Bitcoin', 'Ethereum', 'BNB', 'Chainlink', 'Dash', 'Polygon', 'TRON', 'Bitcoin ETF'].includes(name);
+                if (market.status === 'closed' && !isCrypto) {
+                    confidence = 'waiting';
+                    isActive = false;
                 }
 
                 result.push({
                     name: name,
-                    hasData: !!data,
+                    hasData: isActive,
                     confidence: confidence,
-                    ...(data || { price: 0, signal: 'neutral', strength: 0, change: '+0.00%', entry: 0, current: 0, plus: 0, minus: 0, ret: 0 })
+                    isActive: isActive,
+                    ...(active || { price: 0, signal: 'neutral', strength: 0, change: '+0.00%', entry: 0, current: 0, plus: 0, minus: 0, ret: 0 })
                 });
             });
 
-            // Сортировка: high → medium → waiting
-            const order = { high: 0, medium: 1, waiting: 2 };
-            result.sort((a, b) => order[a.confidence] - order[b.confidence]);
+            // Сортировка: active → waiting
+            result.sort((a, b) => {
+                if (a.isActive && !b.isActive) return -1;
+                if (!a.isActive && b.isActive) return 1;
+                // Сортировка по уверенности
+                const order = { high: 0, medium: 1, low: 2, waiting: 3 };
+                return order[a.confidence] - order[b.confidence];
+            });
 
             return result;
         }
 
-        const PAIRS = buildPairData();
-
         // ==========================================
-        // 7. РЕНДЕРИНГ БЛОКОВ
+        // 8. РЕНДЕРИНГ БЛОКОВ
         // ==========================================
         function renderBlocks() {
             const container = document.getElementById('pairBlocks');
             container.innerHTML = '';
 
+            const market = getMarketStatus();
+
+            // Обновляем статус рынка
+            const statusEl = document.getElementById('marketStatusText');
+            const badgeEl = document.getElementById('marketStatusBadge');
+            statusEl.textContent = market.text;
+            badgeEl.textContent = market.badge;
+            badgeEl.className = `status-badge ${market.status}`;
+
             const blocks = [
                 { key: 'high', label: '🔴 УВЕРЕННЫЙ СИГНАЛ', icon: '🔥' },
                 { key: 'medium', label: '🟡 СРЕДНЯЯ УВЕРЕННОСТЬ', icon: '📊' },
+                { key: 'low', label: '🟢 НИЗКАЯ УВЕРЕННОСТЬ', icon: '📉' },
                 { key: 'waiting', label: '⚪ ОЖИДАНИЕ / ВЫХОДНЫЕ', icon: '💤' },
             ];
 
@@ -924,7 +988,6 @@
                 const blockDiv = document.createElement('div');
                 blockDiv.className = 'block-section';
 
-                // Заголовок блока
                 const header = document.createElement('div');
                 header.className = 'block-header';
                 header.innerHTML = `
@@ -934,32 +997,28 @@
                 `;
                 blockDiv.appendChild(header);
 
-                // Список пар
                 const list = document.createElement('div');
                 list.className = 'pair-list';
 
                 items.forEach((pair, idx) => {
                     const div = document.createElement('div');
                     div.className = 'pair-item';
-                    if (!pair.hasData) div.classList.add('waiting');
+                    if (!pair.isActive) div.classList.add('waiting');
 
-                    const priceDisplay = pair.hasData ? 
+                    const priceDisplay = pair.isActive ? 
                         pair.price.toFixed(pair.price < 1 ? 5 : 2) : 
                         '—';
-                    const changeHtml = pair.hasData ?
+                    const changeHtml = pair.isActive ?
                         `<span class="change ${pair.change.includes('+') ? 'up' : 'down'}">${pair.change}</span>` :
                         '<span style="color:rgba(255,255,255,0.1);font-size:0.55rem;">ожидание</span>';
 
-                    const signalText = pair.hasData ? signalMap[pair.signal] : '—';
-                    const signalClass = pair.hasData ? pair.signal : 'waiting';
-                    const arrow = pair.hasData ?
+                    const signalText = pair.isActive ? signalMap[pair.signal] : '—';
+                    const signalClass = pair.isActive ? pair.signal : 'waiting';
+                    const arrow = pair.isActive ?
                         (pair.signal === 'up' ? '↑' : pair.signal === 'down' ? '↓' : '↔') :
                         '•';
 
-                    // Точка уверенности
-                    let dotClass = 'low';
-                    if (pair.confidence === 'high') dotClass = 'high';
-                    else if (pair.confidence === 'medium') dotClass = 'medium';
+                    const dotClass = pair.isActive ? 'active' : 'waiting';
 
                     div.innerHTML = `
                         <div class="info">
@@ -975,7 +1034,7 @@
                         </div>
                     `;
 
-                    if (pair.hasData) {
+                    if (pair.isActive) {
                         totalActive++;
                         if (pair.signal === 'up' && pair.plus > pair.minus) totalWins++;
                         const index = PAIRS.indexOf(pair);
@@ -1003,11 +1062,11 @@
         }
 
         // ==========================================
-        // 8. МОДАЛКА
+        // 9. МОДАЛКА
         // ==========================================
         function openModal(index) {
             const pair = PAIRS[index];
-            if (!pair.hasData) {
+            if (!pair.isActive) {
                 if (tg) tg.showAlert('⏳ Сигнал в разработке');
                 return;
             }
@@ -1059,22 +1118,30 @@
         });
 
         // ==========================================
-        // 9. АВТОРИЗАЦИЯ
+        // 10. АВТОРИЗАЦИЯ
         // ==========================================
+        let isAuthorized = false;
+
         function checkAuth(id) {
             const cleanId = id.trim();
             if (cleanId === CONFIG.MASTER_ID) {
+                isAuthorized = true;
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('referralScreen').classList.remove('active');
                 document.getElementById('mainScreen').classList.add('active');
                 document.getElementById('userIdDisplay').textContent = cleanId;
-                renderBlocks();
 
-                // Показываем сплеш и убираем
-                document.getElementById('splashScreen').classList.add('active');
+                // Показываем приветствие
+                const splash = document.getElementById('splashScreen');
+                splash.classList.add('active');
                 setTimeout(() => {
-                    document.getElementById('splashScreen').classList.remove('active');
-                }, 2000);
+                    splash.classList.remove('active');
+                }, 2800);
+
+                // Рендерим блоки
+                setTimeout(() => {
+                    renderBlocks();
+                }, 300);
 
                 if (tg) tg.showAlert('👑 Добро пожаловать, Мастер!');
                 return true;
@@ -1087,7 +1154,7 @@
         }
 
         // ==========================================
-        // 10. ОБРАБОТЧИКИ
+        // 11. ОБРАБОТЧИКИ
         // ==========================================
         document.getElementById('authBtn').addEventListener('click', function() {
             const input = document.getElementById('authInput');
@@ -1114,17 +1181,26 @@
         });
 
         // ==========================================
-        // 11. СТАРТ
+        // 12. ПОСТРОЕНИЕ ДАННЫХ
         // ==========================================
-        // Показываем экран входа
+        let PAIRS = [];
+
+        function initApp() {
+            PAIRS = buildPairData();
+        }
+
+        initApp();
+
+        // ==========================================
+        // 13. СТАРТ
+        // ==========================================
         document.getElementById('authScreen').style.display = 'flex';
         document.getElementById('splashScreen').classList.remove('active');
 
         console.log('📡 Kultura_Treyding запущен');
-        console.log(`📊 Загружено ${PAIRS.length} активов`);
-        console.log(`✅ Активных сигналов: ${PAIRS.filter(p => p.hasData).length}`);
-        console.log(`🔴 Уверенных: ${PAIRS.filter(p => p.confidence === 'high').length}`);
-        console.log(`🟡 Средних: ${PAIRS.filter(p => p.confidence === 'medium').length}`);
+        console.log(`📊 Загружено ${ALL_PAIRS.length} активов`);
+        console.log(`✅ Активных сигналов: ${Object.keys(ACTIVE_SIGNALS).length}`);
+        console.log('🔴 Рынок:', getMarketStatus().text);
     </script>
 
 </body>
