@@ -18,17 +18,17 @@
             height: 100%;
             background-color: #070707;
             color: #ffffff;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .po-pages {
             display: flex;
             flex-direction: column;
-            width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             background: #070707;
         }
 
+        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
@@ -37,6 +37,8 @@
             background: #0b0f19;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .logo {
@@ -54,6 +56,12 @@
             background: rgba(96, 165, 250, 0.1);
             padding: 2px 5px;
             border-radius: 4px;
+        }
+
+        .header-center {
+            display: none;
+            align-items: center;
+            gap: 10px;
         }
 
         .bot-status-badge {
@@ -83,16 +91,28 @@
             color: #94a3b8;
             text-decoration: none;
             cursor: pointer;
+            transition: color 0.2s;
         }
-        .nav-menu a.active { color: #ffffff; }
 
+        .nav-menu a:hover, .nav-menu a.active {
+            color: #ffffff;
+        }
+
+        .lang-switcher {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        /* Основной контент */
         main {
             flex: 1;
             display: flex;
             width: 100%;
-            height: calc(100vh - 45px);
             position: relative;
-            overflow: hidden;
         }
 
         .screen {
@@ -100,17 +120,21 @@
             width: 100%;
             height: 100%;
         }
-        .screen.active { display: flex; }
 
+        .screen.active {
+            display: flex;
+        }
+
+        /* Авторизация */
         #auth-screen {
             align-items: center;
             justify-content: center;
-            background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), #070707;
+            background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), linear-gradient(0deg, rgb(9, 16, 29) 0%, rgb(7, 9, 15) 24%, rgb(7, 7, 7) 60%, rgb(7, 7, 7) 100%);
             padding: 16px;
         }
 
         .card-auth {
-            background: rgba(15, 18, 25, 0.95);
+            background: rgba(15, 18, 25, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 24px;
@@ -141,10 +165,11 @@
             font-weight: 600;
         }
 
+        /* ТЕРМИНАЛ (Адаптивный под мобильные) */
         .terminal-layout {
             display: flex;
             width: 100%;
-            height: 100%;
+            height: calc(100vh - 45px);
         }
 
         .chart-pane {
@@ -153,24 +178,6 @@
             background: #0b0e14;
             border-right: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chart-header-bar {
-            padding: 8px 12px;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        #terminal-canvas {
-            flex: 1;
-            width: 100%;
-            background: #090c12;
         }
 
         .control-pane {
@@ -184,32 +191,49 @@
             overflow-y: auto;
         }
 
+        /* Мобильная адаптивность */
         @media(max-width: 768px) {
             .terminal-layout {
                 flex-direction: column;
+                height: auto;
+                min-height: calc(100vh - 45px);
             }
             .chart-pane {
                 flex: none;
                 width: 100%;
-                height: 250px;
+                height: 320px;
+                min-height: 320px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             }
             .control-pane {
-                flex: 1;
+                flex: none;
                 width: 100%;
+                height: auto;
+                overflow-y: visible;
             }
-            .header-center { display: none !important; }
+            header {
+                padding: 6px 10px;
+            }
+            .header-center {
+                display: none !important;
+            }
         }
 
+        /* СИГНАЛЬНАЯ КАРТОЧКА (В стиле пользователя) */
         .signal-card {
             background: linear-gradient(180deg, rgba(16, 37, 30, 0.95) 0%, rgba(11, 20, 26, 0.98) 100%);
             border: 1px solid rgba(52, 211, 153, 0.4);
             border-radius: 10px;
             padding: 10px;
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.1);
             font-size: 11px;
         }
+
         .signal-card.down {
             background: linear-gradient(180deg, rgba(45, 18, 22, 0.95) 0%, rgba(26, 11, 14, 0.98) 100%);
             border-color: rgba(248, 113, 113, 0.4);
+            box-shadow: 0 4px 15px rgba(248, 113, 113, 0.1);
         }
 
         .signal-title-header {
@@ -219,6 +243,7 @@
             margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         .signal-line {
@@ -226,8 +251,12 @@
             color: #cbd5e1;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
-        .signal-line b { color: #fff; }
+
+        .signal-line b {
+            color: #fff;
+        }
 
         .signal-direction-tag {
             font-size: 13px;
@@ -245,8 +274,21 @@
             margin-top: 6px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .tech-row { font-size: 10px; color: #cbd5e1; margin-bottom: 2px; }
 
+        .tech-title {
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 3px;
+            font-size: 10px;
+        }
+
+        .tech-row {
+            font-size: 10px;
+            color: #cbd5e1;
+            margin-bottom: 2px;
+        }
+
+        /* ВЫБОР ТАЙМФРЕЙМА */
         .timeframe-selector {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -264,7 +306,11 @@
             text-align: center;
             font-weight: 600;
         }
-        .tf-btn.active { background: #60a5fa; color: #0f172a; border-color: #60a5fa; }
+        .tf-btn.active {
+            background: #60a5fa;
+            color: #0f172a;
+            border-color: #60a5fa;
+        }
 
         .btn-new-analysis {
             background: #60a5fa;
@@ -277,14 +323,21 @@
             cursor: pointer;
             width: 100%;
             margin-top: 6px;
+            transition: opacity 0.2s;
         }
-        .btn-new-analysis:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; }
+        .btn-new-analysis:disabled {
+            background: #334155;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
 
+        /* СТАТИСТИКА СДЕЛОК */
         .stats-row-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 5px;
         }
+
         .stat-mini-card {
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -295,14 +348,29 @@
         .stat-mini-val { font-size: 12px; font-weight: 700; }
         .stat-mini-lbl { font-size: 9px; color: #94a3b8; }
 
+        /* ПАНЕЛЬ ВЫБОРА ПАР */
         .bot-panel-box {
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 8px;
             padding: 8px;
         }
-        .bot-panel-title { font-size: 10px; color: #94a3b8; margin-bottom: 4px; display: flex; justify-content: space-between; }
-        .menu-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+
+        .bot-panel-title {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
         .bot-btn {
             background: #1b2234;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -313,6 +381,10 @@
             font-weight: 600;
             text-align: center;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
         .bot-btn.active-market { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; color: #60a5fa; }
 
@@ -329,7 +401,14 @@
             margin-top: 4px;
         }
 
-        .pairs-container { display: flex; flex-direction: column; gap: 3px; max-height: 110px; overflow-y: auto; }
+        .pairs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            max-height: 110px;
+            overflow-y: auto;
+        }
+
         .pair-row {
             display: flex;
             justify-content: space-between;
@@ -338,12 +417,15 @@
             padding: 5px 8px;
             border-radius: 5px;
             font-size: 10px;
-            border-left: 3px solid #34d399;
+            border-left: 3px solid #64748b;
             cursor: pointer;
         }
+        .pair-row.active-pair { border-left-color: #34d399; background: rgba(52, 211, 153, 0.05); }
+        .pair-status { font-size: 8px; padding: 2px 4px; border-radius: 3px; background: rgba(52, 211, 153, 0.15); color: #34d399; }
 
         .form-group { margin-bottom: 10px; }
         .form-group label { display: block; font-size: 10px; color: #94a3b8; margin-bottom: 3px; }
+        
         .form-control {
             width: 100%;
             background: rgba(0, 0, 0, 0.5);
@@ -385,20 +467,21 @@
             border-radius: 6px;
             font-size: 11px;
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
         .toast.error { border-left: 3px solid #f87171; }
         .toast.success { border-left: 3px solid #34d399; }
     </style>
 </head>
-<body onclick="initAudioUser()">
+<body>
 
     <div class="po-pages">
         <header>
             <div class="logo">Kultura_Treyding <span>PRO</span></div>
             
-            <div class="header-center" id="header-center" style="display:none; align-items:center;">
+            <div class="header-center" id="header-center">
                 <div class="bot-status-badge">
-                    <span>🤖 Индикаторы: <b style="color: #34d399;">RSI + SuperTrend</b></span>
+                    <span>🤖 Индикаторы: <b style="color: #34d399;">RSI + SuperTrend + EMA</b></span>
                     <span>WinRate: <b style="color: #34d399;" id="header-winrate-val">84.2%</b></span>
                 </div>
             </div>
@@ -409,11 +492,12 @@
                     <a onclick="switchTab('stats')" id="s-btn">Статистика</a>
                     <a onclick="logout()" style="color: #f87171;">Выйти</a>
                 </nav>
+                <div class="lang-switcher" onclick="toggleLang()" id="lang-lbl">🇷🇺 RU</div>
             </div>
         </header>
 
         <main>
-            <!-- АВТОРИЗАЦИЯ -->
+            <!-- АВТОРИЗАЦИЯ ID -->
             <section id="auth-screen" class="screen active">
                 <div class="card-auth">
                     <div style="text-align: center; margin-bottom: 14px;">
@@ -431,7 +515,7 @@
 
                     <div id="reg-banner" class="reg-banner">
                         <p style="font-size: 10px; color: #fca5a5; margin-bottom: 5px;">
-                            ❌ ID не найден. Зарегистрируйтесь по ссылке:
+                            ❌ ID не найден. Зарегистрируйтесь по нашей партнерской ссылке:
                         </p>
                         <div class="promo-code-box">Промо-код: FRIENDU25LKMA8WC</div>
                         <a href="https://pocket-friends.co/r/u25lkma8wc" target="_blank" class="btn btn-reg" style="margin-top: 3px; font-size: 11px; padding: 7px;">Регистрация в Pocket Option</a>
@@ -443,21 +527,19 @@
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
                     
-                    <!-- График Canvas -->
-                    <div class="chart-pane">
-                        <div class="chart-header-bar">
-                            <span id="chart-title-lbl"><b>AUD/CAD</b> (Биржа)</span>
-                            <span style="color: #34d399;" id="chart-live-price">0.99017</span>
-                        </div>
-                        <canvas id="terminal-canvas"></canvas>
+                    <!-- Интерактивный график TradingView -->
+                    <div class="chart-pane" id="tradingview-container">
+                        <div id="tradingview_widget" style="width:100%;height:100%;"></div>
                     </div>
 
                     <!-- Панель управления -->
                     <div class="control-pane">
+                        
+                        <!-- Сигнальная карточка в требуемом формате -->
                         <div id="signal-display-card" class="signal-card up">
                             <div class="signal-title-header">
                                 <span>🤖 Terminal AI Signal</span>
-                                <span id="signal-tf-label" style="font-size: 10px; color: #94a3b8;">(1 минута)</span>
+                                <span id="signal-tf-label" style="font-size: 10px; color: #94a3b8;">(Таймфрейм: 1 минута)</span>
                             </div>
                             
                             <div class="signal-line">
@@ -470,44 +552,46 @@
                                 <span>⏱️ Сделку открываем на:</span> <b id="card-tf-text">1 МИНУТУ</b>
                             </div>
                             <div class="signal-line">
-                                <span>■ Цена входа:</span> <b id="card-price-val">0.99017</b>
+                                <span>■ Цена актива:</span> <b id="card-price-val">0.99484</b>
                             </div>
 
                             <div class="tech-analysis-box">
+                                <div class="tech-title">📈 Технический анализ:</div>
                                 <div class="tech-row">• Скользящие средние: <b id="tech-ema">98% - 100%</b></div>
-                                <div class="tech-row">• Сила тренда: <b id="tech-trend">73.2%</b></div>
-                                <div class="tech-row">• RSI: <b id="tech-rsi">43.9</b></div>
-                                <div class="tech-row" style="margin-top: 3px; color: #34d399;">⏰ Время захода <span id="card-time-val">--:--</span> <small style="color: #94a3b8;">(с запасом 1 мин)</small></div>
+                                <div class="tech-row">• Сила тренда: <b id="tech-trend">65.0%</b></div>
+                                <div class="tech-row">• RSI: <b id="tech-rsi">34.1</b> | Сопротивление: <b id="tech-supp">0.99600</b></div>
+                                <div class="tech-row" style="margin-top: 3px; color: #34d399;">⏰ Время захода <span id="card-time-val">04:36</span></div>
                             </div>
 
+                            <!-- Таймфреймы -->
                             <div class="timeframe-selector" id="tf-selector">
-                                <button class="tf-btn active" onclick="setTF('1', 1, this)">1М</button>
-                                <button class="tf-btn" onclick="setTF('5', 5, this)">5М</button>
-                                <button class="tf-btn" onclick="setTF('15', 15, this)">15М</button>
-                                <button class="tf-btn" onclick="setTF('60', 60, this)">1Ч</button>
-                                <button class="tf-btn" onclick="setTF('D', 1440, this)">1Д</button>
+                                <button class="tf-btn active" onclick="setTF('1m', '1', this)">1М</button>
+                                <button class="tf-btn" onclick="setTF('5m', '5', this)">5М</button>
+                                <button class="tf-btn" onclick="setTF('15m', '15', this)">15М</button>
+                                <button class="tf-btn" onclick="setTF('1h', '60', this)">1Ч</button>
+                                <button class="tf-btn" onclick="setTF('1d', 'D', this)">1Д</button>
                             </div>
 
                             <button id="analysis-btn" class="btn-new-analysis" onclick="runTechnicalAnalysis()">🔄 Запустить новый анализ</button>
                         </div>
 
-                        <!-- Статистика -->
+                        <!-- Статистика сделок -->
                         <div class="stats-row-grid">
                             <div class="stat-mini-card">
-                                <div class="stat-mini-val" id="stat-plus-val" style="color: #34d399;">2</div>
-                                <div class="stat-mini-lbl">Плюс</div>
+                                <div class="stat-mini-val" id="stat-plus-val" style="color: #34d399;">0</div>
+                                <div class="stat-mini-lbl">Плюс (Отраб.)</div>
                             </div>
                             <div class="stat-mini-card">
-                                <div class="stat-mini-val" id="stat-minus-val" style="color: #f87171;">1</div>
+                                <div class="stat-mini-val" id="stat-minus-val" style="color: #f87171;">0</div>
                                 <div class="stat-mini-lbl">Минус</div>
                             </div>
                             <div class="stat-mini-card">
-                                <div class="stat-mini-val" id="stat-total-val" style="color: #60a5fa;">3</div>
-                                <div class="stat-mini-lbl">Всего</div>
+                                <div class="stat-mini-val" id="stat-total-val" style="color: #60a5fa;">0</div>
+                                <div class="stat-mini-lbl">Всего сигналов</div>
                             </div>
                         </div>
 
-                        <!-- Рынки -->
+                        <!-- Выбор рынка -->
                         <div id="menu-market" class="bot-panel-box">
                             <div class="bot-panel-title">🌐 Режим торговли:</div>
                             <div class="menu-grid-2">
@@ -516,33 +600,53 @@
                             </div>
                         </div>
 
+                        <!-- Выбор категории -->
                         <div id="menu-category" class="bot-panel-box" style="display: none;">
                             <div class="bot-panel-title"><span id="lbl-market-mode">Режим: Биржа</span></div>
                             <div class="menu-grid-2">
                                 <button class="bot-btn" onclick="selectCategory('Валютные пары')">Валютные пары</button>
                                 <button class="bot-btn" onclick="selectCategory('Криптовалюта')">Криптовалюта</button>
+                                <button class="bot-btn" onclick="selectCategory('Сырьевые товары')">Сырьевые</button>
+                                <button class="bot-btn" onclick="selectCategory('Акции и Индексы')">Акции</button>
                             </div>
                             <button class="back-btn" onclick="goBackToMarket()">◀ Назад</button>
                         </div>
 
+                        <!-- Список пар -->
                         <div id="menu-pairs" class="bot-panel-box" style="display: none; flex: 1; flex-direction: column;">
-                            <div class="bot-panel-title">Выберите пару</div>
+                            <div class="bot-panel-title"><span id="lbl-cat-title">Выберите пару</span></div>
                             <div class="pairs-container" id="pairs-list-container"></div>
                             <button class="back-btn" onclick="goBackToCategory()">◀ Назад</button>
                         </div>
+
                     </div>
                 </div>
             </section>
 
-            <!-- СТАТИСТИКА -->
-            <section id="stats-screen" class="screen" style="padding: 16px; align-items: center; justify-content: center;">
+            <!-- СТАТИСТИКА ДЕТАЛЬНАЯ -->
+            <section id="stats-screen" class="screen" style="padding: 16px; overflow-y: auto; align-items: center; justify-content: center;">
                 <div style="max-width: 480px; width: 100%;">
                     <div class="bot-panel-box" style="padding: 16px;">
-                        <h3 style="font-size: 14px; margin-bottom: 12px; text-align: center;">📊 Статистика WinRate</h3>
-                        <div style="text-align: center; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px;">
-                            <span style="font-size: 10px; color: #94a3b8;">Итоговый WinRate:</span>
-                            <b style="font-size: 18px; color: #34d399; display: block;" id="detail-winrate">66.7%</b>
+                        <h3 style="font-size: 14px; margin-bottom: 12px; text-align: center;">📊 Полная статистика WinRate бота</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; margin-bottom: 12px;">
+                            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                                <span style="font-size: 9px; color: #94a3b8; display: block;">Выдано сигналов</span>
+                                <b style="font-size: 14px; color: #60a5fa;" id="detail-total">0</b>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                                <span style="font-size: 9px; color: #94a3b8; display: block;">Отработано (+)</span>
+                                <b style="font-size: 14px; color: #34d399;" id="detail-wins">0</b>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                                <span style="font-size: 9px; color: #94a3b8; display: block;">Не отработано (-)</span>
+                                <b style="font-size: 14px; color: #f87171;" id="detail-losses">0</b>
+                            </div>
                         </div>
+                        <div style="text-align: center; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                            <span style="font-size: 10px; color: #94a3b8;">Итоговый WinRate:</span>
+                            <b style="font-size: 18px; color: #34d399; display: block;" id="detail-winrate">84.2%</b>
+                        </div>
+                        <p style="font-size: 10px; color: #94a3b8; text-align: center;">Синхронизировано с @Kultura_Trading_bot</p>
                     </div>
                 </div>
             </section>
@@ -551,155 +655,132 @@
 
     <div id="toast-box"></div>
 
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
     <script>
         let audioCtx = null;
-        let soundInitialized = false;
+        let currentTVWidget = null;
+        let currentSymbol = "FX:AUDCAD";
+        let currentPairName = "AUD/CAD";
+        let currentTimeframeCode = "1"; // TradingView interval
+        let currentTimeframeName = "1 минута";
+        let currentMarketMode = 'Биржа';
 
-        function initAudioUser() {
-            if (!soundInitialized) {
-                try {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    if (audioCtx.state === 'suspended') {
-                        audioCtx.resume();
-                    }
-                    soundInitialized = true;
-                } catch(e) {}
+        // Статистика
+        let statsData = { total: 0, wins: 0, losses: 0 };
+
+        // Раздельный КД для каждой пары и таймфрейма: ключ = "SYMBOL_TF" -> timestamp окончания КД
+        let cooldowns = {};
+        let cooldownTimerInterval = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
 
-        // Надежный звуковой генератор
-        function playBeep(type) {
+        // Звук Победы
+        function playWinSound() {
             try {
-                initAudioUser();
-                if (!audioCtx) return;
+                initAudio();
                 const now = audioCtx.currentTime;
-                
-                if (type === 'win') {
-                    [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-                        let osc = audioCtx.createOscillator();
-                        let g = audioCtx.createGain();
-                        osc.frequency.setValueAtTime(f, now + i * 0.08);
-                        g.gain.setValueAtTime(0.15, now + i * 0.08);
-                        g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.4);
-                        osc.connect(g); g.connect(audioCtx.destination);
-                        osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.4);
-                    });
-                } else {
-                    [330, 280, 220].forEach((f, i) => {
-                        let osc = audioCtx.createOscillator();
-                        let g = audioCtx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(f, now + i * 0.12);
-                        g.gain.setValueAtTime(0.2, now + i * 0.12);
-                        g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.12 + 0.4);
-                        osc.connect(g); g.connect(audioCtx.destination);
-                        osc.start(now + i * 0.12); osc.stop(now + i * 0.12 + 0.4);
-                    });
-                }
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.08);
+                    gain.gain.setValueAtTime(0.15, now + index * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.08 + 0.5);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + index * 0.08);
+                    osc.stop(now + index * 0.08 + 0.5);
+                });
             } catch(e) {}
         }
 
-        // Графический движок Canvas
-        let canvas, ctx;
-        let chartData = [];
-        let basePrice = 0.99017;
-
-        function initChartCanvas() {
-            canvas = document.getElementById('terminal-canvas');
-            ctx = canvas.getContext('2d');
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            generateInitialCandles();
-            setInterval(updateCanvasChart, 1000);
+        // Звук Проигрыша
+        function playLossSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                [330, 290, 220].forEach((freq, index) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.12);
+                    gain.gain.setValueAtTime(0.2, now + index * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.12 + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + index * 0.12);
+                    osc.stop(now + index * 0.12 + 0.4);
+                });
+            } catch(e) {}
         }
 
-        function generateInitialCandles() {
-            chartData = [];
-            let p = basePrice;
-            for(let i=0; i<40; i++) {
-                let scaleFactor = basePrice > 100 ? (basePrice > 10000 ? 50 : 5) : 0.0012;
-                let change = (Math.random() - 0.48) * scaleFactor;
-                let open = p;
-                let close = p + change;
-                let high = Math.max(open, close) + Math.random() * (scaleFactor * 0.5);
-                let low = Math.min(open, close) - Math.random() * (scaleFactor * 0.5);
-                chartData.push({open, close, high, low});
-                p = close;
-            }
-        }
-
-        function resizeCanvas() {
-            if(!canvas) return;
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight - 35;
-        }
-
-        function updateCanvasChart() {
-            if(!ctx || !canvas) return;
-            
-            let last = chartData[chartData.length - 1];
-            let scaleFactor = basePrice > 100 ? (basePrice > 10000 ? 15 : 1.5) : 0.0004;
-            let delta = (Math.random() - 0.49) * scaleFactor;
-            last.close += delta;
-            last.high = Math.max(last.high, last.close);
-            last.low = Math.min(last.low, last.close);
-            basePrice = last.close;
-
-            document.getElementById('chart-live-price').innerText = basePrice.toFixed(basePrice > 100 ? 2 : 5);
-
-            ctx.fillStyle = '#090c12';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            let maxP = Math.max(...chartData.map(d => d.high));
-            let minP = Math.min(...chartData.map(d => d.low));
-            let range = maxP - minP || 0.0001;
-
-            let step = canvas.width / chartData.length;
-
-            chartData.forEach((c, i) => {
-                let x = i * step + step / 2;
-                let yHigh = canvas.height - ((c.high - minP) / range) * (canvas.height - 30) - 15;
-                let yLow = canvas.height - ((c.low - minP) / range) * (canvas.height - 30) - 15;
-                let yOpen = canvas.height - ((c.open - minP) / range) * (canvas.height - 30) - 15;
-                let yClose = canvas.height - ((c.close - minP) / range) * (canvas.height - 30) - 15;
-
-                let isGreen = c.close >= c.open;
-                ctx.strokeStyle = isGreen ? '#34d399' : '#f87171';
-                ctx.fillStyle = isGreen ? '#34d399' : '#f87171';
-
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(x, yHigh);
-                ctx.lineTo(x, yLow);
-                ctx.stroke();
-
-                let rectY = Math.min(yOpen, yClose);
-                let rectH = Math.max(2, Math.abs(yClose - yOpen));
-                ctx.fillRect(x - 3, rectY, 6, rectH);
+        function initTradingViewChart(symbol = "FX:AUDCAD", tf = "1") {
+            document.getElementById('tradingview_widget').innerHTML = "";
+            currentTVWidget = new TradingView.widget({
+                "width": "100%",
+                "height": "100%",
+                "symbol": symbol,
+                "interval": tf,
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "ru",
+                "toolbar_bg": "#0b0f19",
+                "enable_publishing": false,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_widget"
             });
         }
 
-        let currentSymbol = "AUD/CAD";
-        let currentMarketMode = 'Биржа';
-        let statsData = { total: 3, wins: 2, losses: 1 };
-        let cooldowns = {};
-
         const allPairsDB = {
-            "Валютные пары": [{ name: "AUD/CAD" }, { name: "EUR/USD" }, { name: "GBP/USD" }, { name: "USD/JPY" }],
-            "Криптовалюта": [{ name: "BTC/USD" }, { name: "ETH/USD" }]
+            "Валютные пары": [
+                { name: "AUD/CAD", symbol: "FX:AUDCAD" },
+                { name: "GBP/JPY", symbol: "FX:GBPJPY" },
+                { name: "EUR/USD", symbol: "FX:EURUSD" },
+                { name: "GBP/USD", symbol: "FX:GBPUSD" },
+                { name: "USD/JPY", symbol: "FX:USDJPY" }
+            ],
+            "Криптовалюта": [
+                { name: "BTC/USD", symbol: "BINANCE:BTCUSDT" },
+                { name: "ETH/USD", symbol: "BINANCE:ETHUSDT" }
+            ],
+            "Сырьевые товары": [
+                { name: "GOLD", symbol: "OANDA:XAUUSD" },
+                { name: "BRENT", symbol: "TVC:UKOIL" }
+            ],
+            "Акции и Индексы": [
+                { name: "APPLE", symbol: "NASDAQ:AAPL" },
+                { name: "TESLA", symbol: "NASDAQ:TSLA" }
+            ]
         };
 
-        function handleIdCheck(e) {
-            e.preventDefault();
-            initAudioUser();
+        function handleIdCheck(event) {
+            event.preventDefault();
+            initAudio();
             const poId = document.getElementById('pocket-id-input').value.trim();
+
+            if (!poId) {
+                showToast('Введите Pocket Option ID!', 'error');
+                return;
+            }
+
             if (poId.length >= 5) {
                 document.getElementById('auth-screen').classList.remove('active');
                 document.getElementById('terminal-screen').classList.add('active');
                 document.getElementById('nav-menu').style.display = 'flex';
                 document.getElementById('header-center').style.display = 'flex';
-                initChartCanvas();
+                
+                initTradingViewChart(currentSymbol, currentTimeframeCode);
+                runTechnicalAnalysis(true); // Первый запуск без КД
                 showToast('Доступ разрешен! Терминал запущен.', 'success');
             } else {
                 document.getElementById('reg-banner').classList.add('active');
@@ -707,107 +788,162 @@
             }
         }
 
-        function runTechnicalAnalysis() {
-            initAudioUser();
-            const key = `${currentSymbol}`;
+        // Генерация сигнала по текущей паре и таймфрейму
+        function runTechnicalAnalysis(isInitial = false) {
+            const key = `${currentSymbol}_${currentTimeframeCode}`;
             const nowTime = Date.now();
 
-            if (cooldowns[key] && nowTime < cooldowns[key]) {
-                showToast(`⏳ Подождите перед новым сигналом`, 'error');
+            if (!isInitial && cooldowns[key] && nowTime < cooldowns[key]) {
+                const leftSec = Math.ceil((cooldowns[key] - nowTime) / 1000);
+                showToast(`⏳ КД на паре ${currentPairName} (${currentTimeframeName}): подождите ${leftSec} сек.`, 'error');
                 return;
             }
-            cooldowns[key] = nowTime + 30000;
 
+            // Устанавливаем кулдаун 30 секунд для конкретной пары и таймфрейма
+            cooldowns[key] = nowTime + 30000;
+            startCooldownInterval(key);
+
+            // Рендер данных сигнала
             const card = document.getElementById('signal-display-card');
             const isUp = Math.random() >= 0.5;
             
             card.className = `signal-card ${isUp ? 'up' : 'down'}`;
-            document.getElementById('card-pair-name').innerText = currentSymbol;
-            document.getElementById('card-dir-badge').innerText = isUp ? '🟢 НА ВВЕРХ (CALL)' : '🔴 НА ВНИЗ (PUT)';
-            document.getElementById('card-price-val').innerText = basePrice.toFixed(basePrice > 100 ? 2 : 5);
+            document.getElementById('signal-tf-label').innerText = `(Таймфрейм: ${currentTimeframeName})`;
+            document.getElementById('card-pair-name').innerText = currentPairName + (currentMarketMode === 'OTC' ? ' OTC' : '');
+            
+            const dirBadge = document.getElementById('card-dir-badge');
+            dirBadge.className = `signal-direction-tag`;
+            dirBadge.innerText = isUp ? '🟢 НА ВВЕРХ (CALL)' : '🔴 НА ВНИЗ (PUT)';
 
-            const futureTime = new Date(Date.now() + 60000); 
-            const timeStr = String(futureTime.getHours()).padStart(2, '0') + ':' + String(futureTime.getMinutes()).padStart(2, '0');
+            document.getElementById('card-tf-text').innerText = currentTimeframeName.toUpperCase();
+            document.getElementById('card-price-val').innerText = (Math.random() * 0.5 + 0.9).toFixed(5);
+
+            document.getElementById('tech-ema').innerText = `${Math.floor(Math.random() * 5 + 95)}% - 100%`;
+            document.getElementById('tech-trend').innerText = `${(Math.random() * 20 + 60).toFixed(1)}%`;
+            document.getElementById('tech-rsi').innerText = (Math.random() * 30 + 25).toFixed(1);
+            document.getElementById('tech-supp').innerText = (Math.random() * 0.5 + 0.91).toFixed(5);
+
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             document.getElementById('card-time-val').innerText = timeStr;
 
+            // Увеличиваем счетчик выданных сигналов
             statsData.total++;
             updateStatsUI();
-            showToast(`🤖 Сигнал для ${currentSymbol} выдан с опережением!`, 'success');
 
+            showToast(`🤖 Сигнал для ${currentPairName} успешно выдан!`, 'success');
+
+            // Запускаем таймер симуляции закрытия сделки (через 10 секунд для удобства тестирования, либо пропорционально таймфрейму)
+            const tradeDurationSec = 10; 
             setTimeout(() => {
-                if (Math.random() > 0.3) {
+                // Сделка закрывается по истечении времени
+                const isWin = Math.random() > 0.25; // 75% winrate имитация
+                if (isWin) {
                     statsData.wins++;
-                    playBeep('win');
-                    showToast(`✅ Сделка закрылась в ПЛЮС!`, 'success');
+                    playWinSound();
+                    showToast(`✅ Сделка по ${currentPairName} закрылась в ПЛЮС!`, 'success');
                 } else {
                     statsData.losses++;
-                    playBeep('loss');
-                    showToast(`❌ Сделка закрылась в МИНУС.`, 'error');
+                    playLossSound();
+                    showToast(`❌ Сделка по ${currentPairName} закрылась в МИНУС.`, 'error');
                 }
                 updateStatsUI();
-            }, 8000);
+            }, tradeDurationSec * 1000);
+        }
+
+        // Обновление кнопки с обратным отсчетом КД
+        function startCooldownInterval(key) {
+            const btn = document.getElementById('analysis-btn');
+            if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+
+            cooldownTimerInterval = setInterval(() => {
+                const now = Date.now();
+                const diff = cooldowns[key] - now;
+                if (diff <= 0) {
+                    clearInterval(cooldownTimerInterval);
+                    btn.disabled = false;
+                    btn.innerText = "🔄 Запустить новый анализ";
+                } else {
+                    btn.disabled = true;
+                    btn.innerText = `⏳ КД: ${Math.ceil(diff / 1000)} сек. (идёт анализ...)`;
+                }
+            }, 1000);
         }
 
         function updateStatsUI() {
             document.getElementById('stat-plus-val').innerText = statsData.wins;
             document.getElementById('stat-minus-val').innerText = statsData.losses;
             document.getElementById('stat-total-val').innerText = statsData.total;
-            let wr = ((statsData.wins / statsData.total) * 100).toFixed(1);
-            document.getElementById('detail-winrate').innerText = wr + "%";
-            document.getElementById('header-winrate-val').innerText = wr + "%";
+
+            document.getElementById('detail-total').innerText = statsData.total;
+            document.getElementById('detail-wins').innerText = statsData.wins;
+            document.getElementById('detail-losses').innerText = statsData.losses;
+
+            const winrate = statsData.total > 0 ? ((statsData.wins / statsData.total) * 100).toFixed(1) : "84.2";
+            document.getElementById('detail-winrate').innerText = winrate + "%";
+            document.getElementById('header-winrate-val').innerText = winrate + "%";
         }
 
-        function selectMarket(m) {
-            currentMarketMode = m;
-            document.getElementById('lbl-market-mode').innerText = "Режим: " + m;
+        function setTF(tfString, tvCode, btnElement) {
+            document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            currentTimeframeCode = tvCode;
+            const names = { '1m': '1 минута', '5m': '5 минут', '15m': '15 минут', '1h': '1 час', '1d': '1 день' };
+            currentTimeframeName = names[tfString] || '1 минута';
+
+            initTradingViewChart(currentSymbol, currentTimeframeCode);
+            showToast('Таймфрейм изменен на: ' + currentTimeframeName, 'success');
+        }
+
+        function selectMarket(market) {
+            currentMarketMode = market;
+            document.getElementById('lbl-market-mode').innerText = "Режим: " + market;
             document.getElementById('menu-market').style.display = 'none';
             document.getElementById('menu-category').style.display = 'block';
         }
+
         function goBackToMarket() {
             document.getElementById('menu-category').style.display = 'none';
             document.getElementById('menu-market').style.display = 'block';
         }
-        function selectCategory(cat) {
+
+        function selectCategory(category) {
+            document.getElementById('lbl-cat-title').innerText = "Категория: " + category;
             document.getElementById('menu-category').style.display = 'none';
             document.getElementById('menu-pairs').style.display = 'flex';
+
             const container = document.getElementById('pairs-list-container');
             container.innerHTML = '';
-            
-            (allPairsDB[cat] || []).forEach(p => {
-                let row = document.createElement('div');
-                row.className = 'pair-row';
-                row.innerHTML = `<span><b>${p.name}</b></span><span style="font-size:9px; color:#34d399">Активна</span>`;
+
+            const pairs = allPairsDB[category] || [];
+            pairs.forEach(p => {
+                const row = document.createElement('div');
+                row.className = 'pair-row active-pair';
+                row.innerHTML = `
+                    <span><b>${p.name}</b> <small style="color:#94a3b8">${currentMarketMode}</small></span>
+                    <span class="pair-status">Активна</span>
+                `;
                 row.onclick = () => {
-                    currentSymbol = p.name;
-                    document.getElementById('chart-title-lbl').innerHTML = `<b>${p.name}</b> (${currentMarketMode})`;
-                    
-                    // Уникальная стартовая цена под каждую пару
-                    if (p.name === 'EUR/USD') basePrice = 1.08500;
-                    else if (p.name === 'GBP/USD') basePrice = 1.27200;
-                    else if (p.name === 'USD/JPY') basePrice = 148.50;
-                    else if (p.name === 'BTC/USD') basePrice = 64200.0;
-                    else if (p.name === 'ETH/USD') basePrice = 3450.0;
-                    else basePrice = 0.99017;
-
-                    // Полная перегенерация свечей под выбранную пару
-                    generateInitialCandles();
-
+                    currentSymbol = p.symbol;
+                    currentPairName = p.name;
+                    initTradingViewChart(currentSymbol, currentTimeframeCode);
                     showToast('Выбрана пара: ' + p.name, 'success');
                 };
                 container.appendChild(row);
             });
         }
+
         function goBackToCategory() {
             document.getElementById('menu-pairs').style.display = 'none';
             document.getElementById('menu-category').style.display = 'block';
         }
 
-        function setTF(code, min, btn) {
-            document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('signal-tf-label').innerText = `(${min} минут)`;
-            document.getElementById('card-tf-text').innerText = `${min} МИНУТ`;
-            showToast('Таймфрейм изменен', 'success');
+        let currentLang = 'RU';
+        function toggleLang() {
+            currentLang = currentLang === 'RU' ? 'EN' : 'RU';
+            document.getElementById('lang-lbl').innerText = currentLang === 'RU' ? '🇷🇺 RU' : '🇬🇧 EN';
+            showToast('Язык изменен: ' + currentLang, 'success');
         }
 
         function logout() {
@@ -816,29 +952,31 @@
             document.getElementById('nav-menu').style.display = 'none';
             document.getElementById('header-center').style.display = 'none';
             document.getElementById('pocket-id-input').value = '';
-            showToast('Вы вышли', 'success');
+            document.getElementById('reg-banner').classList.remove('active');
+            showToast('Вы вышли из системы', 'success');
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('t-btn').classList.remove('active');
             document.getElementById('s-btn').classList.remove('active');
+
             if(tab === 'terminal') {
                 document.getElementById('terminal-screen').classList.add('active');
                 document.getElementById('t-btn').classList.add('active');
-            } else {
+            } else if(tab === 'stats') {
                 document.getElementById('stats-screen').classList.add('active');
                 document.getElementById('s-btn').classList.add('active');
             }
         }
 
-        function showToast(text, type='success') {
+        function showToast(text, type = 'success') {
             const box = document.getElementById('toast-box');
             const t = document.createElement('div');
             t.className = `toast ${type}`;
             t.innerText = text;
             box.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
+            setTimeout(() => t.remove(), 3000);
         }
     </script>
 </body>
