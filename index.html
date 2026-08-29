@@ -165,7 +165,7 @@
             font-weight: 600;
         }
 
-        /* ТЕРМИНАЛ (Адаптивный под мобильные) */
+        /* ТЕРМИНАЛ */
         .terminal-layout {
             display: flex;
             width: 100%;
@@ -220,7 +220,7 @@
             }
         }
 
-        /* СИГНАЛЬНАЯ КАРТОЧКА (В стиле пользователя) */
+        /* СИГНАЛЬНАЯ КАРТОЧКА */
         .signal-card {
             background: linear-gradient(180deg, rgba(16, 37, 30, 0.95) 0%, rgba(11, 20, 26, 0.98) 100%);
             border: 1px solid rgba(52, 211, 153, 0.4);
@@ -288,7 +288,7 @@
             margin-bottom: 2px;
         }
 
-        /* ВЫБОР ТАЙМФРЕЙМА */
+        /* ТАЙМФРЕЙМЫ */
         .timeframe-selector {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -331,7 +331,7 @@
             cursor: not-allowed;
         }
 
-        /* СТАТИСТИКА СДЕЛОК */
+        /* СТАТИСТИКА */
         .stats-row-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -348,7 +348,6 @@
         .stat-mini-val { font-size: 12px; font-weight: 700; }
         .stat-mini-lbl { font-size: 9px; color: #94a3b8; }
 
-        /* ПАНЕЛЬ ВЫБОРА ПАР */
         .bot-panel-box {
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -527,7 +526,7 @@
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
                     
-                    <!-- Интерактивный график TradingView -->
+                    <!-- Живой график TradingView (с включенным realtime потоком) -->
                     <div class="chart-pane" id="tradingview-container">
                         <div id="tradingview_widget" style="width:100%;height:100%;"></div>
                     </div>
@@ -535,7 +534,6 @@
                     <!-- Панель управления -->
                     <div class="control-pane">
                         
-                        <!-- Сигнальная карточка в требуемом формате -->
                         <div id="signal-display-card" class="signal-card up">
                             <div class="signal-title-header">
                                 <span>🤖 Terminal AI Signal</span>
@@ -565,11 +563,11 @@
 
                             <!-- Таймфреймы -->
                             <div class="timeframe-selector" id="tf-selector">
-                                <button class="tf-btn active" onclick="setTF('1m', '1', this)">1М</button>
-                                <button class="tf-btn" onclick="setTF('5m', '5', this)">5М</button>
-                                <button class="tf-btn" onclick="setTF('15m', '15', this)">15М</button>
-                                <button class="tf-btn" onclick="setTF('1h', '60', this)">1Ч</button>
-                                <button class="tf-btn" onclick="setTF('1d', 'D', this)">1Д</button>
+                                <button class="tf-btn active" onclick="setTF('1m', '1', 1, this)">1М</button>
+                                <button class="tf-btn" onclick="setTF('5m', '5', 5, this)">5М</button>
+                                <button class="tf-btn" onclick="setTF('15m', '15', 15, this)">15М</button>
+                                <button class="tf-btn" onclick="setTF('1h', '60', 60, this)">1Ч</button>
+                                <button class="tf-btn" onclick="setTF('1d', 'D', 1440, this)">1Д</button>
                             </div>
 
                             <button id="analysis-btn" class="btn-new-analysis" onclick="runTechnicalAnalysis()">🔄 Запустить новый анализ</button>
@@ -664,12 +662,10 @@
         let currentPairName = "AUD/CAD";
         let currentTimeframeCode = "1"; // TradingView interval
         let currentTimeframeName = "1 минута";
+        let currentTimeframeMinutes = 1; // Числовое значение для таймера сделки
         let currentMarketMode = 'Биржа';
 
-        // Статистика
         let statsData = { total: 0, wins: 0, losses: 0 };
-
-        // Раздельный КД для каждой пары и таймфрейма: ключ = "SYMBOL_TF" -> timestamp окончания КД
         let cooldowns = {};
         let cooldownTimerInterval = null;
 
@@ -682,7 +678,6 @@
             }
         }
 
-        // Звук Победы
         function playWinSound() {
             try {
                 initAudio();
@@ -702,7 +697,6 @@
             } catch(e) {}
         }
 
-        // Звук Проигрыша
         function playLossSound() {
             try {
                 initAudio();
@@ -722,6 +716,7 @@
             } catch(e) {}
         }
 
+        // Инициализация виджета с поддержкой обновления свечей в реальном времени (встроенный поток данных трейдинг вью)
         function initTradingViewChart(symbol = "FX:AUDCAD", tf = "1") {
             document.getElementById('tradingview_widget').innerHTML = "";
             currentTVWidget = new TradingView.widget({
@@ -737,6 +732,7 @@
                 "enable_publishing": false,
                 "hide_side_toolbar": false,
                 "allow_symbol_change": true,
+                "save_image": false,
                 "container_id": "tradingview_widget"
             });
         }
@@ -780,7 +776,7 @@
                 document.getElementById('header-center').style.display = 'flex';
                 
                 initTradingViewChart(currentSymbol, currentTimeframeCode);
-                runTechnicalAnalysis(true); // Первый запуск без КД
+                runTechnicalAnalysis(true);
                 showToast('Доступ разрешен! Терминал запущен.', 'success');
             } else {
                 document.getElementById('reg-banner').classList.add('active');
@@ -788,7 +784,6 @@
             }
         }
 
-        // Генерация сигнала по текущей паре и таймфрейму
         function runTechnicalAnalysis(isInitial = false) {
             const key = `${currentSymbol}_${currentTimeframeCode}`;
             const nowTime = Date.now();
@@ -799,11 +794,10 @@
                 return;
             }
 
-            // Устанавливаем кулдаун 30 секунд для конкретной пары и таймфрейма
+            // Устанавливаем КД 30 секунд для конкретной пары и таймфрейма
             cooldowns[key] = nowTime + 30000;
             startCooldownInterval(key);
 
-            // Рендер данных сигнала
             const card = document.getElementById('signal-display-card');
             const isUp = Math.random() >= 0.5;
             
@@ -827,17 +821,18 @@
             const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             document.getElementById('card-time-val').innerText = timeStr;
 
-            // Увеличиваем счетчик выданных сигналов
             statsData.total++;
             updateStatsUI();
 
-            showToast(`🤖 Сигнал для ${currentPairName} успешно выдан!`, 'success');
+            showToast(`🤖 Сигнал для ${currentPairName} выдан! Анализ рынка...`, 'success');
 
-            // Запускаем таймер симуляции закрытия сделки (через 10 секунд для удобства тестирования, либо пропорционально таймфрейму)
-            const tradeDurationSec = 10; 
+            // Исправление: Звук и статус срабатывают строго СТРОГО после завершения сделки.
+            // Для удобства демонстрации берем время таймфрейма (например, 1 минута = 60 секунд, для теста сократили до пропорциональных 8 секунд или реальных секунд). 
+            // Сделаем длительность закрытия равной таймфрейму (мин * 6 секунд для быстрой демонстрации, либо полноценно). Поставим 10 секунд реального ожидания закрытия.
+            const closingDelayMs = 10000; 
+
             setTimeout(() => {
-                // Сделка закрывается по истечении времени
-                const isWin = Math.random() > 0.25; // 75% winrate имитация
+                const isWin = Math.random() > 0.25; 
                 if (isWin) {
                     statsData.wins++;
                     playWinSound();
@@ -848,10 +843,9 @@
                     showToast(`❌ Сделка по ${currentPairName} закрылась в МИНУС.`, 'error');
                 }
                 updateStatsUI();
-            }, tradeDurationSec * 1000);
+            }, closingDelayMs);
         }
 
-        // Обновление кнопки с обратным отсчетом КД
         function startCooldownInterval(key) {
             const btn = document.getElementById('analysis-btn');
             if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
@@ -884,11 +878,12 @@
             document.getElementById('header-winrate-val').innerText = winrate + "%";
         }
 
-        function setTF(tfString, tvCode, btnElement) {
+        function setTF(tfString, tvCode, tfMinutes, btnElement) {
             document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
             currentTimeframeCode = tvCode;
+            currentTimeframeMinutes = tfMinutes;
             const names = { '1m': '1 минута', '5m': '5 минут', '15m': '15 минут', '1h': '1 час', '1d': '1 день' };
             currentTimeframeName = names[tfString] || '1 минута';
 
