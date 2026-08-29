@@ -28,7 +28,6 @@
             background: #070707;
         }
 
-        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
@@ -107,7 +106,6 @@
             cursor: pointer;
         }
 
-        /* Основной контент */
         main {
             flex: 1;
             display: flex;
@@ -125,7 +123,6 @@
             display: flex;
         }
 
-        /* Авторизация */
         #auth-screen {
             align-items: center;
             justify-content: center;
@@ -165,7 +162,6 @@
             font-weight: 600;
         }
 
-        /* ТЕРМИНАЛ */
         .terminal-layout {
             display: flex;
             width: 100%;
@@ -191,7 +187,6 @@
             overflow-y: auto;
         }
 
-        /* Мобильная адаптивность */
         @media(max-width: 768px) {
             .terminal-layout {
                 flex-direction: column;
@@ -220,7 +215,6 @@
             }
         }
 
-        /* СИГНАЛЬНАЯ КАРТОЧКА */
         .signal-card {
             background: linear-gradient(180deg, rgba(16, 37, 30, 0.95) 0%, rgba(11, 20, 26, 0.98) 100%);
             border: 1px solid rgba(52, 211, 153, 0.4);
@@ -288,7 +282,6 @@
             margin-bottom: 2px;
         }
 
-        /* ТАЙМФРЕЙМЫ */
         .timeframe-selector {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -331,7 +324,6 @@
             cursor: not-allowed;
         }
 
-        /* СТАТИСТИКА */
         .stats-row-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -526,7 +518,7 @@
             <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
                     
-                    <!-- Живой график TradingView (с включенным realtime потоком) -->
+                    <!-- Живой график TradingView -->
                     <div class="chart-pane" id="tradingview-container">
                         <div id="tradingview_widget" style="width:100%;height:100%;"></div>
                     </div>
@@ -660,9 +652,9 @@
         let currentTVWidget = null;
         let currentSymbol = "FX:AUDCAD";
         let currentPairName = "AUD/CAD";
-        let currentTimeframeCode = "1"; // TradingView interval
+        let currentTimeframeCode = "1"; 
         let currentTimeframeName = "1 минута";
-        let currentTimeframeMinutes = 1; // Числовое значение для таймера сделки
+        let currentTimeframeMinutes = 1; 
         let currentMarketMode = 'Биржа';
 
         let statsData = { total: 0, wins: 0, losses: 0 };
@@ -716,12 +708,11 @@
             } catch(e) {}
         }
 
-        // Инициализация виджета с поддержкой обновления свечей в реальном времени (встроенный поток данных трейдинг вью)
+        // Обновленная конфигурация графиков с включенным realtime потоком свечей и авторазмером
         function initTradingViewChart(symbol = "FX:AUDCAD", tf = "1") {
             document.getElementById('tradingview_widget').innerHTML = "";
             currentTVWidget = new TradingView.widget({
-                "width": "100%",
-                "height": "100%",
+                "autosize": true,
                 "symbol": symbol,
                 "interval": tf,
                 "timezone": "Etc/UTC",
@@ -794,7 +785,6 @@
                 return;
             }
 
-            // Устанавливаем КД 30 секунд для конкретной пары и таймфрейма
             cooldowns[key] = nowTime + 30000;
             startCooldownInterval(key);
 
@@ -824,12 +814,11 @@
             statsData.total++;
             updateStatsUI();
 
-            showToast(`🤖 Сигнал для ${currentPairName} выдан! Анализ рынка...`, 'success');
+            showToast(`🤖 Сигнал для ${currentPairName} выдан! Идет сделка...`, 'success');
 
-            // Исправление: Звук и статус срабатывают строго СТРОГО после завершения сделки.
-            // Для удобства демонстрации берем время таймфрейма (например, 1 минута = 60 секунд, для теста сократили до пропорциональных 8 секунд или реальных секунд). 
-            // Сделаем длительность закрытия равной таймфрейму (мин * 6 секунд для быстрой демонстрации, либо полноценно). Поставим 10 секунд реального ожидания закрытия.
-            const closingDelayMs = 10000; 
+            // Точная синхронизация длительности сделки с выбранным таймфреймом 
+            // (минуты таймфрейма * 60 секунд * 1000 миллисекунд). Для демонстрации/тестов можно оставить реальное время или масштабировать.
+            const closingDelayMs = currentTimeframeMinutes * 60 * 1000;
 
             setTimeout(() => {
                 const isWin = Math.random() > 0.25; 
@@ -859,7 +848,7 @@
                     btn.innerText = "🔄 Запустить новый анализ";
                 } else {
                     btn.disabled = true;
-                    btn.innerText = `⏳ КД: ${Math.ceil(diff / 1000)} сек. (идёт анализ...)`;
+                    btn.innerText = `⏳ КД: ${Math.ceil(diff / 1000)} сек. (анализ...)`;
                 }
             }, 1000);
         }
