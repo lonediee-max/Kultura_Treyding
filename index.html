@@ -74,7 +74,7 @@
         }
 
         .nav-menu {
-            display: flex;
+            display: none;
             gap: 12px;
             font-size: 12px;
         }
@@ -101,6 +101,45 @@
             height: 100%;
         }
         .screen.active { display: flex; }
+
+        #auth-screen {
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(58rem 34rem at 50% -9rem, rgba(128, 178, 255, 0.18), rgba(0, 0, 0, 0.62)), #070707;
+            padding: 16px;
+        }
+
+        .card-auth {
+            background: rgba(15, 18, 25, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .reg-banner {
+            display: none;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .reg-banner.active { display: block; }
+
+        .promo-code-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed rgba(96, 165, 250, 0.4);
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #60a5fa;
+            margin: 6px 0;
+            font-weight: 600;
+        }
 
         .terminal-layout {
             display: flex;
@@ -239,6 +278,7 @@
             width: 100%;
             margin-top: 6px;
         }
+        .btn-new-analysis:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; }
 
         .stats-row-grid {
             display: grid;
@@ -302,6 +342,33 @@
             cursor: pointer;
         }
 
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 10px; color: #94a3b8; margin-bottom: 3px; }
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: #ffffff;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            background: #60a5fa;
+            color: #0f172a;
+            border: none;
+            border-radius: 6px;
+            padding: 9px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-reg { background: #34d399; color: #064e3b; }
+
         #toast-box {
             position: fixed;
             bottom: 12px;
@@ -329,10 +396,10 @@
         <header>
             <div class="logo">Kultura_Treyding <span>PRO</span></div>
             
-            <div class="header-center" id="header-center" style="display:flex; align-items:center;">
+            <div class="header-center" id="header-center" style="display:none; align-items:center;">
                 <div class="bot-status-badge">
                     <span>🤖 Индикаторы: <b style="color: #34d399;">RSI + SuperTrend</b></span>
-                    <span>WinRate: <b style="color: #34d399;" id="header-winrate-val">66.7%</b></span>
+                    <span>WinRate: <b style="color: #34d399;" id="header-winrate-val">84.2%</b></span>
                 </div>
             </div>
 
@@ -340,13 +407,40 @@
                 <nav class="nav-menu" id="nav-menu">
                     <a onclick="switchTab('terminal')" class="active" id="t-btn">Терминал</a>
                     <a onclick="switchTab('stats')" id="s-btn">Статистика</a>
+                    <a onclick="logout()" style="color: #f87171;">Выйти</a>
                 </nav>
             </div>
         </header>
 
         <main>
-            <!-- ТЕРМИНАЛ (Главный экран по умолчанию) -->
-            <section id="terminal-screen" class="screen active">
+            <!-- АВТОРИЗАЦИЯ -->
+            <section id="auth-screen" class="screen active">
+                <div class="card-auth">
+                    <div style="text-align: center; margin-bottom: 14px;">
+                        <h1 style="font-size: 16px; font-weight: 700; margin-bottom: 3px;">ПРОВЕРКА ДОСТУПА</h1>
+                        <p style="font-size: 10px; color: #94a3b8;">Введите ваш ID от платформы Pocket Option</p>
+                    </div>
+
+                    <form onsubmit="handleIdCheck(event)">
+                        <div class="form-group">
+                            <label>Pocket Option ID *</label>
+                            <input type="text" id="pocket-id-input" class="form-control" placeholder="Введите ваш ID" required>
+                        </div>
+                        <button type="submit" class="btn" style="margin-top: 4px;">Войти в терминал</button>
+                    </form>
+
+                    <div id="reg-banner" class="reg-banner">
+                        <p style="font-size: 10px; color: #fca5a5; margin-bottom: 5px;">
+                            ❌ ID не найден. Зарегистрируйтесь по ссылке:
+                        </p>
+                        <div class="promo-code-box">Промо-код: FRIENDU25LKMA8WC</div>
+                        <a href="https://pocket-friends.co/r/u25lkma8wc" target="_blank" class="btn btn-reg" style="margin-top: 3px; font-size: 11px; padding: 7px;">Регистрация в Pocket Option</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ТЕРМИНАЛ -->
+            <section id="terminal-screen" class="screen">
                 <div class="terminal-layout">
                     
                     <!-- График Canvas -->
@@ -473,7 +567,7 @@
             }
         }
 
-        // Надежный звуковой генератор синтезатора
+        // Надежный звуковой генератор
         function playBeep(type) {
             try {
                 initAudioUser();
@@ -505,37 +599,31 @@
             } catch(e) {}
         }
 
+        // Графический движок Canvas
         let canvas, ctx;
         let chartData = [];
         let basePrice = 0.99017;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initChartCanvas();
-        });
-
         function initChartCanvas() {
             canvas = document.getElementById('terminal-canvas');
-            if(!canvas) return;
             ctx = canvas.getContext('2d');
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
 
-            generateChartCandles();
+            generateInitialCandles();
             setInterval(updateCanvasChart, 1000);
         }
 
-        function generateChartCandles() {
+        function generateInitialCandles() {
             chartData = [];
             let p = basePrice;
-            let rangeMultiplier = basePrice > 100 ? 5 : 0.0006;
-            let stepMultiplier = basePrice > 100 ? 15 : 0.0012;
-
             for(let i=0; i<40; i++) {
-                let change = (Math.random() - 0.48) * stepMultiplier;
+                let scaleFactor = basePrice > 100 ? (basePrice > 10000 ? 50 : 5) : 0.0012;
+                let change = (Math.random() - 0.48) * scaleFactor;
                 let open = p;
                 let close = p + change;
-                let high = Math.max(open, close) + Math.random() * rangeMultiplier;
-                let low = Math.min(open, close) - Math.random() * rangeMultiplier;
+                let high = Math.max(open, close) + Math.random() * (scaleFactor * 0.5);
+                let low = Math.min(open, close) - Math.random() * (scaleFactor * 0.5);
                 chartData.push({open, close, high, low});
                 p = close;
             }
@@ -548,10 +636,11 @@
         }
 
         function updateCanvasChart() {
-            if(!ctx || !canvas || chartData.length === 0) return;
+            if(!ctx || !canvas) return;
             
             let last = chartData[chartData.length - 1];
-            let delta = (Math.random() - 0.49) * (basePrice > 100 ? 2 : 0.0004);
+            let scaleFactor = basePrice > 100 ? (basePrice > 10000 ? 15 : 1.5) : 0.0004;
+            let delta = (Math.random() - 0.49) * scaleFactor;
             last.close += delta;
             last.high = Math.max(last.high, last.close);
             last.low = Math.min(last.low, last.close);
@@ -601,6 +690,23 @@
             "Криптовалюта": [{ name: "BTC/USD" }, { name: "ETH/USD" }]
         };
 
+        function handleIdCheck(e) {
+            e.preventDefault();
+            initAudioUser();
+            const poId = document.getElementById('pocket-id-input').value.trim();
+            if (poId.length >= 5) {
+                document.getElementById('auth-screen').classList.remove('active');
+                document.getElementById('terminal-screen').classList.add('active');
+                document.getElementById('nav-menu').style.display = 'flex';
+                document.getElementById('header-center').style.display = 'flex';
+                initChartCanvas();
+                showToast('Доступ разрешен! Терминал запущен.', 'success');
+            } else {
+                document.getElementById('reg-banner').classList.add('active');
+                showToast('ID не найден. Требуется регистрация.', 'error');
+            }
+        }
+
         function runTechnicalAnalysis() {
             initAudioUser();
             const key = `${currentSymbol}`;
@@ -626,7 +732,7 @@
 
             statsData.total++;
             updateStatsUI();
-            showToast(`🤖 Сигнал для ${currentSymbol} выдан!`, 'success');
+            showToast(`🤖 Сигнал для ${currentSymbol} выдан с опережением!`, 'success');
 
             setTimeout(() => {
                 if (Math.random() > 0.3) {
@@ -675,6 +781,7 @@
                     currentSymbol = p.name;
                     document.getElementById('chart-title-lbl').innerHTML = `<b>${p.name}</b> (${currentMarketMode})`;
                     
+                    // Уникальная стартовая цена под каждую пару
                     if (p.name === 'EUR/USD') basePrice = 1.08500;
                     else if (p.name === 'GBP/USD') basePrice = 1.27200;
                     else if (p.name === 'USD/JPY') basePrice = 148.50;
@@ -682,7 +789,9 @@
                     else if (p.name === 'ETH/USD') basePrice = 3450.0;
                     else basePrice = 0.99017;
 
-                    generateChartCandles();
+                    // Полная перегенерация свечей под выбранную пару
+                    generateInitialCandles();
+
                     showToast('Выбрана пара: ' + p.name, 'success');
                 };
                 container.appendChild(row);
@@ -699,6 +808,15 @@
             document.getElementById('signal-tf-label').innerText = `(${min} минут)`;
             document.getElementById('card-tf-text').innerText = `${min} МИНУТ`;
             showToast('Таймфрейм изменен', 'success');
+        }
+
+        function logout() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('auth-screen').classList.add('active');
+            document.getElementById('nav-menu').style.display = 'none';
+            document.getElementById('header-center').style.display = 'none';
+            document.getElementById('pocket-id-input').value = '';
+            showToast('Вы вышли', 'success');
         }
 
         function switchTab(tab) {
