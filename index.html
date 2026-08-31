@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PO Terminal</title>
+    <title>Kultura_Treyding Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- TradingView Widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,10 +14,8 @@
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0a0a14;
             color: #e0e0e0;
             min-height: 100vh;
@@ -41,7 +41,6 @@
             background: #0a0a14;
             padding: 20px;
         }
-
         .auth-overlay.hidden { display: none; }
 
         .auth-logo { font-size: 3.5rem; margin-bottom: 12px; }
@@ -53,11 +52,7 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
         }
-        .auth-sub {
-            color: rgba(255,255,255,0.3);
-            font-size: 0.9rem;
-            margin-bottom: 24px;
-        }
+        .auth-sub { color: rgba(255,255,255,0.3); font-size: 0.9rem; margin-bottom: 24px; }
         .auth-input {
             width: 100%;
             max-width: 320px;
@@ -87,14 +82,8 @@
             margin-top: 12px;
         }
         .auth-btn:active { opacity: 0.7; }
-        .auth-error {
-            color: #ff1744;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            min-height: 24px;
-        }
+        .auth-error { color: #ff1744; font-size: 0.85rem; margin-top: 8px; min-height: 24px; }
 
-        /* Реферальный */
         .ref-link {
             background: rgba(20,20,42,0.6);
             padding: 12px 16px;
@@ -131,7 +120,7 @@
             margin-bottom: 16px;
         }
 
-        /* Приветствие */
+        /* ===== ПРИВЕТСТВИЕ ===== */
         #splashScreen {
             position: fixed;
             top: 0;
@@ -160,11 +149,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        #splashScreen .splash-sub {
-            color: rgba(255,255,255,0.4);
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
+        #splashScreen .splash-sub { color: rgba(255,255,255,0.4); font-size: 1rem; margin-bottom: 20px; }
         #splashScreen .splash-loader {
             width: 40px;
             height: 40px;
@@ -184,32 +169,23 @@
         }
         #mainApp.active { display: flex; }
 
-        /* ===== ЛЕВАЯ ПАНЕЛЬ (70%) ===== */
+        /* ===== ЛЕВАЯ ПАНЕЛЬ (60%) ===== */
         .left-panel {
-            width: 70%;
+            width: 60%;
             height: 100vh;
-            padding: 12px 16px;
-            overflow-y: auto;
+            padding: 10px 12px;
+            overflow: hidden;
             background: linear-gradient(180deg, #0a0a14 0%, #111128 100%);
+            display: flex;
+            flex-direction: column;
             position: relative;
         }
 
-        .left-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(123, 47, 252, 0.04) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        /* ===== ПРАВАЯ ПАНЕЛЬ (30%) ===== */
+        /* ===== ПРАВАЯ ПАНЕЛЬ (40%) ===== */
         .right-panel {
-            width: 30%;
+            width: 40%;
             height: 100vh;
-            padding: 12px 14px;
+            padding: 10px 12px;
             overflow-y: auto;
             background: rgba(12, 12, 28, 0.95);
             backdrop-filter: blur(20px);
@@ -221,15 +197,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 14px;
+            padding: 6px 12px;
             background: rgba(20, 20, 42, 0.5);
             backdrop-filter: blur(20px);
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid rgba(123, 47, 252, 0.08);
-            margin-bottom: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            margin-bottom: 8px;
+            flex-shrink: 0;
         }
 
         .header-left {
@@ -239,51 +213,61 @@
         }
 
         .header-logo {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             background: linear-gradient(135deg, #7b2ffc, #00d2ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .header-tabs {
-            display: flex;
-            gap: 16px;
-        }
-
+        .header-tabs { display: flex; gap: 12px; }
         .header-tab {
             color: rgba(255,255,255,0.3);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             cursor: pointer;
-            padding: 4px 0;
+            padding: 3px 0;
             border-bottom: 2px solid transparent;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .header-tab:hover { color: rgba(255,255,255,0.6); }
-        .header-tab.active {
-            color: #fff;
-            border-bottom-color: #7b2ffc;
-        }
+        .header-tab.active { color: #fff; border-bottom-color: #7b2ffc; }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.6rem;
+            gap: 8px;
+            font-size: 0.55rem;
             color: rgba(255,255,255,0.3);
         }
-
         .header-right .id { color: rgba(255,255,255,0.5); }
         .header-right .live { color: #00c853; font-weight: 600; }
+
+        /* ===== КОНТЕЙНЕР ГРАФИКА ===== */
+        .chart-container {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #13142a;
+            border: 1px solid rgba(255,255,255,0.04);
+            min-height: 300px;
+            position: relative;
+        }
+
+        .chart-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
         /* ===== ТАБ-КОНТЕНТ ===== */
         .tab-content {
             display: none;
             animation: fadeIn 0.3s ease-out;
+            height: calc(100% - 40px);
+            overflow-y: auto;
         }
         .tab-content.active { display: block; }
 
@@ -293,45 +277,25 @@
         }
 
         /* ===== БЛОГ ===== */
-        .blog-grid {
-            display: grid;
-            gap: 10px;
-        }
-
+        .blog-grid { display: grid; gap: 8px; padding: 4px 0; }
         .blog-card {
             background: rgba(20, 20, 42, 0.4);
             border-radius: 10px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border: 1px solid rgba(255,255,255,0.04);
             transition: all 0.3s;
             cursor: pointer;
         }
-
-        .blog-card:hover {
-            border-color: rgba(123, 47, 252, 0.15);
-            transform: translateX(4px);
-        }
-
-        .blog-card .title {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #fff;
-            margin-bottom: 4px;
-        }
-
-        .blog-card .desc {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.35);
-            line-height: 1.5;
-        }
-
+        .blog-card:hover { border-color: rgba(123, 47, 252, 0.15); transform: translateX(4px); }
+        .blog-card .title { font-weight: 600; font-size: 0.8rem; color: #fff; margin-bottom: 3px; }
+        .blog-card .desc { font-size: 0.65rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
         .blog-card .tag {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.5rem;
             font-weight: 600;
-            margin-top: 6px;
+            margin-top: 4px;
             background: rgba(123, 47, 252, 0.12);
             color: #7b2ffc;
         }
@@ -339,30 +303,19 @@
         /* ===== СТАТИСТИКА ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
         }
-
         .stats-card {
             background: rgba(20, 20, 42, 0.4);
-            border-radius: 10px;
-            padding: 12px 10px;
+            border-radius: 8px;
+            padding: 10px 8px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.04);
         }
-
-        .stats-card .value {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-        .stats-card .label {
-            font-size: 0.5rem;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
+        .stats-card .value { font-size: 1.2rem; font-weight: 700; }
+        .stats-card .label { font-size: 0.45rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
         .stats-card .value.green { color: #00c853; }
         .stats-card .value.red { color: #ff1744; }
         .stats-card .value.yellow { color: #ffab00; }
@@ -370,17 +323,16 @@
 
         .stats-history {
             background: rgba(20, 20, 42, 0.4);
-            border-radius: 10px;
-            padding: 12px 14px;
+            border-radius: 8px;
+            padding: 10px 12px;
             border: 1px solid rgba(255,255,255,0.04);
         }
-
         .stats-history .row {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
+            padding: 3px 0;
             border-bottom: 1px solid rgba(255,255,255,0.03);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         .stats-history .row:last-child { border-bottom: none; }
         .stats-history .row .label { color: rgba(255,255,255,0.35); }
@@ -392,62 +344,51 @@
         /* ===== ПРОФИЛЬ ===== */
         .profile-card {
             background: rgba(20, 20, 42, 0.4);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 16px;
             border: 1px solid rgba(255,255,255,0.04);
             text-align: center;
         }
-
-        .profile-card .avatar { font-size: 3rem; margin-bottom: 8px; }
-        .profile-card .pid {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        .profile-card .pstatus {
-            font-size: 0.75rem;
-            color: #00c853;
-            margin: 4px 0 16px 0;
-        }
+        .profile-card .avatar { font-size: 2.5rem; margin-bottom: 6px; }
+        .profile-card .pid { font-size: 0.9rem; font-weight: 600; color: #fff; }
+        .profile-card .pstatus { font-size: 0.7rem; color: #00c853; margin: 4px 0 12px 0; }
         .profile-btn {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             background: rgba(255, 23, 68, 0.12);
             color: #ff1744;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
         .profile-btn:hover { background: rgba(255, 23, 68, 0.2); }
 
-        /* ===== ПРАВАЯ ПАНЕЛЬ - СИГНАЛЫ ===== */
+        /* ===== ПРАВАЯ ПАНЕЛЬ ===== */
         .right-title {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: rgba(255,255,255,0.2);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
-        /* Выбор типа */
         .pair-type-selector {
             display: flex;
             gap: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
-
         .pair-type-btn {
             flex: 1;
-            padding: 6px 8px;
+            padding: 5px 6px;
             border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 8px;
+            border-radius: 6px;
             background: rgba(20,20,42,0.3);
             color: rgba(255,255,255,0.25);
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -455,7 +396,6 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-
         .pair-type-btn:hover { border-color: rgba(123, 47, 252, 0.2); }
         .pair-type-btn.active {
             background: rgba(123, 47, 252, 0.12);
@@ -463,26 +403,23 @@
             color: #fff;
         }
 
-        /* Категории */
         .category-selector {
             display: flex;
             flex-wrap: wrap;
             gap: 3px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
-
         .cat-btn {
-            padding: 3px 10px;
+            padding: 2px 8px;
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 6px;
+            border-radius: 5px;
             background: transparent;
             color: rgba(255,255,255,0.2);
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .cat-btn:hover { border-color: rgba(123, 47, 252, 0.15); color: rgba(255,255,255,0.4); }
         .cat-btn.active {
             background: rgba(123, 47, 252, 0.08);
@@ -490,12 +427,11 @@
             color: #fff;
         }
 
-        /* Список пар */
         .pairs-list {
             display: flex;
             flex-direction: column;
             gap: 3px;
-            max-height: calc(100vh - 280px);
+            max-height: calc(100vh - 240px);
             overflow-y: auto;
         }
 
@@ -503,35 +439,23 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 10px;
+            padding: 5px 8px;
             background: rgba(20,20,42,0.25);
-            border-radius: 6px;
+            border-radius: 5px;
             border: 1px solid rgba(255,255,255,0.03);
             cursor: pointer;
             transition: all 0.2s;
         }
-
         .pair-item:hover { border-color: rgba(123, 47, 252, 0.1); }
 
-        .pair-item .pname {
-            font-size: 0.65rem;
-            font-weight: 500;
-            color: #fff;
-        }
-
-        .pair-item .pinfo {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
+        .pair-item .pname { font-size: 0.6rem; font-weight: 500; color: #fff; }
+        .pair-item .pinfo { display: flex; align-items: center; gap: 4px; }
         .pair-item .pbadge {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 600;
-            padding: 1px 8px;
-            border-radius: 8px;
+            padding: 1px 6px;
+            border-radius: 6px;
         }
-
         .pair-item .pbadge.up {
             background: rgba(0,200,83,0.1);
             color: #00c853;
@@ -552,15 +476,10 @@
             color: rgba(255,255,255,0.15);
             border: 1px solid rgba(255,255,255,0.03);
         }
-
-        .pair-item .pstrength {
-            font-size: 0.5rem;
-            color: rgba(255,255,255,0.2);
-        }
-
+        .pair-item .pstrength { font-size: 0.45rem; color: rgba(255,255,255,0.2); }
         .pair-item.inactive { opacity: 0.4; }
 
-        /* ===== МОДАЛЬНОЕ ОКНО СИГНАЛА (PO Terminal стиль) ===== */
+        /* ===== МОДАЛЬНОЕ ОКНО ===== */
         .signal-modal {
             display: none;
             position: fixed;
@@ -575,17 +494,16 @@
             align-items: center;
             padding: 20px;
         }
-
         .signal-modal.active { display: flex; animation: fadeIn 0.3s ease-out; }
 
         .signal-modal-content {
             background: linear-gradient(180deg, #141430, #0a0a1a);
-            border-radius: 24px;
-            max-width: 520px;
+            border-radius: 20px;
+            max-width: 480px;
             width: 100%;
             max-height: 95vh;
             overflow-y: auto;
-            padding: 24px;
+            padding: 20px;
             border: 1px solid rgba(123, 47, 252, 0.15);
             box-shadow: 0 30px 80px rgba(0,0,0,0.9);
         }
@@ -594,129 +512,81 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
-
-        .signal-header .spair {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .signal-header .spair small {
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.3);
-            font-weight: 400;
-            margin-left: 8px;
-        }
-
+        .signal-header .spair { font-size: 1rem; font-weight: 700; color: #fff; }
+        .signal-header .spair small { font-size: 0.55rem; color: rgba(255,255,255,0.3); font-weight: 400; margin-left: 6px; }
         .signal-close {
             background: none;
             border: none;
             color: rgba(255,255,255,0.2);
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: all 0.2s;
         }
-
         .signal-close:hover { color: #fff; }
 
-        /* Картинка сигнала */
         .signal-visual {
             text-align: center;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 16px;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 12px;
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.04);
             position: relative;
         }
-
-        .signal-visual .big-arrow {
-            font-size: 4rem;
-            display: block;
-        }
+        .signal-visual .big-arrow { font-size: 3.5rem; display: block; }
         .signal-visual .big-arrow.up { color: #00c853; }
         .signal-visual .big-arrow.down { color: #ff1744; }
-
-        .signal-visual .signal-label {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
+        .signal-visual .signal-label { font-size: 1.1rem; font-weight: 700; margin-top: 2px; }
         .signal-visual .signal-label.up { color: #00c853; }
         .signal-visual .signal-label.down { color: #ff1744; }
-
-        .signal-visual .signal-pair-name {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.2);
-            margin-top: 4px;
-        }
-
+        .signal-visual .signal-pair-name { font-size: 0.65rem; color: rgba(255,255,255,0.2); margin-top: 2px; }
         .signal-visual .signal-percent {
             position: absolute;
-            top: 12px;
-            right: 16px;
-            font-size: 0.8rem;
+            top: 10px;
+            right: 14px;
+            font-size: 0.75rem;
             font-weight: 700;
             color: #00c853;
         }
 
-        /* Инфо сетка */
         .signal-info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin-bottom: 12px;
+            gap: 5px;
+            margin-bottom: 10px;
         }
-
         .signal-info-item {
             background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            padding: 8px 10px;
+            border-radius: 7px;
+            padding: 6px 8px;
             border: 1px solid rgba(255,255,255,0.04);
             text-align: center;
         }
-
-        .signal-info-item .label {
-            font-size: 0.45rem;
-            color: rgba(255,255,255,0.25);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .signal-info-item .value {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 2px;
-            color: #fff;
-        }
-
+        .signal-info-item .label { font-size: 0.4rem; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.5px; }
+        .signal-info-item .value { font-size: 0.75rem; font-weight: 600; margin-top: 1px; color: #fff; }
         .signal-info-item .value.green { color: #00c853; }
         .signal-info-item .value.red { color: #ff1744; }
         .signal-info-item .value.yellow { color: #ffab00; }
         .signal-info-item .value.blue { color: #448aff; }
 
-        /* Таймфреймы */
         .tf-selector {
             display: flex;
             gap: 4px;
-            margin: 10px 0;
+            margin: 8px 0;
             flex-wrap: wrap;
         }
-
         .tf-btn {
-            padding: 5px 12px;
+            padding: 4px 10px;
             border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 6px;
+            border-radius: 5px;
             background: rgba(20,20,42,0.3);
             color: rgba(255,255,255,0.25);
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .tf-btn:hover { border-color: rgba(123, 47, 252, 0.2); }
         .tf-btn.active {
             background: rgba(123, 47, 252, 0.12);
@@ -724,67 +594,52 @@
             color: #fff;
         }
 
-        /* Индикаторы */
         .indicators-block {
             background: rgba(255,255,255,0.02);
-            border-radius: 10px;
-            padding: 10px 12px;
+            border-radius: 8px;
+            padding: 8px 10px;
             border: 1px solid rgba(255,255,255,0.04);
-            margin: 8px 0;
+            margin: 6px 0;
         }
-
-        .indicators-block .ititle {
-            font-size: 0.5rem;
-            color: rgba(255,255,255,0.2);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
+        .indicators-block .ititle { font-size: 0.45rem; color: rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
         .indicator-row {
             display: flex;
             justify-content: space-between;
-            padding: 3px 0;
-            font-size: 0.7rem;
+            padding: 2px 0;
+            font-size: 0.65rem;
         }
-
         .indicator-row .iname { color: rgba(255,255,255,0.35); }
         .indicator-row .ival.buy { color: #00c853; }
         .indicator-row .ival.sell { color: #ff1744; }
         .indicator-row .ival.neutral { color: #ffab00; }
 
-        /* Результат */
         .result-buttons {
             display: flex;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 6px;
+            margin-top: 8px;
         }
-
         .result-btn {
             flex: 1;
-            padding: 8px;
+            padding: 6px;
             border: none;
-            border-radius: 8px;
-            font-size: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.65rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .result-btn.win {
             background: rgba(0,200,83,0.1);
             color: #00c853;
             border: 1px solid rgba(0,200,83,0.1);
         }
         .result-btn.win:hover { background: rgba(0,200,83,0.2); }
-
         .result-btn.breakeven {
             background: rgba(255,171,0,0.1);
             color: #ffab00;
             border: 1px solid rgba(255,171,0,0.1);
         }
         .result-btn.breakeven:hover { background: rgba(255,171,0,0.2); }
-
         .result-btn.lose {
             background: rgba(255,23,68,0.1);
             color: #ff1744;
@@ -792,14 +647,9 @@
         }
         .result-btn.lose:hover { background: rgba(255,23,68,0.2); }
 
-        .signal-timer {
-            font-size: 0.55rem;
-            color: rgba(255,255,255,0.15);
-            text-align: center;
-            margin-top: 8px;
-        }
+        .signal-timer { font-size: 0.5rem; color: rgba(255,255,255,0.15); text-align: center; margin-top: 6px; }
 
-        /* ===== ТОСТ ===== */
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -808,10 +658,10 @@
             background: rgba(20,20,42,0.95);
             backdrop-filter: blur(20px);
             color: #fff;
-            padding: 10px 24px;
-            border-radius: 10px;
+            padding: 8px 20px;
+            border-radius: 8px;
             border: 1px solid rgba(123,47,252,0.15);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             z-index: 9999;
             animation: fadeIn 0.3s ease-out;
             max-width: 90%;
@@ -827,12 +677,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 4rem;
+            font-size: 3.5rem;
             z-index: 9998;
             pointer-events: none;
             animation: soundPop 0.8s ease-out forwards;
         }
-
         @keyframes soundPop {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
             30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
@@ -841,30 +690,31 @@
 
         /* ===== АДАПТИВ ===== */
         @media (max-width: 900px) {
-            .left-panel { width: 60%; padding: 10px 12px; }
-            .right-panel { width: 40%; padding: 10px 12px; }
+            .left-panel { width: 55%; }
+            .right-panel { width: 45%; }
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 768px) {
             body { overflow-y: auto; }
             #mainApp { flex-direction: column; height: auto; min-height: 100vh; overflow-y: auto; }
             .left-panel { width: 100%; height: auto; min-height: 50vh; }
-            .right-panel { width: 100%; height: auto; min-height: 50vh; border-left: none; border-top: 1px solid rgba(255,255,255,0.04); }
-            .header { flex-wrap: wrap; gap: 6px; }
+            .right-panel { width: 100%; height: auto; min-height: 40vh; border-left: none; border-top: 1px solid rgba(255,255,255,0.04); }
+            .header { flex-wrap: wrap; gap: 4px; }
             .header-tabs { order: 3; width: 100%; justify-content: center; }
-            .stats-grid { grid-template-columns: 1fr 1fr 1fr; }
-            .pairs-list { max-height: 300px; }
+            .chart-container { min-height: 250px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
             .signal-info-grid { grid-template-columns: 1fr 1fr; }
+            .pairs-list { max-height: 250px; }
         }
 
         @media (max-width: 480px) {
-            .left-panel { padding: 8px 10px; }
-            .right-panel { padding: 8px 10px; }
-            .signal-modal-content { padding: 16px; margin: 10px; }
-            .signal-visual .big-arrow { font-size: 3rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .header-tabs { gap: 8px; }
-            .header-tab { font-size: 0.55rem; }
+            .left-panel { padding: 6px 8px; }
+            .right-panel { padding: 6px 8px; }
+            .signal-modal-content { padding: 14px; margin: 10px; }
+            .signal-visual .big-arrow { font-size: 2.5rem; }
+            .chart-container { min-height: 200px; }
+            .header-tabs { gap: 6px; }
+            .header-tab { font-size: 0.5rem; }
         }
     </style>
 </head>
@@ -873,7 +723,7 @@
     <!-- ===== ЭКРАН ВХОДА ===== -->
     <div class="auth-overlay" id="authScreen">
         <div class="auth-logo">📡</div>
-        <div class="auth-title">PO Terminal</div>
+        <div class="auth-title">Kultura_Treyding</div>
         <div class="auth-sub">Введите ваш ID для входа</div>
         <input type="text" class="auth-input" id="authInput" placeholder="Введите ID..." value="88808610">
         <div class="auth-error" id="authError"></div>
@@ -910,17 +760,18 @@
     <!-- ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ ===== -->
     <div id="mainApp">
 
-        <!-- ЛЕВАЯ ПАНЕЛЬ (70%) -->
+        <!-- ЛЕВАЯ ПАНЕЛЬ (60%) -->
         <div class="left-panel">
 
             <!-- Хедер -->
             <div class="header">
                 <div class="header-left">
-                    <div class="header-logo">PO Terminal</div>
+                    <div class="header-logo">Kultura_Treyding™</div>
                     <div class="header-tabs">
-                        <span class="header-tab active" data-tab="blog">Блог</span>
-                        <span class="header-tab" data-tab="stats">Статистика</span>
-                        <span class="header-tab" data-tab="profile">Профиль</span>
+                        <span class="header-tab active" data-tab="chart">📊 График</span>
+                        <span class="header-tab" data-tab="blog">📖 Блог</span>
+                        <span class="header-tab" data-tab="stats">📈 Статистика</span>
+                        <span class="header-tab" data-tab="profile">👤 Профиль</span>
                     </div>
                 </div>
                 <div class="header-right">
@@ -930,99 +781,107 @@
                 </div>
             </div>
 
-            <!-- Контент -->
-            <div class="content-area">
-
-                <!-- Блог -->
-                <div class="tab-content active" id="tab-blog">
-                    <div class="blog-grid">
-                        <div class="blog-card">
-                            <div class="title">📊 Индикатор Imbalance Signals (BUY/SELL)</div>
-                            <div class="desc">Как использовать сигналы рыночного дисбаланса для точных входов в сделку.</div>
-                            <span class="tag">Индикатор</span>
-                        </div>
-                        <div class="blog-card">
-                            <div class="title">📈 Стратегия Smart Money (SMC)</div>
-                            <div class="desc">Полный гайд по использованию SMC для поиска точек входа крупных игроков.</div>
-                            <span class="tag">Стратегия</span>
-                        </div>
-                        <div class="blog-card">
-                            <div class="title">🔍 Поиск разворотных моделей (Pattern)</div>
-                            <div class="desc">Автоматический поиск разворотных моделей на графике.</div>
-                            <span class="tag">Инструмент</span>
-                        </div>
-                        <div class="blog-card">
-                            <div class="title">📉 Индикатор ZigZag + Channels</div>
-                            <div class="desc">Анализ структуры рынка и тренда с помощью ZigZag и каналов.</div>
-                            <span class="tag">Индикатор</span>
-                        </div>
-                        <div class="blog-card">
-                            <div class="title">🎯 Уровни поддержки и сопротивления (SR Zones)</div>
-                            <div class="desc">Автоматический поиск зон поддержки и сопротивления для точных входов.</div>
-                            <span class="tag">Инструмент</span>
-                        </div>
-                        <div class="blog-card">
-                            <div class="title">📊 Объемный профиль (Volumes)</div>
-                            <div class="desc">Анализ торговых объемов для подтверждения сигналов.</div>
-                            <span class="tag">Индикатор</span>
-                        </div>
-                    </div>
+            <!-- Таб: График -->
+            <div class="tab-content active" id="tab-chart" style="flex:1;display:flex;flex-direction:column;height:calc(100% - 40px);">
+                <div class="chart-container" id="tradingview-container">
+                    <!-- TradingView будет загружен сюда -->
+                    <div id="tradingview-widget" style="width:100%;height:100%;"></div>
                 </div>
-
-                <!-- Статистика -->
-                <div class="tab-content" id="tab-stats">
-                    <div class="stats-grid">
-                        <div class="stats-card">
-                            <div class="value blue" id="statTotal">0</div>
-                            <div class="label">Всего сигналов</div>
-                        </div>
-                        <div class="stats-card">
-                            <div class="value green" id="statWins">0</div>
-                            <div class="label">✅ В плюс</div>
-                        </div>
-                        <div class="stats-card">
-                            <div class="value red" id="statLoses">0</div>
-                            <div class="label">❌ В минус</div>
-                        </div>
-                    </div>
-                    <div style="display:flex;gap:8px;margin-bottom:10px;">
-                        <div class="stats-card" style="flex:1;">
-                            <div class="value yellow" id="statWinRate">0%</div>
-                            <div class="label">🏆 Винрейт</div>
-                        </div>
-                        <div class="stats-card" style="flex:1;">
-                            <div class="value blue" id="statProfit">$0</div>
-                            <div class="label">💰 Прибыль</div>
-                        </div>
-                    </div>
-
-                    <div class="stats-history">
-                        <div class="row">
-                            <span class="label">История сделок за сегодня</span>
-                            <span class="value" id="historyCount">0</span>
-                        </div>
-                        <div id="historyList">
-                            <div style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.7rem;padding:10px 0;">
-                                История сделок будет здесь
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Профиль -->
-                <div class="tab-content" id="tab-profile">
-                    <div class="profile-card">
-                        <div class="avatar">👤</div>
-                        <div class="pid" id="profileUserId">88808610</div>
-                        <div class="pstatus">✅ Активен</div>
-                        <button class="profile-btn" id="logoutBtn">🚪 Выйти из аккаунта</button>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- Таб: Блог -->
+            <div class="tab-content" id="tab-blog" style="height:calc(100% - 40px);overflow-y:auto;">
+                <div class="blog-grid">
+                    <div class="blog-card">
+                        <div class="title">📊 Индикатор Imbalance Signals</div>
+                        <div class="desc">Сигналы рыночного дисбаланса для точных входов.</div>
+                        <span class="tag">Индикатор</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">📈 Стратегия Smart Money (SMC)</div>
+                        <div class="desc">Поиск точек входа крупных игроков.</div>
+                        <span class="tag">Стратегия</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">🔍 Поиск разворотных моделей</div>
+                        <div class="desc">Автоматический поиск разворотных моделей.</div>
+                        <span class="tag">Инструмент</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">📉 Индикатор ZigZag + Channels</div>
+                        <div class="desc">Анализ структуры рынка и тренда.</div>
+                        <span class="tag">Индикатор</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">🎯 Уровни поддержки/сопротивления</div>
+                        <div class="desc">Автоматический поиск зон поддержки и сопротивления.</div>
+                        <span class="tag">Инструмент</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">📊 Объемный профиль (Volumes)</div>
+                        <div class="desc">Анализ торговых объемов для подтверждения сигналов.</div>
+                        <span class="tag">Индикатор</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">📈 RSI Zones</div>
+                        <div class="desc">Индикатор зон перекупленности и перепроданности.</div>
+                        <span class="tag">Индикатор</span>
+                    </div>
+                    <div class="blog-card">
+                        <div class="title">📊 SuperTrend</div>
+                        <div class="desc">Трендовый индикатор на основе ATR.</div>
+                        <span class="tag">Индикатор</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таб: Статистика -->
+            <div class="tab-content" id="tab-stats" style="height:calc(100% - 40px);overflow-y:auto;">
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="value blue" id="statTotal">0</div>
+                        <div class="label">Всего сигналов</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="value green" id="statWins">0</div>
+                        <div class="label">✅ В плюс</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="value red" id="statLoses">0</div>
+                        <div class="label">❌ В минус</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="value yellow" id="statWinRate">0%</div>
+                        <div class="label">🏆 Винрейт</div>
+                    </div>
+                </div>
+
+                <div class="stats-history">
+                    <div class="row">
+                        <span class="label">История сделок за сегодня</span>
+                        <span class="value" id="historyCount">0</span>
+                    </div>
+                    <div id="historyList">
+                        <div style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.65rem;padding:8px 0;">
+                            История сделок будет здесь
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таб: Профиль -->
+            <div class="tab-content" id="tab-profile" style="height:calc(100% - 40px);overflow-y:auto;display:flex;align-items:center;justify-content:center;">
+                <div class="profile-card" style="width:100%;">
+                    <div class="avatar">👤</div>
+                    <div class="pid" id="profileUserId">88808610</div>
+                    <div class="pstatus">✅ Активен</div>
+                    <button class="profile-btn" id="logoutBtn">🚪 Выйти из аккаунта</button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- ПРАВАЯ ПАНЕЛЬ (30%) -->
+        <!-- ПРАВАЯ ПАНЕЛЬ (40%) -->
         <div class="right-panel">
             <div class="right-title">📊 Сигналы</div>
 
@@ -1048,23 +907,21 @@
 
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО СИГНАЛА ===== -->
+    <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
     <div class="signal-modal" id="signalModal">
         <div class="signal-modal-content">
             <div class="signal-header">
-                <span class="spair" id="modalPairName">AUD/CHF OTC <small>92%</small></span>
+                <span class="spair" id="modalPairName">AUD/CHF <small>92%</small></span>
                 <button class="signal-close" id="modalCloseBtn">✕</button>
             </div>
 
-            <!-- Визуал -->
             <div class="signal-visual">
                 <span class="signal-percent" id="modalPercent">+92%</span>
                 <span class="big-arrow up" id="modalArrow">↑</span>
                 <span class="signal-label up" id="modalSignalLabel">ВВЕРХ</span>
-                <div class="signal-pair-name" id="modalPairNameSmall">AUD/CHF OTC</div>
+                <div class="signal-pair-name" id="modalPairNameSmall">AUD/CHF</div>
             </div>
 
-            <!-- Инфо -->
             <div class="signal-info-grid">
                 <div class="signal-info-item">
                     <div class="label">Цена входа</div>
@@ -1092,7 +949,6 @@
                 </div>
             </div>
 
-            <!-- Таймфреймы -->
             <div class="tf-selector" id="tfSelector">
                 <button class="tf-btn active" data-tf="1">1м</button>
                 <button class="tf-btn" data-tf="2">2м</button>
@@ -1102,7 +958,6 @@
                 <button class="tf-btn" data-tf="30">30м</button>
             </div>
 
-            <!-- Индикаторы -->
             <div class="indicators-block">
                 <div class="ititle">📊 Индикаторы</div>
                 <div id="modalIndicators">
@@ -1113,7 +968,6 @@
                 </div>
             </div>
 
-            <!-- Результат -->
             <div class="result-buttons">
                 <button class="result-btn win" id="resultWin">✅ + В плюс</button>
                 <button class="result-btn breakeven" id="resultBreakeven">↔ Без убытка</button>
@@ -1150,21 +1004,36 @@
         // 3. ДАННЫЕ
         // ==========================================
         const ACTIVE_SIGNALS = {
-            'AUD/CAD': { price: 0.97460, signal: 'up', strength: 78, change: '+0.32%', entry: 0.97460, current: 0.97550, cat: 'forex', payout: 92 },
-            'EUR/USD': { price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750, cat: 'forex', payout: 80 },
-            'GBP/JPY': { price: 186.45, signal: 'up', strength: 82, change: '+0.87%', entry: 186.45, current: 187.20, cat: 'forex', payout: 92 },
-            'GBP/USD': { price: 1.31240, signal: 'up', strength: 52, change: '+0.28%', entry: 1.31240, current: 1.31520, cat: 'forex', payout: 85 },
-            'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280, cat: 'forex', payout: 50 },
-            'USD/JPY': { price: 145.80, signal: 'down', strength: 48, change: '-0.32%', entry: 145.80, current: 145.20, cat: 'forex', payout: 75 },
-            'AUD/CHF': { price: 0.57000, signal: 'up', strength: 89, change: '+0.92%', entry: 0.57000, current: 0.57224, cat: 'forex', payout: 92 },
-            'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00, cat: 'commodities', payout: 80 },
-            'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20, cat: 'stocks', payout: 85 },
-            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00, cat: 'indices', payout: 75 },
-            'Bitcoin': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00, cat: 'crypto', payout: 92 },
-            'Ethereum': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00, cat: 'crypto', payout: 70 },
-            'Silver': { price: 24.50, signal: 'neutral', strength: 28, change: '+0.12%', entry: 24.50, current: 24.55, cat: 'commodities', payout: 60 },
-            'Tesla': { price: 245.00, signal: 'down', strength: 63, change: '-0.88%', entry: 245.00, current: 242.80, cat: 'stocks', payout: 65 },
-            'US100': { price: 17850.00, signal: 'down', strength: 42, change: '-0.28%', entry: 17850.00, current: 17800.00, cat: 'indices', payout: 55 },
+            'AUD/CAD': { price: 0.97460, signal: 'up', strength: 78, change: '+0.32%', entry: 0.97460, current: 0.97550,
+                cat: 'forex', payout: 92 },
+            'EUR/USD': { price: 1.08920, signal: 'down', strength: 45, change: '-0.18%', entry: 1.08920, current: 1.08750,
+                cat: 'forex', payout: 80 },
+            'GBP/JPY': { price: 186.45, signal: 'up', strength: 82, change: '+0.87%', entry: 186.45, current: 187.20,
+                cat: 'forex', payout: 92 },
+            'GBP/USD': { price: 1.31240, signal: 'up', strength: 52, change: '+0.28%', entry: 1.31240, current: 1.31520,
+                cat: 'forex', payout: 85 },
+            'USD/CHF': { price: 0.88230, signal: 'neutral', strength: 32, change: '+0.05%', entry: 0.88230, current: 0.88280,
+                cat: 'forex', payout: 50 },
+            'USD/JPY': { price: 145.80, signal: 'down', strength: 48, change: '-0.32%', entry: 145.80, current: 145.20,
+                cat: 'forex', payout: 75 },
+            'AUD/CHF': { price: 0.57000, signal: 'up', strength: 89, change: '+0.92%', entry: 0.57000, current: 0.57224,
+                cat: 'forex', payout: 92 },
+            'Gold': { price: 2035.00, signal: 'up', strength: 73, change: '+0.65%', entry: 2035.00, current: 2048.00,
+                cat: 'commodities', payout: 80 },
+            'Apple': { price: 175.30, signal: 'up', strength: 58, change: '+0.52%', entry: 175.30, current: 176.20,
+                cat: 'stocks', payout: 85 },
+            'SP500': { price: 5120.50, signal: 'up', strength: 67, change: '+0.45%', entry: 5120.50, current: 5145.00,
+                cat: 'indices', payout: 75 },
+            'Bitcoin': { price: 67250.00, signal: 'up', strength: 89, change: '+2.15%', entry: 67250.00, current: 68200.00,
+                cat: 'crypto', payout: 92 },
+            'Ethereum': { price: 3450.00, signal: 'down', strength: 55, change: '-0.75%', entry: 3450.00, current: 3425.00,
+                cat: 'crypto', payout: 70 },
+            'Silver': { price: 24.50, signal: 'neutral', strength: 28, change: '+0.12%', entry: 24.50, current: 24.55,
+                cat: 'commodities', payout: 60 },
+            'Tesla': { price: 245.00, signal: 'down', strength: 63, change: '-0.88%', entry: 245.00, current: 242.80,
+                cat: 'stocks', payout: 65 },
+            'US100': { price: 17850.00, signal: 'down', strength: 42, change: '-0.28%', entry: 17850.00, current: 17800.00,
+                cat: 'indices', payout: 55 },
         };
 
         const OFFICIAL_PAIRS = ['AUD/CAD', 'EUR/USD', 'GBP/JPY', 'GBP/USD', 'USD/CHF', 'USD/JPY', 'AUD/CHF'];
@@ -1225,10 +1094,62 @@
             stats: { total: 0, wins: 0, loses: 0, profit: 0, history: [] },
             signalTimer: null,
             isSignalActive: false,
+            currentPair: 'AUD/CHF',
         };
 
         // ==========================================
-        // 5. ЗВУКИ
+        // 5. TRADINGVIEW WIDGET
+        // ==========================================
+        let tvWidget = null;
+
+        function initTradingView(symbol = 'FX:AUDCHF') {
+            const container = document.getElementById('tradingview-widget');
+            if (!container) return;
+
+            // Очищаем контейнер
+            container.innerHTML = '';
+
+            try {
+                new TradingView.widget({
+                    "width": "100%",
+                    "height": "100%",
+                    "symbol": symbol,
+                    "interval": "1",
+                    "timezone": "Etc/UTC",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "ru",
+                    "toolbar_bg": "#13142a",
+                    "enable_publishing": false,
+                    "hide_side_toolbar": false,
+                    "allow_symbol_change": true,
+                    "save_image": false,
+                    "container_id": "tradingview-widget",
+                    "studies": [
+                        "RSI@tv-basicstudies",
+                        "MACD@tv-basicstudies",
+                        "MASimple@tv-basicstudies"
+                    ],
+                    "studies_overrides": {
+                        "volume.volume.color.0": "#ff1744",
+                        "volume.volume.color.1": "#00c853"
+                    }
+                });
+                console.log('✅ TradingView Widget загружен');
+            } catch (e) {
+                console.error('Ошибка загрузки TradingView:', e);
+                container.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.2);flex-direction:column;gap:10px;">
+                        <span style="font-size:2rem;">📊</span>
+                        <span style="font-size:0.8rem;">График TradingView</span>
+                        <span style="font-size:0.6rem;">Для загрузки графика требуется интернет</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ==========================================
+        // 6. ЗВУКИ
         // ==========================================
         function playSound(type) {
             try {
@@ -1243,13 +1164,15 @@
                     osc.type = 'sine';
                     gain.gain.value = 0.3;
                     osc.start();
-                    setTimeout(() => { osc.frequency.value = 1108; setTimeout(() => osc.stop(), 200); }, 150);
+                    setTimeout(() => { osc.frequency.value = 1108;
+                        setTimeout(() => osc.stop(), 200); }, 150);
                 } else if (type === 'lose') {
                     osc.frequency.value = 440;
                     osc.type = 'sawtooth';
                     gain.gain.value = 0.2;
                     osc.start();
-                    setTimeout(() => { osc.frequency.value = 330; setTimeout(() => osc.stop(), 300); }, 200);
+                    setTimeout(() => { osc.frequency.value = 330;
+                        setTimeout(() => osc.stop(), 300); }, 200);
                 } else {
                     osc.frequency.value = 600;
                     osc.type = 'sine';
@@ -1268,7 +1191,7 @@
         }
 
         // ==========================================
-        // 6. ТАЙМЕР
+        // 7. ТАЙМЕР
         // ==========================================
         function startSignalTimer(tf) {
             if (state.signalTimer) clearInterval(state.signalTimer);
@@ -1331,7 +1254,7 @@
         }
 
         // ==========================================
-        // 7. ОТОБРАЖЕНИЕ ПАР
+        // 8. ОТОБРАЖЕНИЕ ПАР
         // ==========================================
         function getPairsForMode(mode) {
             return mode === 'official' ? OFFICIAL_PAIRS : OTC_PAIRS;
@@ -1376,7 +1299,8 @@
             container.innerHTML = '';
 
             if (pairs.length === 0) {
-                container.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.7rem;padding:20px 0;">Нет пар в этой категории</div>`;
+                container.innerHTML =
+                    `<div style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.65rem;padding:16px 0;">Нет пар в этой категории</div>`;
                 return;
             }
 
@@ -1399,6 +1323,8 @@
 
                 div.addEventListener('click', () => {
                     if (pair.isActive) {
+                        // Меняем символ на графике
+                        changeChartSymbol(pair.name);
                         openSignalModal(pair.name);
                     } else {
                         showToast('⏳ Сигнал в разработке', 'info');
@@ -1410,7 +1336,66 @@
         }
 
         // ==========================================
-        // 8. МОДАЛЬНОЕ ОКНО
+        // 9. СМЕНА СИМВОЛА НА ГРАФИКЕ
+        // ==========================================
+        function changeChartSymbol(pairName) {
+            const symbolMap = {
+                'AUD/CAD': 'FX:AUDCAD',
+                'EUR/USD': 'FX:EURUSD',
+                'GBP/JPY': 'FX:GBPJPY',
+                'GBP/USD': 'FX:GBPUSD',
+                'USD/CHF': 'FX:USDCHF',
+                'USD/JPY': 'FX:USDJPY',
+                'AUD/CHF': 'FX:AUDCHF',
+                'Gold': 'TVC:GOLD',
+                'Apple': 'NASDAQ:AAPL',
+                'SP500': 'SP:SPX',
+                'Bitcoin': 'CRYPTO:BTCUSD',
+                'Ethereum': 'CRYPTO:ETHUSD',
+                'Silver': 'TVC:SILVER',
+                'Tesla': 'NASDAQ:TSLA',
+                'US100': 'NASDAQ:NDX',
+            };
+
+            const symbol = symbolMap[pairName] || 'FX:AUDCHF';
+            state.currentPair = pairName;
+
+            // Перезагружаем виджет с новым символом
+            const container = document.getElementById('tradingview-widget');
+            if (container) {
+                container.innerHTML = '';
+                try {
+                    new TradingView.widget({
+                        "width": "100%",
+                        "height": "100%",
+                        "symbol": symbol,
+                        "interval": state.currentTF,
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "ru",
+                        "toolbar_bg": "#13142a",
+                        "enable_publishing": false,
+                        "hide_side_toolbar": false,
+                        "allow_symbol_change": true,
+                        "save_image": false,
+                        "container_id": "tradingview-widget",
+                        "studies": [
+                            "RSI@tv-basicstudies",
+                            "MACD@tv-basicstudies",
+                            "MASimple@tv-basicstudies"
+                        ],
+                    });
+                } catch(e) {
+                    console.error('Ошибка смены символа:', e);
+                }
+            }
+
+            showToast(`📊 График обновлен: ${pairName}`, 'info');
+        }
+
+        // ==========================================
+        // 10. МОДАЛЬНОЕ ОКНО
         // ==========================================
         function openSignalModal(pairName) {
             const data = ACTIVE_SIGNALS[pairName];
@@ -1418,8 +1403,8 @@
 
             state.selectedPair = pairName;
 
-            document.getElementById('modalPairName').textContent = `${pairName} OTC`;
-            document.getElementById('modalPairNameSmall').textContent = `${pairName} OTC`;
+            document.getElementById('modalPairName').textContent = `${pairName}`;
+            document.getElementById('modalPairNameSmall').textContent = `${pairName}`;
             document.getElementById('modalPercent').textContent = `+${data.payout}%`;
 
             const isUp = data.signal === 'up';
@@ -1470,7 +1455,7 @@
         });
 
         // ==========================================
-        // 9. РЕЗУЛЬТАТЫ
+        // 11. РЕЗУЛЬТАТЫ
         // ==========================================
         function handleResult(type) {
             if (!state.selectedPair) return;
@@ -1512,7 +1497,7 @@
         document.getElementById('resultBreakeven').addEventListener('click', () => handleResult('breakeven'));
 
         // ==========================================
-        // 10. СТАТИСТИКА UI
+        // 12. СТАТИСТИКА UI
         // ==========================================
         function updateStatsUI() {
             const s = state.stats;
@@ -1521,13 +1506,12 @@
             document.getElementById('statLoses').textContent = s.loses;
             const winRate = s.total > 0 ? Math.round((s.wins / s.total) * 100) : 0;
             document.getElementById('statWinRate').textContent = winRate + '%';
-            document.getElementById('statProfit').textContent = `$${s.profit.toLocaleString()}`;
             document.getElementById('historyCount').textContent = s.history.length;
 
             const historyList = document.getElementById('historyList');
             if (s.history.length === 0) {
                 historyList.innerHTML =
-                    `<div style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.7rem;padding:10px 0;">История сделок будет здесь</div>`;
+                    `<div style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.65rem;padding:8px 0;">История сделок будет здесь</div>`;
             } else {
                 historyList.innerHTML = s.history.slice(0, 15).map(h => `
                     <div class="row">
@@ -1541,7 +1525,7 @@
         }
 
         // ==========================================
-        // 11. ВКЛАДКИ
+        // 13. ВКЛАДКИ
         // ==========================================
         document.querySelectorAll('.header-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -1553,7 +1537,7 @@
         });
 
         // ==========================================
-        // 12. ВЫБОР ТИПА И КАТЕГОРИИ
+        // 14. ВЫБОР ТИПА И КАТЕГОРИИ
         // ==========================================
         document.querySelectorAll('.pair-type-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -1584,11 +1568,65 @@
                         state.signalTimer = null; }
                     startSignalTimer(parseInt(state.currentTF));
                 }
+                // Меняем интервал на графике
+                changeChartInterval(state.currentTF);
             });
         });
 
+        function changeChartInterval(tf) {
+            // TradingView не поддерживает программную смену интервала через API
+            // Поэтому перезагружаем виджет с новым интервалом
+            const container = document.getElementById('tradingview-widget');
+            if (container && state.currentPair) {
+                const symbolMap = {
+                    'AUD/CAD': 'FX:AUDCAD',
+                    'EUR/USD': 'FX:EURUSD',
+                    'GBP/JPY': 'FX:GBPJPY',
+                    'GBP/USD': 'FX:GBPUSD',
+                    'USD/CHF': 'FX:USDCHF',
+                    'USD/JPY': 'FX:USDJPY',
+                    'AUD/CHF': 'FX:AUDCHF',
+                    'Gold': 'TVC:GOLD',
+                    'Apple': 'NASDAQ:AAPL',
+                    'SP500': 'SP:SPX',
+                    'Bitcoin': 'CRYPTO:BTCUSD',
+                    'Ethereum': 'CRYPTO:ETHUSD',
+                    'Silver': 'TVC:SILVER',
+                    'Tesla': 'NASDAQ:TSLA',
+                    'US100': 'NASDAQ:NDX',
+                };
+                const symbol = symbolMap[state.currentPair] || 'FX:AUDCHF';
+                container.innerHTML = '';
+                try {
+                    new TradingView.widget({
+                        "width": "100%",
+                        "height": "100%",
+                        "symbol": symbol,
+                        "interval": tf,
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "ru",
+                        "toolbar_bg": "#13142a",
+                        "enable_publishing": false,
+                        "hide_side_toolbar": false,
+                        "allow_symbol_change": true,
+                        "save_image": false,
+                        "container_id": "tradingview-widget",
+                        "studies": [
+                            "RSI@tv-basicstudies",
+                            "MACD@tv-basicstudies",
+                            "MASimple@tv-basicstudies"
+                        ],
+                    });
+                } catch(e) {
+                    console.error('Ошибка смены интервала:', e);
+                }
+            }
+        }
+
         // ==========================================
-        // 13. TOAST
+        // 15. TOAST
         // ==========================================
         function showToast(message, type = 'info', duration = 3000) {
             const old = document.querySelector('.toast');
@@ -1605,7 +1643,7 @@
         }
 
         // ==========================================
-        // 14. АВТОРИЗАЦИЯ
+        // 16. АВТОРИЗАЦИЯ
         // ==========================================
         function checkAuth(id) {
             const cleanId = id.trim();
@@ -1625,6 +1663,11 @@
                 const splash = document.getElementById('splashScreen');
                 splash.classList.add('active');
                 setTimeout(() => splash.classList.remove('active'), 3000);
+
+                // Инициализируем TradingView
+                setTimeout(() => {
+                    initTradingView('FX:AUDCHF');
+                }, 500);
 
                 renderPairs();
 
@@ -1661,7 +1704,7 @@
         });
 
         // ==========================================
-        // 15. ВЫХОД
+        // 17. ВЫХОД
         // ==========================================
         document.getElementById('logoutBtn').addEventListener('click', function() {
             if (confirm('Вы уверены, что хотите выйти?')) {
@@ -1674,10 +1717,11 @@
         });
 
         // ==========================================
-        // 16. СТАРТ
+        // 18. СТАРТ
         // ==========================================
-        console.log('📡 PO Terminal запущен');
+        console.log('📡 Kultura_Treyding Pro запущен');
         console.log('👑 Мастер-ID:', CONFIG.MASTER_ID);
+        console.log('📊 TradingView Widget интегрирован');
     </script>
 
 </body>
